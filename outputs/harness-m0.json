@@ -1,0 +1,45 @@
+{
+  "h0a": {
+    "2shapes": {
+      "background_pixel_accuracy": 1.0,
+      "foreground_ari": 1.0,
+      "foreground_mask_iou": 1.0,
+      "n_clusters": 2,
+      "seed": 1
+    },
+    "3shapes": {
+      "background_pixel_accuracy": 1.0,
+      "foreground_ari": 1.0,
+      "foreground_mask_iou": 1.0,
+      "n_clusters": 3,
+      "seed": 9
+    },
+    "reference_commit": "18a60649d927efb1504472cb33bd52b22db0f277",
+    "reference_suite_returncode": 0,
+    "reference_suite_tail": "40 passed, 1 warning in 39.99s"
+  },
+  "h0b": {
+    "2shapes": {
+      "mean_foreground_ari": 0.16,
+      "n": 50
+    },
+    "MNIST_shapes": {
+      "mean_foreground_ari": 0.01552888819008583,
+      "n": 50
+    }
+  },
+  "h0c": {
+    "count": 9,
+    "files": {
+      "2shapes_test.npz": "e9dbb9faa8acdf068ba9711347d31a44b96789962315031e7e2cc1af448c0693",
+      "2shapes_train.npz": "304b3224e453429e7fef1ee96fcff1c3c3cf138ce0804ca31f6dc2d135006730",
+      "2shapes_val.npz": "9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59",
+      "3shapes_test.npz": "4abd3f666c58ec5d18cc313b92bfd492793569065dde20d7a14a51fb69013807",
+      "3shapes_train.npz": "f79e21ca86e151f010e51ed4c9ededcbc8f515d03bb2261ef209c9c3b6ea4064",
+      "3shapes_val.npz": "9baec24f4e4dded964794e52f71a1dc934505533845d275f2d29aa35a6e24984",
+      "MNIST_shapes_test.npz": "1ae2507abaf01254aa65a62e78bc3283881ca310e2b1bb35cc21430a9d4189b7",
+      "MNIST_shapes_train.npz": "b0777f2803df09cf1dadfda9a84e093d8be139e2fcb6be6a4142ce2d180b718e",
+      "MNIST_shapes_val.npz": "09900916adbd1d5011b285c5a1f3613c5969bb5cb87e76f43e33e545b2474d23"
+    }
+  }
+}
