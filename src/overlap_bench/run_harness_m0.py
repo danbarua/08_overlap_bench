@@ -34,9 +34,10 @@ def _h0a() -> dict:
         capture_output=True,
         text=True,
     )
-    match = re.search(r"(\d+) passed(?:, (\d+) failed)?", suite.stdout)
-    passed = int(match.group(1)) if match else None
-    failed = int(match.group(2)) if match and match.group(2) else 0
+    passed_match = re.search(r"(\d+) passed", suite.stdout)
+    failed_match = re.search(r"(\d+) failed", suite.stdout)
+    passed = int(passed_match.group(1)) if passed_match else 0
+    failed = int(failed_match.group(1)) if failed_match else 0
     two_shapes = run_reference_bundled_image("2shapes", 0)
     three_shapes = run_reference_bundled_image("3shapes", 0)
     return {
