@@ -82,11 +82,7 @@ ones rather than two assumed ones.
 A note is dated and attributed and constrains nothing by itself. What
 makes a lock binding is `L1`/`L2` below, which every Arc 1 analysis is
 held to. **A changed lock is a new pursuit**, recorded with `pursue`
-and a new approach — never an edit to the note. One exemption: values
-marked *provisional* below are pinned by a harness condition, not by
-this note, and the harness may `amend` them citing the check that
-fixed them. Once `gate-arc1a` is satisfied, nothing is provisional and
-the rule applies in full.
+and a new approach — never an edit to the note.
 
 ### On the question: isolation
 
@@ -139,17 +135,12 @@ labels over pixels whose true label is positive. Overlap pixels
 meter, fixed here, for every pursuit. Whole-image ARI is reported as a
 diagnostic and enters no verdict.
 
-**This definition is provisional until `H0b` passes.** The probe's
-code is not in any tree. Three things about it are inferred, not
-read: the FG-ARI mask (this note), the binarisation threshold, and the
-connectivity of `scipy.ndimage.label` (both in the protocol table).
-`cc` is deterministic, so reproducing the probe's two numbers exactly
-pins all three at once. If `H0b` misses, the harness tries each
-candidate in turn — mask convention, threshold, 4- vs 8-connectivity —
-and reports which one closed the gap, as an observation, before
-`amend`ing the affected value. A change to any of the three that is
-not the one reported to close the gap is tuning to hit a number, and
-`L1` is what it fails.
+**Read from the probe, not inferred.** The probe's author confirmed
+the exact expressions it ran: `foreground = truth > 0` for the mask;
+`label(im > 0)` for `cc`, with no `structure` argument, which is
+scipy's default 4-connectivity. `H0b` then reproduced 0.160 and 0.016
+by computation from those expressions. Both hold; nothing here is
+provisional.
 
 ### On every pursuit: the protocol
 
@@ -160,7 +151,7 @@ not the one reported to close the gap is tuning to hit a number, and
 | Seeds | integers $1,\ldots,10$ inclusive; one $x_0$ draw per (image, seed) |
 | RNG | `torch.Generator().manual_seed(seed)` for $x_0$; `numpy.random.default_rng(seed)` elsewhere |
 | Reported statistic | mean FG ARI over the 50 images, then mean and standard deviation over the 10 seeds |
-| Baseline `cc` | `scipy.ndimage.label` on the binarised image, same 50 images, deterministic. *Provisional:* threshold $>0$ on the raw image, 4-connectivity — pinned by `H0b`, see the meter note |
+| Baseline `cc` | `scipy.ndimage.label(im > 0)`, scipy default 4-connectivity, same 50 images, deterministic. The probe's own expression. |
 | Precision | `float64` / `complex128` throughout; no downcasting |
 
 ### On `M0`: locks
@@ -171,14 +162,17 @@ not the one reported to close the gap is tuning to hit a number, and
 | `alpha` | $(0.5, 0.5)$ |
 | `sigma` | $(0.9, 0.0313)$ |
 | `nt` | $(60, 200)$ |
-| `n_clusters` | $2$ — the published default, and what the probe ran |
+| `n_clusters` | $2$, hardcoded — the published default, and the value the probe used on every image |
 | `window_size`, `window_step` | $40, 40$ |
 | Parameter sweep (Arc 1b only) | `alpha` $\in\{0.25, 0.5, 1.0\}\times\{0.25, 0.5, 1.0\}$; `sigma`$_1\in\{0.45, 0.9, 1.8\}$; `sigma`$_2$ fixed — 27 cells, tuned on `train` images 0–49, reported on `val` |
 
-`n_clusters` stays at the default so that Arc 1a changes exactly one
-thing against the probe: the number of seeds. On both Arc 1 datasets
-every image has exactly 2 objects, so the default and the ground-truth
-count coincide there; the `3shapes` split, where they would not, is
+`n_clusters` is hardcoded so that Arc 1a changes exactly one thing
+against the probe: the number of seeds. The probe's code derived it
+per image from ground truth (`int(truth[truth > 0].max())`); the value
+was $2$ on every image, because every image in both Arc 1 datasets has
+exactly 2 objects. Hardcoding matches the probe's value and not its
+mechanism, which is a choice made here on its own merits. The
+`3shapes` split, where the two would differ, is
 out of scope. Cluster count is not the variable.
 
 ### On `M1`: locks
@@ -225,10 +219,14 @@ no marginal band.
   images equals *positive labels* because they have no overlap class;
   on the benchmark it would not, which is why this record defines the
   meter separately.
-- `H0b` — `cc` reproduces the probe's two numbers (0.160, 0.016) on the
-  same 50 images exactly. This is the check on the *meter*, not on
-  `cc`: a miss means the FG-ARI mask is not the probe's. See the meter
-  note.
+- `H0b` — `cc`, computed from the probe's own expressions as noted on
+  the meter, gives mean FG ARI over the 50 `val` images within
+  $10^{-12}$ absolute of $0.16$ on `2shapes` and of
+  $0.01552888819008583$ on `MNIST_shapes`. These are the locked
+  values, produced in `float64` by the harness's first run; the probe
+  reported them at 3 dp as $0.160$ and $0.016$. The tolerance is for
+  last-ulp drift in a 50-term mean across BLAS builds, as `H1a` allows;
+  it is not a marginal band.
 - `H0c` — every benchmark file's sha256 matches the locked table.
 - `H1a` — the `M1` propagator agrees with an independent
   `scipy.linalg.expm` to $10^{-12}$ relative on $N\in\{16, 1024\}$.

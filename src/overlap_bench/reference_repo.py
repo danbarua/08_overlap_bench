@@ -18,7 +18,15 @@ _inserted = False
 
 
 def verify_reference_commit() -> str:
-    """Return 07_posn's HEAD sha; raise if it does not match the pinned commit."""
+    """Return 07_posn's HEAD sha; raise if it does not match the pinned commit,
+    or if the imported paths (src/, defns.py) have uncommitted changes.
+
+    07's working tree is known to be dirty outside src/ (DESIGN.labkit.md's
+    isolation note: modified .gitignore, untracked docs/_archive/ and
+    fixtures) -- that's expected and out of scope. What H0a's "the code is
+    the reference's" actually needs is that src/ and defns.py, specifically,
+    match the pinned commit exactly.
+    """
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=REFERENCE_REPO,
@@ -31,6 +39,19 @@ def verify_reference_commit() -> str:
             f"07_posn HEAD is {head}, DESIGN.labkit.md pins {REFERENCE_COMMIT}. "
             "The reference implementation moved since the design was locked; "
             "this is a new pursuit, not a harness bug -- do not silently re-pin."
+        )
+    dirty = subprocess.run(
+        ["git", "status", "--porcelain", "--", "src", "defns.py"],
+        cwd=REFERENCE_REPO,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    if dirty.strip():
+        raise ValueError(
+            f"07_posn's src/ or defns.py has uncommitted changes at HEAD "
+            f"{head}:\n{dirty}\nThe code is not shown to be the reference's "
+            "while these paths differ from the pinned commit."
         )
     return head
 

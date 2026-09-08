@@ -16,6 +16,8 @@ answering a different question (a new benchmark under a newly-locked
 protocol, not reproducing 07's own certified numbers).
 """
 
+
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -24,6 +26,19 @@ from scipy.ndimage import label
 from sklearn.metrics import adjusted_rand_score
 
 from overlap_bench.reference_repo import ensure_on_path
+
+
+def probe_seed(image_index: int) -> int:
+    """Seed mapping the original probe used: torch.Generator().manual_seed(1000 + i)
+    per image index i, image-index-derived, NOT the protocol's seeds 1..10.
+
+    Exists only to reconstruct the probe's fixed-dynamics numbers (0.062 on
+    2shapes, 0.143 on MNIST_shapes) for traceability. arc1a uses seeds 1..10
+    directly, one draw per (image, seed) -- a different, already-locked
+    convention (DESIGN.labkit.md protocol table). Do not use this mapping
+    for arc1a; do not use 1..10 to reconstruct the probe.
+    """
+    return 1000 + image_index
 
 
 @dataclass(frozen=True)

@@ -150,18 +150,13 @@ opens, not now, because what it has to beat is what Arc 1 decides.
   actually run — the `DESIGN.labkit.md` isolation note lists what and
   why. Don't rescue any of it.
 - **Foreground ARI, one definition.** Pixels whose true label is
-  positive. Overlap ($-1$) and background ($0$) excluded. Whole-image
-  ARI gets reported as a diagnostic and decides nothing. One caveat:
-  the probe's code isn't in any tree, so three things are guessed —
-  this mask, `cc`'s binarisation threshold, and whether `label` used
-  4- or 8-connectivity. The harness check that `cc` reproduces the
-  probe's 0.160 and 0.016 *exactly* pins all three at once, because
-  `cc` is deterministic. If it misses, try each guess in turn, write
-  down which one closed the gap, then fix that one. Changing any
-  other one until the numbers come out is tuning, and the record will
-  say so.
-- **`n_clusters = 2`, the published default.** It's what the probe
-  ran, and Arc 1a has to change one thing against the probe (seeds),
+  positive (`truth > 0`). Overlap ($-1$) and background ($0$) excluded.
+  Whole-image ARI gets reported as a diagnostic and decides nothing.
+  This is the probe's own expression, confirmed by its author, and the
+  harness reproduces the probe's 0.160 and 0.016 from it exactly.
+- **`n_clusters = 2`, hardcoded.** The probe derived it from ground
+  truth per image and got 2 every time; we hardcode the value so Arc
+  1a changes one thing against the probe (seeds),
   not two. It happens that every image in both Arc 1 datasets has
   exactly two objects, so the default and the true count coincide;
   `3shapes`, where they wouldn't, is out of scope. Cluster count is
