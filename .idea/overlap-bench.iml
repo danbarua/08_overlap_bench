@@ -5,9 +5,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="~/Code/AI/08_overlap_bench/.venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings" />
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+  </component>
   <component name="ReSTService" />
+  <component name="TestRunnerService" />
 </module>
