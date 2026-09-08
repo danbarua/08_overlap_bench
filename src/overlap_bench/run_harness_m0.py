@@ -2,10 +2,12 @@
 
 Exists so labkit's content_hash points at an actual artefact -- a file a
 future re-run can be checked against -- rather than a hash of an input or
-a hand-typed proxy string.
+a hand-typed proxy string. No wall-clock time anywhere in the output: a
+re-run with the same code and data must hash identically.
 """
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -32,12 +34,16 @@ def _h0a() -> dict:
         capture_output=True,
         text=True,
     )
+    match = re.search(r"(\d+) passed(?:, (\d+) failed)?", suite.stdout)
+    passed = int(match.group(1)) if match else None
+    failed = int(match.group(2)) if match and match.group(2) else 0
     two_shapes = run_reference_bundled_image("2shapes", 0)
     three_shapes = run_reference_bundled_image("3shapes", 0)
     return {
         "reference_commit": commit,
         "reference_suite_returncode": suite.returncode,
-        "reference_suite_tail": suite.stdout.strip().splitlines()[-1] if suite.stdout else "",
+        "reference_suite_passed": passed,
+        "reference_suite_failed": failed,
         "2shapes": {"seed": two_shapes.seed, "n_clusters": two_shapes.n_clusters, **two_shapes.scores},
         "3shapes": {"seed": three_shapes.seed, "n_clusters": three_shapes.n_clusters, **three_shapes.scores},
     }
