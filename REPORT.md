@@ -47,29 +47,36 @@ of the foreground scores 0.000 and labelling everything one object scores
 0.000. So every number in this report — 0.16, 0.121, 0.135 — sits in the
 bottom sixth of the scale. Nothing here segments these images well.
 
-And the decomposition is worse than either number suggests. Splitting
-`cc`'s 0.160 by how many components it found, and measuring `M0` per image
-at seed 1 on the same 50 images (which `arc1a` does not store — it stores
-per-seed means):
+And the aggregate hides a mixture. Decomposing `arc1a`'s own number — all
+500 image-seed pairs, per-image, whose per-seed means reproduce `arc1a`
+exactly — against whether an image actually contains overlap pixels:
 
-| `2shapes` subset | images | `cc` | `M0` (seed 1) |
-|---|---:|---:|---:|
-| overlap pixels present | 35 | 0.000 | **0.002** |
-| no overlap pixels | 15 | 0.533 | 0.272 |
-| `cc` merged into one component | 42 | 0.000 | 0.019 |
-| `cc` found two components | 8 | 1.000 | 0.418 |
+| `2shapes` | images | pairs | `M0` mean | `M0` median | `M0` >0.5 | `cc` |
+|---|---:|---:|---:|---:|---:|---:|
+| overlap pixels present | 35 | 350 | 0.005 | −0.044 | 4.6% | **0.000** |
+| no overlap pixels | 15 | 150 | 0.391 | 0.164 | 36.7% | 0.533 |
 
-**On genuinely overlapping images both methods are at chance.** Neither
-touches the benchmark's actual task. Both scores are earned almost entirely
-on the non-overlapping minority, where `cc` is the better of the two. `M0`
-is worse on the easy images and equally useless on the hard ones — 39 of 50
-images at or below 0.02, median −0.037, with three images near 1.0 carrying
-most of its mean. `cc`'s 8/50 × 1.000 = 0.160 exactly: its entire score is
-the images whose objects happen not to touch.
+Per-image means over the ten seeds: nine images above 0.5 — **none of them
+containing overlap** — eight between 0.02 and 0.5, and thirty-three at or
+below 0.02, twenty-nine of those overlapping.
 
-So `P1`'s scalar comparison was fair after all. The two are comparable, and
-comparably unable to do the thing. (`NOTE_52`, `NOTE_53`, measured after
-closure; `M0` stratification is one seed, and `MNIST_shapes` was not
+So neither aggregate describes a method that partly works. `M0`'s 0.121 is
+nine images it mostly solves and thirty-three it never solves. On
+overlapping images it is near chance in aggregate, though not incapable:
+4.6% of pairs still exceed 0.5, which is more than `cc` manages there —
+`cc` scores exactly 0.000 on all 35, every time, because it merges the
+objects into one component. That is the one place `M0` is strictly the
+better of the two. On the non-overlapping images it is the worse one,
+0.391 against 0.533, failing a third of them outright.
+
+`cc`'s 0.160 is 8/50 × 1.000, exactly: the images where its merge happens
+not to occur.
+
+`P1`'s scalar comparison was therefore fair — the two are comparable, and
+comparably far from doing the task. What a scalar cannot show is that both
+means are mixtures of near-perfect and near-chance images rather than
+uniform mediocrity, which is the fact a successor pursuit would want.
+(`NOTE_52`–`NOTE_54`, measured after closure. `MNIST_shapes` was not
 stratified.)
 
 That killed the question as posed. "When it fails, is it the parameters or
