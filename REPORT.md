@@ -150,8 +150,13 @@ formula, which returns 0 there.
 It is now on the record as a prespecified criterion for any successor
 pursuit (`NOTE_49`), and it took three attempts to write correctly — the
 first two had the subtraction backwards and the wrong expected values,
-which is the same defect class it exists to prevent. The third was checked
-by executing it rather than deriving it (`NOTE_50`).
+which is the same defect class it exists to prevent. The third derives each
+case by hand and shows the arithmetic, precisely so a reader can check it
+without running anything; executing it afterwards changed only the
+tolerance, from 10⁻¹² to 10⁻⁹, because the denominator guard sits at the
+same scale as the tighter bound (`NOTE_50`). Derive first, then execute: a
+known-answer test whose expected values came out of the code it tests is
+not a control.
 
 That is the transferable lesson of this programme, and it is not about
 oscillators: **a loss is code, and code that has never been run against a
