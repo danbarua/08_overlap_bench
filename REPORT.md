@@ -73,20 +73,24 @@ merges the two objects into one component. `M0` nonetheless falls *below*
 `cc` on 80% of those pairs, because 80% of them are negative.
 
 Pairwise, `M0` exceeds `cc` on 20.0% of pairs in the overlapping stratum
-(70/350) and 20.0% in the non-overlapping one (30/150) — the same rate, so
-neither stratum is where `M0` is the better method. Only the *means* order
-differently: 0.005 against 0.000 with overlap, 0.391 against 0.533 without,
-with 36% of `M0`'s non-overlapping pairs at or below 0.02.
+(70/350) and 20.0% in the non-overlapping one (30/150). The stratum means
+order differently: 0.005 against 0.000 with overlap, 0.391 against 0.533
+without, with 36% of `M0`'s non-overlapping pairs at or below 0.02. Those
+are two facts about two different statistics; this programme fixed no
+comparison statistic beyond `P1`'s means, so neither fact makes either
+method the better one, and the report does not say which is.
 
-`P1`'s scalar comparison was therefore fair — the two are comparable, and
-comparably far from doing the task. What a scalar cannot show is that both
-means are mixtures of near-perfect and near-chance images rather than
-uniform mediocrity, which is the fact a successor pursuit would want.
-(`NOTE_52`–`NOTE_55`, measured after closure by
-`scripts/verification/stratify_arc1a_by_overlap.py`, whose own assertion is
-that its per-seed means reproduce `arc1a.json` to 10⁻¹²; output
-`outputs/arc1a-stratified.json`, sha256 `78177c5cc27b634f…`. `MNIST_shapes` was not
-stratified.)
+`P1` compared the two by their means over images, which is what it said it
+would do, and the comparison holds as written. What a mean cannot show is
+that both sides of it are mixtures of near-perfect and near-chance images
+rather than uniform mediocrity — the fact a successor pursuit would want,
+and the reason to state the distribution beside the mean.
+(`NOTE_52`–`NOTE_55`; the figures are `ART_15`, produced after closure by
+`scripts/verification/stratify_arc1a_by_overlap.py` at commit `ba836f4`,
+whose own assertion is that its per-seed means reproduce `arc1a.json` to
+10⁻¹²; output `outputs/arc1a-stratified.json`, sha256 `78177c5cc27b634f…`.
+`MNIST_shapes` was not stratified. `ART_14` records an earlier run of the
+same script and its hash is stale.)
 
 That killed the question as posed. "When it fails, is it the parameters or
 the data" has no instance: at ten seeds the fixed mechanism does not fail on
