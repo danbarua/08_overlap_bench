@@ -64,6 +64,13 @@ def _summary(m0: np.ndarray, cc: np.ndarray) -> dict:
         "m0_frac_at_or_below_0.02": float((flat <= 0.02).mean()),
         "m0_frac_negative": float((flat < 0).mean()),
         "cc_mean": float(cc.mean()),
+        # Pairwise, not mean-versus-mean: which stratum's mean is higher does
+        # not say where a given run beat thresholding. Compared per image
+        # against that image's own deterministic cc score.
+        "m0_frac_pairs_above_cc": float((m0 > cc[:, None]).mean()),
+        "m0_frac_pairs_below_cc": float((m0 < cc[:, None]).mean()),
+        "m0_frac_pairs_equal_cc": float((m0 == cc[:, None]).mean()),
+        "n_images_cc_zero": int((cc == 0).sum()),
     }
 
 

@@ -68,11 +68,15 @@ overlap), and thirty-three at or below 0.02 (twenty-nine with overlap).
 
 On overlapping images `M0`'s aggregate is near chance — mean 0.005, median
 −0.044, 87% of pairs at or below 0.02 — while 4.6% of pairs still exceed
-0.5. `cc` scores exactly 0.000 on all 35, every time, because it merges the
-two objects into one component; so the overlapping subset is the one place
-`M0`'s scores are ever above `cc`'s. On the non-overlapping subset the
-ordering reverses: `cc` 0.533 against `M0` 0.391, with 36% of `M0`'s pairs
-there at or below 0.02.
+0.5. `cc` scores exactly 0.000 on all 35 of them, every time, because it
+merges the two objects into one component. `M0` nonetheless falls *below*
+`cc` on 80% of those pairs, because 80% of them are negative.
+
+Pairwise, `M0` exceeds `cc` on 20.0% of pairs in the overlapping stratum
+(70/350) and 20.0% in the non-overlapping one (30/150) — the same rate, so
+neither stratum is where `M0` is the better method. Only the *means* order
+differently: 0.005 against 0.000 with overlap, 0.391 against 0.533 without,
+with 36% of `M0`'s non-overlapping pairs at or below 0.02.
 
 `P1`'s scalar comparison was therefore fair — the two are comparable, and
 comparably far from doing the task. What a scalar cannot show is that both
@@ -81,7 +85,7 @@ uniform mediocrity, which is the fact a successor pursuit would want.
 (`NOTE_52`–`NOTE_55`, measured after closure by
 `scripts/verification/stratify_arc1a_by_overlap.py`, whose own assertion is
 that its per-seed means reproduce `arc1a.json` to 10⁻¹²; output
-`outputs/arc1a-stratified.json`, sha256 `55cb65d4804adb73…`. `MNIST_shapes` was not
+`outputs/arc1a-stratified.json`, sha256 `78177c5cc27b634f…`. `MNIST_shapes` was not
 stratified.)
 
 That killed the question as posed. "When it fails, is it the parameters or
