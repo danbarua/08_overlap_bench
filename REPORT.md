@@ -47,27 +47,30 @@ of the foreground scores 0.000 and labelling everything one object scores
 0.000. So every number in this report — 0.16, 0.121, 0.135 — sits in the
 bottom sixth of the scale. Nothing here segments these images well.
 
-And the two baselines fail differently in a way the scalar hides. Breaking
-`cc`'s 0.160 down by how many components it found on the foreground:
+And the decomposition is worse than either number suggests. Splitting
+`cc`'s 0.160 by how many components it found, and measuring `M0` per image
+at seed 1 on the same 50 images (which `arc1a` does not store — it stores
+per-seed means):
 
-| `2shapes` | images | mean FG ARI |
-|---|---:|---:|
-| one component found | 42 | 0.000 |
-| two components found | 8 | 1.000 |
+| `2shapes` subset | images | `cc` | `M0` (seed 1) |
+|---|---:|---:|---:|
+| overlap pixels present | 35 | 0.000 | **0.002** |
+| no overlap pixels | 15 | 0.533 | 0.272 |
+| `cc` merged into one component | 42 | 0.000 | 0.019 |
+| `cc` found two components | 8 | 1.000 | 0.418 |
 
-8/50 × 1.000 = 0.160, exactly. **`cc`'s entire score is the fraction of
-images whose two objects happen not to touch.** Where they touch — 35 of
-50 images have overlap pixels, and that is the benchmark's whole point — it
-merges them into one blob and scores zero, every time. On `MNIST_shapes`,
-where objects touch on 49 of 50, it manages 0.016 the same way. `M0`'s
-scores are spread across images rather than bimodal, so it is partially
-solving genuinely overlapping images while `cc` is not solving them at all.
+**On genuinely overlapping images both methods are at chance.** Neither
+touches the benchmark's actual task. Both scores are earned almost entirely
+on the non-overlapping minority, where `cc` is the better of the two. `M0`
+is worse on the easy images and equally useless on the hard ones — 39 of 50
+images at or below 0.02, median −0.037, with three images near 1.0 carrying
+most of its mean. `cc`'s 8/50 × 1.000 = 0.160 exactly: its entire score is
+the images whose objects happen not to touch.
 
-Which means "not distinguishable from thresholding on `2shapes`" is
-arithmetically right and the wrong comparison: the two are incommensurable,
-not tied. `P1` was written as a scalar comparison of means, and a scalar
-cannot see the difference between solving 16% of a task perfectly and
-solving most of it slightly. (`NOTE_52`, measured after closure.)
+So `P1`'s scalar comparison was fair after all. The two are comparable, and
+comparably unable to do the thing. (`NOTE_52`, `NOTE_53`, measured after
+closure; `M0` stratification is one seed, and `MNIST_shapes` was not
+stratified.)
 
 That killed the question as posed. "When it fails, is it the parameters or
 the data" has no instance: at ten seeds the fixed mechanism does not fail on
