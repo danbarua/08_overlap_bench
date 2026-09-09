@@ -13,14 +13,18 @@ they do, this is arc1a's number decomposed; if they do not, the decomposition
 is measuring something else and its strata mean nothing. The check is asserted,
 not printed.
 
-Writes `outputs/arc1a-stratified.json`. Nothing here is on the LabKit record as
-evidence for a criterion -- see NOTE_52 through NOTE_54, which are observations
-recorded after the programme closed.
+Writes `outputs/arc1a-stratified.json`. Takes about six minutes: 500 model
+runs, one per image and seed, with a progress line per seed on stderr.
+Nothing here is on the LabKit record as evidence for a criterion -- see
+NOTE_52 through NOTE_55, which are observations recorded after the programme
+closed, and ART_14, which is this script's hashed output.
 
-    PYTHONPATH=src uv run --locked python scripts/verification/stratify_arc1a_by_overlap.py
+    PYTHONPATH=src uv run --locked python \
+        scripts/verification/stratify_arc1a_by_overlap.py
 """
 
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -84,6 +88,14 @@ def main() -> dict:
         for i in range(N_IMAGES):
             result = run_on_cae_image(images[i, 0], seed=seed, n_clusters=N_CLUSTERS)
             m0[i, s] = foreground_ari(labels[i], result.predicted)
+        # Six minutes of silence reads as a hang, the more so because the
+        # OpenMP warning above it names deadlock. stderr, so stdout stays
+        # parseable.
+        print(
+            f"seed {seed} of {SEEDS[-1]}: mean {m0[:, s].mean():+.4f}",
+            file=sys.stderr,
+            flush=True,
+        )
 
     # The control. arc1a computed these independently; if this decomposition
     # does not reproduce them, its strata are about some other computation.
