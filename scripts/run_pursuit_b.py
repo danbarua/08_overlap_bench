@@ -167,6 +167,76 @@ class Layer2(torch.nn.Module):
         """The whole layer-2 orbit, (B, N, 140), for M0's readout."""
         return self._run(x0, omega, mask, keep_all=True)
 
+
+def assert_matches_m0_at_init(
+    k2: torch.Tensor, device: torch.device, n_images: int = 3
+) -> dict:
+    """The oracle. Before training: this reimplementation must BE M0.
+
+    Checks, per image, against 07's own `run_2layer_torch` output: the
+    layer-2 orbit agrees to 1e-12 relative on unmasked pixels, and M0's
+    readout gives byte-identical labels. This is CRIT_19's content, run here
+    because a batched GPU reimplementation of layer 1 and layer 2 is new code
+    and a preprocessing divergence would masquerade as an improvement.
+
+    Raises AssertionError before any training happens. Seconds, not minutes.
+    """
+    ensure_on_path()
+    from src.cv_rnn.cv_rnn_segmentation import (
+        run_2layer_torch,
+        spatiotemporal_segmentation_torch,
+    )
+
+    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+        images_np = np.asarray(data["images"][:n_images, 0], dtype=np.float64)
+
+    model = Layer2(k2, k2.shape[0]).to(device)
+    results = []
+    for i in range(n_images):
+        image = torch.from_numpy(images_np[i])
+        generator = torch.Generator().manual_seed(1)
+        states_m0, mask = run_2layer_torch(image, generator=generator)
+        x0 = states_m0[:, 0].masked_fill(mask, 0)
+        omega = image.T.reshape(-1)
+        with torch.no_grad():
+            orbit = model.orbit_all(
+                x0.to(device).unsqueeze(0),
+                omega.to(device).unsqueeze(0),
+                mask.to(device).unsqueeze(0),
+            )[0].cpu()
+
+        reference = states_m0[:, LAYER1_STEPS:200]
+        unmasked = ~mask
+        scale = reference[unmasked].abs().max().item()
+        relative = (orbit[unmasked] - reference[unmasked]).abs().max().item() / scale
+
+        states = states_m0.clone()
+        states[:, LAYER1_STEPS:200] = orbit
+        states[mask, LAYER1_STEPS:200] = torch.nan
+        mine, *_ = spatiotemporal_segmentation_torch(
+            states, image, mask, nt_mask=LAYER1_STEPS, n_clusters=2
+        )
+        theirs, *_ = spatiotemporal_segmentation_torch(
+            states_m0, image, mask, nt_mask=LAYER1_STEPS, n_clusters=2
+        )
+        identical = bool(torch.equal(mine, theirs))
+        results.append({"image": i, "orbit_relative_error": relative, "labels_identical": identical})
+        assert relative < 1e-12, (
+            f"image {i}: layer-2 orbit differs from M0 by {relative:.3e} relative at "
+            "initialisation. This model is not M0, so nothing it scores is comparable "
+            "to arc1a. Do not train."
+        )
+        assert identical, (
+            f"image {i}: orbit matches M0 but the readout gives different labels. "
+            "Do not train."
+        )
+    _progress(
+        "oracle passed: at init this is M0 "
+        f"(max orbit rel err {max(r['orbit_relative_error'] for r in results):.2e}, "
+        f"labels identical on all {n_images})"
+    )
+    return {"n_images": n_images, "per_image": results}
+
 def _train(
     model: Layer2,
     images: torch.Tensor,
@@ -202,19 +272,28 @@ def _train(
     return curve
 
 
-def _evaluate(model: Layer2, k1: torch.Tensor, device: torch.device) -> dict:
-    """Val, seeds 1..10, through M0's own readout. Foreground ARI as locked."""
+def _evaluate(
+    model: Layer2,
+    device: torch.device,
+    n_images: int = EVAL_IMAGES,
+    n_seeds: int = len(EVAL_SEEDS),
+) -> dict:
+    """Val through M0's own readout, foreground ARI as the protocol note locks it.
+
+    `n_images`/`n_seeds` exist to smoke-test the path in seconds; a real run
+    uses the locked 50 images and seeds 1..10, which are the defaults.
+    """
     ensure_on_path()
     from src.cv_rnn.cv_rnn_segmentation import run_2layer_torch, spatiotemporal_segmentation_torch
 
     with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
-        images_np = np.asarray(data["images"][:EVAL_IMAGES, 0], dtype=np.float64)
-        labels_np = np.asarray(data["labels"][:EVAL_IMAGES], dtype=np.int64)
+        images_np = np.asarray(data["images"][:n_images, 0], dtype=np.float64)
+        labels_np = np.asarray(data["labels"][:n_images], dtype=np.int64)
 
     per_seed = []
-    for seed in EVAL_SEEDS:
+    for seed in EVAL_SEEDS[:n_seeds]:
         scores = []
-        for i in range(EVAL_IMAGES):
+        for i in range(n_images):
             image = torch.from_numpy(images_np[i])
             generator = torch.Generator().manual_seed(seed)
             states_m0, mask = run_2layer_torch(image, generator=generator)
@@ -243,8 +322,17 @@ def _evaluate(model: Layer2, k1: torch.Tensor, device: torch.device) -> dict:
         "seed_std_foreground_ari": float(np.std(per_seed, ddof=0)),
         "m0_at_defaults": M0_AT_DEFAULTS,
         "cc_baseline": CC_BASELINE,
-        "above_m0_at_defaults": mean > M0_AT_DEFAULTS,
-        "above_cc": mean > CC_BASELINE,
+        # P6 (CRIT_14) as written: above cc's 0.16. This is the answer.
+        "p6_above_cc": mean > CC_BASELINE,
+        # NOT P5. CRIT_15 requires exceeding M0's best swept cell by more than
+        # two seed SDs, and that cell does not exist -- GATE_2 blocked, arc1b
+        # never ran, and DEC_1 amended the comparator to M0 at defaults for
+        # exactly this reason. This is that amended comparison, and it is a
+        # diagnostic here rather than a verdict: a verdict needs an evaluation
+        # recorded against CRIT_15 on the record, not a boolean in a JSON file.
+        "diagnostic_above_m0_at_defaults": mean > M0_AT_DEFAULTS,
+        "diagnostic_exceeds_m0_by_two_seed_sd": mean
+        > M0_AT_DEFAULTS + 2 * float(np.std(per_seed, ddof=0)),
     }
 
 
@@ -255,7 +343,14 @@ def main(argv: list[str] | None = None) -> dict:
     parser.add_argument("--epochs", type=int, default=0, help="if set, overrides --steps")
     parser.add_argument("--train-images", type=int, default=16_000)
     parser.add_argument("--out", default=str(Path(ROOT_DIR) / "outputs" / "pursuit-b.json"))
+    parser.add_argument("--eval-images", type=int, default=EVAL_IMAGES)
+    parser.add_argument("--eval-seeds", type=int, default=len(EVAL_SEEDS))
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument(
+        "--skip-oracle",
+        action="store_true",
+        help="skip the at-init identity check against M0. Do not use for a real run.",
+    )
     args = parser.parse_args(argv)
 
     # 1 and 2. Before anything else, and before any GPU is touched.
@@ -280,6 +375,10 @@ def main(argv: list[str] | None = None) -> dict:
     labels = torch.from_numpy(labels_np).transpose(1, 2).reshape(n_train, n).to(device)
     k1, k2 = _sheets(nrow, ncol, device)
 
+    # The oracle, before any training: this reimplementation must be M0 at
+    # initialisation, or nothing it produces is comparable to arc1a.
+    oracle = None if args.skip_oracle else assert_matches_m0_at_init(k2, device)
+
     _progress(f"precomputing M0 layer-1 masks for {n_train} images on {device}")
     masks = torch.empty((n_train, n), dtype=torch.bool, device=device)
     x0s = torch.empty((n_train, n), dtype=torch.complex128, device=device)
@@ -299,8 +398,8 @@ def main(argv: list[str] | None = None) -> dict:
     curve = _train(model, images, labels, masks, x0s, steps, device)
     train_s = time.monotonic() - train_started
 
-    _progress("evaluating on val, seeds 1..10")
-    evaluation = _evaluate(model, k1, device)
+    _progress(f"evaluating on val: {args.eval_images} images, {args.eval_seeds} seeds")
+    evaluation = _evaluate(model, device, args.eval_images, args.eval_seeds)
 
     with torch.no_grad():
         k2_change = float((model.K2 - k2).norm() / k2.norm())
@@ -342,4 +441,8 @@ if __name__ == "__main__":
         f"+/- {e['seed_std_foreground_ari']:.4f}   "
         f"(M0 at defaults {e['m0_at_defaults']:.4f}, cc {e['cc_baseline']:.2f})"
     )
-    print(f"above M0: {e['above_m0_at_defaults']}   above cc: {e['above_cc']}")
+    print(
+        f"P6 (above cc 0.16): {e['p6_above_cc']}\n"
+        f"diagnostic, above M0 at defaults 0.1209: {e['diagnostic_above_m0_at_defaults']}"
+        f"  (by >2 seed SD: {e['diagnostic_exceeds_m0_by_two_seed_sd']})"
+    )
