@@ -240,17 +240,24 @@ oscillator model beats thresholding on 2shapes. That's all that is left.
 
 ## The result
 
-**Training made it worse, and we know why.** The trainable copy of the
-reference's layer-2 recurrence was verified to be the reference exactly
-at initialisation — zero error on the trajectory, all 50 labels — and
-then 500 optimiser steps under the phase-coherence loss took it to
+**Training made it worse, and now we know exactly why.** The trainable
+copy of the reference's layer-2 recurrence was verified to be the
+reference exactly at initialisation, then 500 optimiser steps took it to
 *chance* on 2shapes (−0.01, against the reference's 0.12 and plain
-thresholding's 0.16). The loss only looks at phases, so nothing stopped
-the amplitudes running away: the dominant eigenvalue grew from 2.9 to
-5.1 and by the time the readout looks, every image is the same
-eigenvector. The implementor checked the evaluation wasn't broken by
-running the untrained model through it and getting the earlier
-numbers back digit-for-digit.
+thresholding's 0.16). First explanation: the loss only looks at phases,
+so amplitudes ran away and every image became one eigenvector. That is
+a true description of the dynamics. The real reason, found by the
+implementor after we had closed the record: the loss as I *specified*
+it had a between-object term of $|z_o\bar z_{o'}|/(|z_o||z_{o'}|)$ —
+which is identically 1 for any two complex numbers. The code
+implemented the formula faithfully. So the loss was just
+"maximise within-object coherence" with nothing whatsoever against
+all objects sharing a phase, and gradient descent did precisely that.
+
+The numbers stand. What they mean changed: they are evidence that we
+never trained a discriminating objective, not that the model can't
+learn one. The intended term is $\cos(\phi_o-\phi_{o'})$, and it has
+not been tried.
 
 **So where does the question stand?** Parked, on purpose. It asked
 "when the fixed model fails, is it the parameters or the data?" — and at
@@ -259,8 +266,8 @@ nine-fold on MNIST_shapes. The one thing that *did* fail was the trained
 model, for a reason that is neither parameters nor data. The record
 says *accepted as unresolved*, with two things written down that would
 reopen it: a seed count or dataset where the fixed model actually loses,
-or a new attempt at training under a loss that penalises everything
-synchronising. That's the honest bucket — not answered, not abandoned.
+or training under the loss that was actually intended — the one with
+a real between-object term. That's the honest bucket — not answered, not abandoned.
 
 One caution the implementor added after checking: the trained model
 *sits* at the loss's trivial minimum, measured; whether training could

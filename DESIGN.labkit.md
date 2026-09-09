@@ -76,22 +76,32 @@ Decided on the record since this was written, each with its reason there:
   `CLM_16`/`CLM_17` were one; withdrawn in reading (`NOTE_34`).
   `CLM_19` (`M0`, on `CLM_4 CLM_5`): ties thresholding on `2shapes`,
   nine-fold better on `MNIST_shapes`; the "parameters or data" clause
-  has no instance. `CLM_20` (`M1d`, on `CLM_14 CLM_15`): chance on
-  `2shapes`; the surrogate's trivial global-synchrony minimum is the
-  mechanism, reached and measured to six decimals (`NOTE_28`); whether
-  it is an absorbing attractor under batch-averaged training was *not*
-  established (`NOTE_31`, carried as `NOTE_36`). `P5`/`P6` not folded.
+  has no instance. `CLM_21` (`M1d`, on `CLM_14 CLM_15`; supersedes
+  `CLM_20`): chance on `2shapes` — **because the surrogate's between
+  term was identically 1 as specified** (`NOTE_16` wrote
+  $|z_o\bar z_{o'}|/(|z_o||z_{o'}|)$, which is 1 for any pair;
+  `loss_m1.py:42` coded it faithfully; `NOTE_40`, `NOTE_41`). The loss
+  trained was $1-\text{within}$, with no term against objects sharing
+  a phase; gradient descent drove every object to one phase, correctly,
+  via amplitude growth (`ART_12`). So the numbers are evidence that
+  this record never tested a discriminating objective — not that `M1d`
+  cannot learn under one. Found by the implementor after closure,
+  after two earlier mechanism notes (`NOTE_28`, `NOTE_31`) had explained
+  *how* synchrony was reached without knowing why nothing opposed it.
+  `P5`/`P6` not folded; `CLM_20` is a summary (`NOTE_39`).
 - **`Q_1` accepted as unresolved** (`DEC_9`, in light of `CLM_4`): the
   fixed model does not fail at ten seeds, so the question's premise has
   no instance; left open on purpose rather than closed as "answered by
   the finding that it does not apply". Reopens on (a) a seed count or
   dataset where `M0` at defaults loses to thresholding by two SDs, or
-  (b) a new pursuit under a synchrony-penalised loss.
+  (b) a new pursuit under the loss `NOTE_16` *intended* —
+  $\cos(\phi_o-\phi_{o'})$ between objects — which was never trained
+  (`NOTE_44`).
 
-**Final standing** (`seq 141`): nothing ready, nothing waiting; `GATE_2`,
+**Final standing** (`seq 146`): nothing ready, nothing waiting; `GATE_2`,
 `GATE_3`, `GATE_4` blocked on standing fails, `GATE_5` satisfied, each
 walkable by `why`. `Q_1` in *accepted as unresolved* with its reopening
-conditions. 36 of 141 acts transcribed from this document; the rest
+conditions. 36 of 146 acts transcribed from this document; the rest
 performed. One throwaway question (`Q_2`) sits in *untested* — a
 verification of a labkit fix done on the live record by mistake, and
 unretractable (labkit#364). Read nothing into it. `LOE_2`/`LOE_3`
