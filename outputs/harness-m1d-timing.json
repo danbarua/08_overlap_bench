@@ -1,0 +1,6 @@
+{
+  "extrapolated_total_seconds_unbatched": 5768116.252403706,
+  "n_epochs": 20,
+  "n_train_images": 50000,
+  "seconds_per_image_forward_backward": 5.768116252403706
+}

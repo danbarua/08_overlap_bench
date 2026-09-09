@@ -1,0 +1,18 @@
+{
+  "h1a_d": {
+    "relative_error": 0.0
+  },
+  "h1b_d": {
+    "gradient_reaches_K": true,
+    "gradient_reaches_omega": true,
+    "max_finite_difference_error_K": 7.120125803918568e-11,
+    "max_finite_difference_error_omega": 1.0789902984877363e-10
+  },
+  "h1c_d": {
+    "matches": 50,
+    "max_orbit_relative_error": 0.0,
+    "mismatches": [],
+    "n_images": 50,
+    "seed": 1
+  }
+}
