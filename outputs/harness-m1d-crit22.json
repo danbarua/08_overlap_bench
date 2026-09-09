@@ -1,0 +1,89 @@
+{
+  "all_pass": true,
+  "entries": [
+    {
+      "absolute_error": 3.596216071314348e-14,
+      "analytic": 1.1259131314330844e-09,
+      "finite_diff": 1.1258771692723712e-09,
+      "index": [
+        268,
+        268
+      ],
+      "param": "K2",
+      "pass": true
+    },
+    {
+      "absolute_error": 1.0477332691978287e-13,
+      "analytic": 1.0151816847417004e-09,
+      "finite_diff": 1.0150769114147806e-09,
+      "index": [
+        268,
+        300
+      ],
+      "param": "K2",
+      "pass": true
+    },
+    {
+      "absolute_error": 4.733295193268412e-15,
+      "analytic": -4.5002416973661394e-10,
+      "finite_diff": -4.500289030318072e-10,
+      "index": [
+        334,
+        358
+      ],
+      "param": "K2",
+      "pass": true
+    },
+    {
+      "absolute_error": 6.88407985185801e-14,
+      "analytic": 1.3776624216100694e-09,
+      "finite_diff": 1.377731262408588e-09,
+      "index": [
+        780,
+        780
+      ],
+      "param": "K2",
+      "pass": true
+    },
+    {
+      "analytic": 2.0263018821063296e-06,
+      "finite_diff": 2.0263016820010193e-06,
+      "index": [
+        268
+      ],
+      "param": "omega2",
+      "pass": true,
+      "relative_error": 9.875394776134746e-08
+    },
+    {
+      "analytic": 4.329208938371412e-06,
+      "finite_diff": 4.329208103115434e-06,
+      "index": [
+        300
+      ],
+      "param": "omega2",
+      "pass": true,
+      "relative_error": 1.9293501193309791e-07
+    },
+    {
+      "analytic": 4.651671062998326e-06,
+      "finite_diff": 4.651670215682913e-06,
+      "index": [
+        301
+      ],
+      "param": "omega2",
+      "pass": true,
+      "relative_error": 1.821529084462602e-07
+    },
+    {
+      "analytic": 1.0608975202836996e-05,
+      "finite_diff": 1.0608972589309928e-05,
+      "index": [
+        332
+      ],
+      "param": "omega2",
+      "pass": true,
+      "relative_error": 2.4635056800349256e-07
+    }
+  ]
+}

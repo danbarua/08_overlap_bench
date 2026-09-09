@@ -69,6 +69,94 @@ def h1a_d_step_oracle() -> dict:
     return {"relative_error": relative_error}
 
 
+def h1b_d_gradient_check_crit22() -> dict:
+    """CRIT_22 (DEC_8, amending CRIT_21/H1b-d): central difference with eps
+    scaled per entry as 1e-3*max(|param|,1), on the same 8 sampled entries
+    as the original check, agreeing with the analytic gradient to 1e-3
+    relative where |analytic| > 1e-8, and to 1e-10 absolute where smaller.
+    Committed so the evidence behind GATE_5/CEVAL_21 is reproducible."""
+    ensure_on_path()
+    from src.cv_rnn.cv_rnn_segmentation import run_2layer_torch
+
+    image = torch.from_numpy(_load_image("2shapes", "train", 0))
+    nrow, ncol = image.shape
+    generator = torch.Generator().manual_seed(1)
+    states_m0, mask = run_2layer_torch(image, generator=generator)
+    x0 = states_m0[:, 0]
+    x0_masked = x0.masked_fill(mask, 0)
+
+    with np.load(CAE_DIR / "2shapes_train.npz") as data:
+        truth = torch.from_numpy(np.asarray(data["labels"][0], dtype=np.int64)).T.reshape(-1)
+
+    model = _build_m1d_at_init(image, mask, nrow, ncol)
+
+    def loss_fn() -> torch.Tensor:
+        x_T = model.orbit(x0_masked, steps=140)[:, -1]
+        return phase_coherence_loss(x_T, truth)
+
+    model.zero_grad()
+    loss = loss_fn()
+    loss.backward()
+    analytic_grad_k = model.K2.grad.clone()
+    analytic_grad_omega = model.omega2.grad.clone()
+
+    unmasked_idx = (~mask).nonzero(as_tuple=True)[0]
+    entries = []
+    all_pass = True
+    with torch.no_grad():
+        for i, j in [
+            (unmasked_idx[0].item(), unmasked_idx[0].item()),
+            (unmasked_idx[0].item(), unmasked_idx[1].item()),
+            (unmasked_idx[5].item(), unmasked_idx[7].item()),
+            (unmasked_idx[-1].item(), unmasked_idx[-1].item()),
+        ]:
+            original = model.K2[i, j].item()
+            eps = 1e-3 * max(abs(original), 1.0)
+            model.K2[i, j] = original + eps
+            plus = loss_fn().item()
+            model.K2[i, j] = original - eps
+            minus = loss_fn().item()
+            model.K2[i, j] = original
+            finite_diff = (plus - minus) / (2 * eps)
+            analytic = analytic_grad_k[i, j].item()
+            abs_err = abs(finite_diff - analytic)
+            if abs(analytic) > 1e-8:
+                rel_err = abs_err / abs(analytic)
+                ok = rel_err < 1e-3
+                entries.append({"param": "K2", "index": [i, j], "analytic": analytic,
+                                 "finite_diff": finite_diff, "relative_error": rel_err, "pass": ok})
+            else:
+                ok = abs_err < 1e-10
+                entries.append({"param": "K2", "index": [i, j], "analytic": analytic,
+                                 "finite_diff": finite_diff, "absolute_error": abs_err, "pass": ok})
+            all_pass = all_pass and ok
+
+        for i in unmasked_idx[:4].tolist():
+            original = model.omega2[i].item()
+            eps = 1e-3 * max(abs(original), 1.0)
+            model.omega2[i] = original + eps
+            plus = loss_fn().item()
+            model.omega2[i] = original - eps
+            minus = loss_fn().item()
+            model.omega2[i] = original
+            finite_diff = (plus - minus) / (2 * eps)
+            analytic = analytic_grad_omega[i].item()
+            abs_err = abs(finite_diff - analytic)
+            if abs(analytic) > 1e-8:
+                rel_err = abs_err / abs(analytic)
+                ok = rel_err < 1e-3
+                entries.append({"param": "omega2", "index": [i], "analytic": analytic,
+                                 "finite_diff": finite_diff, "relative_error": rel_err, "pass": ok})
+            else:
+                ok = abs_err < 1e-10
+                entries.append({"param": "omega2", "index": [i], "analytic": analytic,
+                                 "finite_diff": finite_diff, "absolute_error": abs_err, "pass": ok})
+            all_pass = all_pass and ok
+
+    _progress(f"CRIT_22: all_pass={all_pass}")
+    return {"entries": entries, "all_pass": all_pass}
+
+
 def h1b_d_gradient_check() -> dict:
     """H1b-d / CRIT_17: finite-difference gradient of the NOTE_16 loss
     reaches K_2 and omega_2, through the full 140-step layer-2 recurrence,
