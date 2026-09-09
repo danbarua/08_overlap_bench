@@ -1,0 +1,274 @@
+{
+  "h1a": {
+    "1024": {
+      "relative_error": 4.643454895320684e-14
+    },
+    "16": {
+      "relative_error": 6.538097230085772e-16
+    }
+  },
+  "h1b": {
+    "gradient_reaches_K": true,
+    "gradient_reaches_omega": true,
+    "max_finite_difference_error_K": 3.2347874379112795e-10,
+    "max_finite_difference_error_omega": 3.3451208469870153e-10
+  },
+  "h1c": {
+    "diverged": [
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 0,
+        "max_real_eigenvalue_of_generator": 424.11699396398933
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 1,
+        "max_real_eigenvalue_of_generator": 424.1170633885312
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 2,
+        "max_real_eigenvalue_of_generator": 424.11692452274406
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 3,
+        "max_real_eigenvalue_of_generator": 424.1171257599665
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 4,
+        "max_real_eigenvalue_of_generator": 424.1170497808907
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 5,
+        "max_real_eigenvalue_of_generator": 424.11699479943604
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 6,
+        "max_real_eigenvalue_of_generator": 424.11702202790264
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 7,
+        "max_real_eigenvalue_of_generator": 424.11698902493714
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 8,
+        "max_real_eigenvalue_of_generator": 424.1169838854387
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 9,
+        "max_real_eigenvalue_of_generator": 424.11698704723824
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 10,
+        "max_real_eigenvalue_of_generator": 424.11693538514396
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 11,
+        "max_real_eigenvalue_of_generator": 424.1169926251758
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 12,
+        "max_real_eigenvalue_of_generator": 424.1170271926252
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 13,
+        "max_real_eigenvalue_of_generator": 424.1169095195325
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 14,
+        "max_real_eigenvalue_of_generator": 424.1169720328291
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 15,
+        "max_real_eigenvalue_of_generator": 424.1169167137352
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 16,
+        "max_real_eigenvalue_of_generator": 424.1169124198758
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 17,
+        "max_real_eigenvalue_of_generator": 424.11699251691647
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 18,
+        "max_real_eigenvalue_of_generator": 424.11694830326667
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 19,
+        "max_real_eigenvalue_of_generator": 424.11688916846225
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 20,
+        "max_real_eigenvalue_of_generator": 424.11701002558874
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 21,
+        "max_real_eigenvalue_of_generator": 424.1170549828997
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 22,
+        "max_real_eigenvalue_of_generator": 424.11692688330606
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 23,
+        "max_real_eigenvalue_of_generator": 424.11694485411346
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 24,
+        "max_real_eigenvalue_of_generator": 424.1169317149488
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 25,
+        "max_real_eigenvalue_of_generator": 424.1169245509091
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 26,
+        "max_real_eigenvalue_of_generator": 424.117054412152
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 27,
+        "max_real_eigenvalue_of_generator": 424.1170054385743
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 28,
+        "max_real_eigenvalue_of_generator": 424.11692874498783
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 29,
+        "max_real_eigenvalue_of_generator": 424.1169302786017
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 30,
+        "max_real_eigenvalue_of_generator": 424.1169382663549
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 31,
+        "max_real_eigenvalue_of_generator": 424.11696183796425
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 32,
+        "max_real_eigenvalue_of_generator": 424.1171032292911
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 33,
+        "max_real_eigenvalue_of_generator": 424.1169879830842
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 34,
+        "max_real_eigenvalue_of_generator": 424.1171704465122
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 35,
+        "max_real_eigenvalue_of_generator": 424.11698675284896
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 36,
+        "max_real_eigenvalue_of_generator": 424.1169659416334
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 37,
+        "max_real_eigenvalue_of_generator": 424.1168826396081
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 38,
+        "max_real_eigenvalue_of_generator": 424.11694022793944
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 39,
+        "max_real_eigenvalue_of_generator": 424.11700604392195
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 40,
+        "max_real_eigenvalue_of_generator": 424.11693079164615
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 41,
+        "max_real_eigenvalue_of_generator": 424.1169412374022
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 42,
+        "max_real_eigenvalue_of_generator": 424.11692716994713
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 43,
+        "max_real_eigenvalue_of_generator": 424.1171057323021
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 44,
+        "max_real_eigenvalue_of_generator": 424.11702565837703
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 45,
+        "max_real_eigenvalue_of_generator": 424.11696868873224
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 46,
+        "max_real_eigenvalue_of_generator": 424.11707772774577
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 47,
+        "max_real_eigenvalue_of_generator": 424.11695328723135
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 48,
+        "max_real_eigenvalue_of_generator": 424.11708084847334
+      },
+      {
+        "first_nonfinite_step": 2,
+        "image_index": 49,
+        "max_real_eigenvalue_of_generator": 424.1168833838033
+      }
+    ],
+    "matches": 0,
+    "mismatches": [],
+    "n_images": 50,
+    "seed": 1
+  }
+}
