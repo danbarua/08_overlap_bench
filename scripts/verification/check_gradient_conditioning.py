@@ -14,10 +14,12 @@ LabKit record for the full trail.
 Four escalating techniques, each more informative than the last:
 
 1. Per-entry check at a fixed eps (naive, and *ill-conditioned* whenever
-   the true gradient is small). Central-difference cancellation error is
-   roughly ulp(L)/eps ~ 1e-16*|L|/eps: with |L| ~ 1e-2 and eps=1e-6, that
-   floor is ~1e-12 absolute -- the same order as the ~1e-9 K_2 gradients
-   themselves, which is exactly why the relative error reads 1-10%.
+   the true gradient is small). Central-difference cancellation error goes
+   as ulp(L)/eps; the naive estimate 1e-16*|L|/eps with |L| ~ 1e-2 and
+   eps=1e-6 suggests ~1e-12, but the loss's *effective* ulp after a
+   140-step recurrence is larger than that, and the floor observed here
+   lands around 1e-11 to 1e-10 absolute. Against ~1e-9 analytic gradients
+   that is 1-10% relative -- which is exactly what the check reports.
 2. Directional-derivative check: perturb along the unit gradient direction
    d = g/||g||, compare [L(p+eps*d) - L(p-eps*d)]/(2*eps) against g.d =
    ||g||. This tests an O(||g||)-scale quantity instead of a possibly-tiny

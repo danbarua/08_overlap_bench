@@ -26,12 +26,13 @@ PYTHONPATH=src uv run --locked python scripts/verification/<script>.py
    parameter magnitude and dominant eigenvalue grew substantially (2.94 →
    5.07), and the trajectory's magnitude blew up geometrically (to ~1e97,
    still finite in float64). What actually explains a chance-level
-   *segmentation* score is the two objects' MEAN PHASES themselves — on
-   several trained images they had converged to within a few thousandths
-   of a radian of each other (e.g. 0.470 vs 0.470). The "cross-object
-   cosine" the script also prints reads ≈1.000000 here too, but — as item 5
-   found — that number reads ≈1.000000 unconditionally, whether phases
-   actually match or not; the real evidence is the phases themselves.
+   *segmentation* score is the two objects' MEAN PHASES themselves — for
+   the trained model, the phase difference between the two objects is
+   ≈0.001–0.004 rad (true `cos(Δφ) = 1.0000`) on images 0–4: they really
+   have collapsed onto one shared phase. The "cross-object cosine" the
+   script also prints reads ≈1.000000 here too, but — as item 5 found —
+   that number reads ≈1.000000 *unconditionally*, so it is not the
+   evidence; the phase difference is.
 
 4. A plausible mechanism ("training discovered the loss surrogate's trivial
    global-synchrony fixed point") was proposed and *checked before being

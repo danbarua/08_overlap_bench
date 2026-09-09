@@ -52,7 +52,9 @@ def algebra_demo() -> None:
 
 
 def loss_insensitivity_demo() -> None:
-    print("\n--- 2. phase_coherence_loss barely moves as two objects' phases diverge ---")
+    print("\n--- 2. phase_coherence_loss does not move AT ALL as two objects' phases diverge ---")
+    print("    (third column: what the INTENDED formula would have given,")
+    print("     between = Re(z.conj(z'))/(|z||z'|) = cos(delta_phi), so loss = cos(delta_phi) - within)")
     n_per_object = 50
     labels = torch.cat([torch.ones(n_per_object, dtype=torch.long), 2 * torch.ones(n_per_object, dtype=torch.long)])
     for delta_phi in [0.0, torch.pi / 4, torch.pi / 2, 3 * torch.pi / 4, torch.pi]:
@@ -60,13 +62,16 @@ def loss_insensitivity_demo() -> None:
         phase_object_2 = torch.full((n_per_object,), delta_phi, dtype=torch.float64)
         x_T = torch.exp(1j * torch.cat([phase_object_1, phase_object_2]))
         loss = phase_coherence_loss(x_T, labels).item()
-        print(f"  delta_phi={delta_phi:.4f} rad ({delta_phi / torch.pi:.2f}*pi): loss = {loss:.6f}"
-              f"  <- should fall sharply as delta_phi grows if 'between' worked; it barely moves")
+        # Both synthetic objects are perfectly internally coherent, so within == 1 exactly;
+        # the intended between term would be cos(delta_phi), giving loss = cos(delta_phi) - 1.
+        intended_loss = torch.cos(torch.tensor(delta_phi, dtype=torch.float64)).item() - 1.0
+        print(f"  delta_phi={delta_phi:.4f} rad ({delta_phi / torch.pi:.2f}*pi):"
+              f"  actual loss={loss:+.6f}   intended loss would be={intended_loss:+.6f}")
 
 
 if __name__ == "__main__":
     algebra_demo()
     loss_insensitivity_demo()
     print("\nConclusion: within-object coherence is real and correctly measured (|z_o| terms).")
-    print("Between-object coherence has never been measured at all -- loss ~= 1 - within,")
+    print("Between-object coherence has never been measured at all -- loss == 1 - within,")
     print("always, for any phase configuration. See NOTE_40 on this project's LabKit record.")
