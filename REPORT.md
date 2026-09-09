@@ -60,23 +60,28 @@ Per-image means over the ten seeds: nine images above 0.5 — **none of them
 containing overlap** — eight between 0.02 and 0.5, and thirty-three at or
 below 0.02, twenty-nine of those overlapping.
 
-So neither aggregate describes a method that partly works. `M0`'s 0.121 is
-nine images it mostly solves and thirty-three it never solves. On
-overlapping images it is near chance in aggregate, though not incapable:
-4.6% of pairs still exceed 0.5, which is more than `cc` manages there —
-`cc` scores exactly 0.000 on all 35, every time, because it merges the
-objects into one component. That is the one place `M0` is strictly the
-better of the two. On the non-overlapping images it is the worse one,
-0.391 against 0.533, failing a third of them outright.
+Neither aggregate describes uniform mediocrity. `M0`'s 500 pairs have mean
+0.121 and median −0.037: most pairs score at or below chance, and 14.2% of
+them exceed 0.5. Grouping images by their ten-seed mean gives nine above
+0.5 (none containing overlap), eight between 0.02 and 0.5 (six with
+overlap), and thirty-three at or below 0.02 (twenty-nine with overlap).
 
-`cc`'s 0.160 is 8/50 × 1.000, exactly: the images where its merge happens
-not to occur.
+On overlapping images `M0`'s aggregate is near chance — mean 0.005, median
+−0.044, 87% of pairs at or below 0.02 — while 4.6% of pairs still exceed
+0.5. `cc` scores exactly 0.000 on all 35, every time, because it merges the
+two objects into one component; so the overlapping subset is the one place
+`M0`'s scores are ever above `cc`'s. On the non-overlapping subset the
+ordering reverses: `cc` 0.533 against `M0` 0.391, with 36% of `M0`'s pairs
+there at or below 0.02.
 
 `P1`'s scalar comparison was therefore fair — the two are comparable, and
 comparably far from doing the task. What a scalar cannot show is that both
 means are mixtures of near-perfect and near-chance images rather than
 uniform mediocrity, which is the fact a successor pursuit would want.
-(`NOTE_52`–`NOTE_54`, measured after closure. `MNIST_shapes` was not
+(`NOTE_52`–`NOTE_55`, measured after closure by
+`scripts/verification/stratify_arc1a_by_overlap.py`, whose own assertion is
+that its per-seed means reproduce `arc1a.json` to 10⁻¹²; output
+`outputs/arc1a-stratified.json`, sha256 `55cb65d4804adb73…`. `MNIST_shapes` was not
 stratified.)
 
 That killed the question as posed. "When it fails, is it the parameters or
