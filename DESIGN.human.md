@@ -213,3 +213,27 @@ line. What has happened since it was written:
   it, and ask the one question still open — can a *trained* linear
   oscillator model beat thresholding on 2shapes? P5's comparator is now
   M0 at defaults, since the sweep cell it named never exists.
+
+## After harness-M1
+
+**My M1 spec was wrong, twice.** First: I wrote M1 as $x(t)=e^{At}x_0$
+with $A$ the reference model's per-step matrix. But the reference is a
+*discrete* map, $x_{n+1}=Ax_n$, and $e^{A}\neq A$ — so "equals M0 at
+initialisation" could never hold, whatever the time convention. The
+implementor built it as specified, watched it overflow by step 2, and
+recorded the failure rather than patching around it. Correct.
+
+Second: I'd missed that the reference runs *two* layers. Layer 1 runs 59
+steps only to vote a background mask (an argmax — no gradients through
+it). Layer 2 restarts from the masked initial state under a 29× gentler
+coupling and runs to step 199, and *that* is the only trajectory the
+readout ever looks at. The implementor caught this too.
+
+**So M1 is now M1d:** the reference's layer-2 recurrence exactly, with its
+coupling $K_2$ and frequencies $\omega_2$ trainable, and layer 1 plus the
+mask kept fixed as the reference computes them. No exponential. It equals
+M0 at initialisation by construction; the harness check is that it does,
+to $10^{-12}$ on the trajectory and exactly on the labels.
+
+**Then the last question:** train it, and ask whether a trained linear
+oscillator model beats thresholding on 2shapes. That's all that is left.

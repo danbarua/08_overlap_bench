@@ -28,11 +28,27 @@ Decided on the record since this was written, each with its reason there:
   survives ten seeds. `GATE_2` is blocked and `arc1b` never runs.
 - `P5`'s comparator was "`M0`'s best sweep cell", which now never
   exists. Amended to `M0` at defaults (`DEC_1`, citing `CLM_4`).
-- `M2` closed as abandoned (`NOTE_15`): `P1` failing removed the premise
-  for a third mechanism, not just the gate. Reopening is a new pursuit.
-- Two locks the design left open were fixed before their numbers
-  existed: `ddof=0` for every seed-SD (`NOTE_11`, `NOTE_12`), and the
-  constraints on `M1`'s loss surrogate (`NOTE_13`).
+- `M2` abandoned with reason (`NOTE_15`): `P1` failing removed the
+  premise for a third mechanism, not just the gate. Its `close` is
+  deferred: on v0.5.0 `close <enquiry>` resolved the *question*
+  (labkit#360); the act was undone and the reason stands as a note.
+- **The `M1` lock below was wrong.** It put `M0`'s per-step matrix `A`
+  as the exponent of $e^{At}$; `M0` is the discrete map $A^n$, and
+  $e^{A}\neq A$, so `H1c` was unpassable as written. `harness-M1` ran
+  it anyway and recorded the failure (`CLM_8`, `NOTE_19`). It also
+  missed that `M0` is two runs: layer 1 makes a mask by a phase vote,
+  layer 2 restarts from the masked `x0` under a 29× gentler `K₂`, and
+  the readout windows only ever see layer 2. `LOE_2` is superseded,
+  reason on `NOTE_17`; its closure is deferred with `M2`'s.
+- `LOE_4` = **`M1d`**: `M0`'s layer-2 recurrence exactly, `K₂` and `ω₂`
+  trainable, layer 1 and the mask fixed as `M0`'s. No exponential, no
+  `logm`. Lock `NOTE_20`; harness criteria `CRIT_19`/`CRIT_20`/`CRIT_21`
+  (`H1c-d`/`H1a-d`/`H1b-d`) on `GATE_5`, protecting `TASK_8` =
+  `arc1c-d`, held to `L1 L2 P5 P6`. `TASK_7` = `harness-M1d`.
+- Locks the design left open, fixed before their numbers existed:
+  `ddof=0` for every seed-SD (`NOTE_11`, `NOTE_12`); the loss surrogate's
+  constraints (`NOTE_13`) and its exact expression, mask convention and
+  `x0` convention (`NOTE_16`).
 
 Nothing below this line has been edited to reflect those. The sections
 describe what was designed; the record describes what happened.
