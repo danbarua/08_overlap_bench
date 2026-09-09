@@ -252,12 +252,19 @@ eigenvector. The implementor checked the evaluation wasn't broken by
 running the untrained model through it and getting the earlier
 numbers back digit-for-digit.
 
-**So where does the question stand?** Nowhere clean, honestly. It asked
+**So where does the question stand?** Parked, on purpose. It asked
 "when the fixed model fails, is it the parameters or the data?" — and at
 ten seeds it doesn't fail: it ties thresholding on 2shapes and beats it
 nine-fold on MNIST_shapes. The one thing that *did* fail was the trained
 model, for a reason that is neither parameters nor data. The record
-says *unresolved*, which is right.
+says *accepted as unresolved*, with two things written down that would
+reopen it: a seed count or dataset where the fixed model actually loses,
+or a new attempt at training under a loss that penalises everything
+synchronising. That's the honest bucket — not answered, not abandoned.
+
+One caution the implementor added after checking: the trained model
+*sits* at the loss's trivial minimum, measured; whether training could
+have escaped it is not established, and nobody should say "can't".
 
 **What would come next, if anyone wants it:** a loss that penalises
 amplitude growth (a spectral penalty, or normalise inside the surrogate).

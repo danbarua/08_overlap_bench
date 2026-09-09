@@ -62,21 +62,41 @@ Decided on the record since this was written, each with its reason there:
   eigenvector-dominated before the readout windows. The eval path was
   validated by reproducing `arc1a`'s ten per-seed numbers with the
   untrained model.
-- **Synthesis `CLM_16`**, resting on `CLM_4 CLM_5 CLM_14 CLM_15`: the
-  fixed mechanism is indistinguishable from thresholding on `2shapes`
-  and nine-fold better on `MNIST_shapes`; training the same recurrence
-  under this loss made it worse, for a diagnosed reason. `Q_1` stands
-  *unresolved*: its premise — "when it fails" — has no instance at ten
-  seeds, and the record dissolves the question rather than answering
-  it (`NOTE_26`). A stability-constrained loss is a new pursuit, not
-  started.
+- **Corrections after closure, in the order found.** `H1b-d`'s pass
+  (`CEVAL_14`) had compared an *absolute* error to a *relative* bar;
+  relative, it failed (`NOTE_27`, `CEVAL_20`). The bar itself was
+  unmeasurable for gradients of order 1e-9 at ε=1e-6 — the same defect
+  class as the first `H1c` — so `CRIT_21` was amended to a scaled-ε
+  check (`DEC_8` → `CRIT_22`), which then passed by three orders of
+  magnitude (`CEVAL_21`, `CLM_18`). `GATE_5` reads satisfied; `TASK_8`
+  was not re-run, because the measurement changed and the gradient did
+  not (`NOTE_35`). The peer also withdrew one of its own arguments and
+  one overclaim (`NOTE_31`–`NOTE_33`).
+- **Syntheses, one per pursuit** — the design forbids an omnibus, and
+  `CLM_16`/`CLM_17` were one; withdrawn in reading (`NOTE_34`).
+  `CLM_19` (`M0`, on `CLM_4 CLM_5`): ties thresholding on `2shapes`,
+  nine-fold better on `MNIST_shapes`; the "parameters or data" clause
+  has no instance. `CLM_20` (`M1d`, on `CLM_14 CLM_15`): chance on
+  `2shapes`; the surrogate's trivial global-synchrony minimum is the
+  mechanism, reached and measured to six decimals (`NOTE_28`); whether
+  it is an absorbing attractor under batch-averaged training was *not*
+  established (`NOTE_31`, carried as `NOTE_36`). `P5`/`P6` not folded.
+- **`Q_1` accepted as unresolved** (`DEC_9`, in light of `CLM_4`): the
+  fixed model does not fail at ten seeds, so the question's premise has
+  no instance; left open on purpose rather than closed as "answered by
+  the finding that it does not apply". Reopens on (a) a seed count or
+  dataset where `M0` at defaults loses to thresholding by two SDs, or
+  (b) a new pursuit under a synchrony-penalised loss.
 
-**Final standing** (`seq 122`): nothing ready, nothing waiting; `GATE_2`,
-`GATE_3`, `GATE_4` blocked on standing fails, each walkable by `why`.
-36 of 122 acts are transcribed from this document; the rest were
+**Final standing** (`seq 141`): nothing ready, nothing waiting; `GATE_2`,
+`GATE_3`, `GATE_4` blocked on standing fails, `GATE_5` satisfied, each
+walkable by `why`. `Q_1` in *accepted as unresolved* with its reopening
+conditions. 36 of 141 acts transcribed from this document; the rest
 performed. One throwaway question (`Q_2`) sits in *untested* — a
 verification of a labkit fix done on the live record by mistake, and
-unretractable (labkit#364). Read nothing into it.
+unretractable (labkit#364). Read nothing into it. `LOE_2`/`LOE_3`
+read open with their closure reasons on `NOTE_17`/`NOTE_15`, pending
+labkit#360.
 
 Nothing below this line has been edited to reflect those. The sections
 describe what was designed; the record describes what happened.
