@@ -194,3 +194,22 @@ note. If you change a lock, that is a new pursuit, not an edit.
 
 `M2` has no locks yet, deliberately. Writing them now would fix a
 target that Arc 1 hasn't produced.
+
+## Where things stand (added after Arc 1a)
+
+The record in `./.labkit` is the authority now; `labkit now` tells you
+what is ready, blocked, and why. This note is not updated below this
+line. What has happened since it was written:
+
+- **The probe's 2shapes result was a fluke.** Ten seeds put the fixed
+  dynamics at 0.121 ± 0.040 against thresholding's 0.160 — inside one
+  seed-SD. The 9× win on MNIST_shapes is real (0.135 ± 0.018 vs 0.016).
+- **So the sweep never runs.** There is no 2shapes failure to explain
+  with parameters. That is the design working, not a problem.
+- **M2 is closed.** No clean failure for a third mechanism to fix. If
+  training the linear model (M1) turns out to help and *still* lose to
+  thresholding, that is the reason to reopen it — as a new pursuit.
+- **What's left:** build M1, prove it equals M0 at initialisation, train
+  it, and ask the one question still open — can a *trained* linear
+  oscillator model beat thresholding on 2shapes? P5's comparator is now
+  M0 at defaults, since the sweep cell it named never exists.

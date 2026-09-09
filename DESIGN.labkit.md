@@ -5,10 +5,37 @@ and the fields the act takes. Names in `code` — `M0`, `cc`, `P1` — are
 this document's, for cross-reference; the record mints its own ids when
 the act is recorded, and those are what later acts name.
 
-Nothing here is an established finding. Two numbers exist, from a
-throwaway probe, and they are recorded below as what they are: a
-reconstruction of one run, single seed, that motivated the question.
-Findings arrive as acts under "What running it puts on the record".
+**This document is the design as written; the record in `./.labkit` is
+the book of record.** It was put on the record from this file (36 acts,
+every one stamped `reconstructed-from` this document). Where the two
+disagree, the record is right and this file is history. `labkit now`
+answers what stands; `labkit why <handle>` answers why.
+
+Handles the record minted for the names below: `Q_1` the question;
+`LOE_1`/`LOE_2`/`LOE_3` = `M0`/`M1`/`M2`; `NOTE_1`–`NOTE_4` on `Q_1`
+(isolation, benchmark and hashes, meter, protocol); `NOTE_5`/`NOTE_6`/
+`NOTE_7` the `M0`/`M1`/`M2` locks; `NOTE_8` the probe; `CRIT_1`–`CRIT_3`
+= `H0a`–`H0c`; `CRIT_4`–`CRIT_6` = `H1a`–`H1c`; `CRIT_7`/`CRIT_8` =
+`L1`/`L2`; `CRIT_9`–`CRIT_12` = `P1`–`P4`; `CRIT_14` = `P6`; `CRIT_15` =
+`P5` as amended (`CRIT_13` is the superseded wording); `TASK_1`–`TASK_6`
+= `harness-M0`, `arc1a`, `arc1b`, `harness-M1`, `arc1c`, `arc2`;
+`GATE_1`–`GATE_4` = `gate-arc1a`, `gate-arc1b`, `gate-arc1c`, `gate-M2`.
+
+Decided on the record since this was written, each with its reason there:
+
+- `arc1a` ran. `P1` and `P2` both failed (`CLM_4`, `CLM_5`): the probe's
+  `2shapes` split was a single low seed; the `MNIST_shapes` split
+  survives ten seeds. `GATE_2` is blocked and `arc1b` never runs.
+- `P5`'s comparator was "`M0`'s best sweep cell", which now never
+  exists. Amended to `M0` at defaults (`DEC_1`, citing `CLM_4`).
+- `M2` closed as abandoned (`NOTE_15`): `P1` failing removed the premise
+  for a third mechanism, not just the gate. Reopening is a new pursuit.
+- Two locks the design left open were fixed before their numbers
+  existed: `ddof=0` for every seed-SD (`NOTE_11`, `NOTE_12`), and the
+  constraints on `M1`'s loss surrogate (`NOTE_13`).
+
+Nothing below this line has been edited to reflect those. The sections
+describe what was designed; the record describes what happened.
 
 ---
 
