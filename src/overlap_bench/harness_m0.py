@@ -119,8 +119,11 @@ def foreground_ari(truth: np.ndarray, predicted: np.ndarray) -> float:
 
 
 def valid_region_ari(truth: np.ndarray, predicted: np.ndarray) -> float:
-    """Whole-image ARI over pixels that are not overlap. Diagnostic only;
-    DESIGN.labkit.md: "enters no verdict"."""
+    """Valid-region ARI: ARI over pixels that are not overlap (truth != -1).
+
+    Includes background; excludes only overlap. Not "whole-image" -- that
+    would include overlap too. Diagnostic only; DESIGN.labkit.md: "enters
+    no verdict"."""
     valid = truth != -1
     if valid.sum() < 2:
         return float("nan")
