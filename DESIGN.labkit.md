@@ -48,7 +48,35 @@ Decided on the record since this was written, each with its reason there:
 - Locks the design left open, fixed before their numbers existed:
   `ddof=0` for every seed-SD (`NOTE_11`, `NOTE_12`); the loss surrogate's
   constraints (`NOTE_13`) and its exact expression, mask convention and
-  `x0` convention (`NOTE_16`).
+  `x0` convention (`NOTE_16`); `M1d`'s training budget in optimiser
+  steps after timing showed the placeholder was 74 days (`NOTE_21`,
+  `NOTE_22`); `ω₂` as per-image intensity plus one shared trainable
+  term (`NOTE_23`).
+- **`harness-M1d` passed exactly** — zero error on the step oracle and
+  the orbit, 50/50 labels (`GATE_5` satisfied). **`arc1c-d` ran: `P5`
+  and `P6` both failed** (`CLM_14`, `CLM_15`). Trained `M1d` scores
+  −0.010 ± 0.0001 on `2shapes` against `M0`'s 0.121 and `cc`'s 0.16 —
+  chance. Diagnosed, not just observed (`ART_12`): the phase-only
+  surrogate constrains nothing about amplitude; 500 steps grew the
+  dominant eigenvalue from 2.94 to 5.07 and the orbit is
+  eigenvector-dominated before the readout windows. The eval path was
+  validated by reproducing `arc1a`'s ten per-seed numbers with the
+  untrained model.
+- **Synthesis `CLM_16`**, resting on `CLM_4 CLM_5 CLM_14 CLM_15`: the
+  fixed mechanism is indistinguishable from thresholding on `2shapes`
+  and nine-fold better on `MNIST_shapes`; training the same recurrence
+  under this loss made it worse, for a diagnosed reason. `Q_1` stands
+  *unresolved*: its premise — "when it fails" — has no instance at ten
+  seeds, and the record dissolves the question rather than answering
+  it (`NOTE_26`). A stability-constrained loss is a new pursuit, not
+  started.
+
+**Final standing** (`seq 122`): nothing ready, nothing waiting; `GATE_2`,
+`GATE_3`, `GATE_4` blocked on standing fails, each walkable by `why`.
+36 of 122 acts are transcribed from this document; the rest were
+performed. One throwaway question (`Q_2`) sits in *untested* — a
+verification of a labkit fix done on the live record by mistake, and
+unretractable (labkit#364). Read nothing into it.
 
 Nothing below this line has been edited to reflect those. The sections
 describe what was designed; the record describes what happened.

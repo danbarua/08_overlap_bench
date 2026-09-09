@@ -237,3 +237,32 @@ to $10^{-12}$ on the trajectory and exactly on the labels.
 
 **Then the last question:** train it, and ask whether a trained linear
 oscillator model beats thresholding on 2shapes. That's all that is left.
+
+## The result
+
+**Training made it worse, and we know why.** The trainable copy of the
+reference's layer-2 recurrence was verified to be the reference exactly
+at initialisation — zero error on the trajectory, all 50 labels — and
+then 500 optimiser steps under the phase-coherence loss took it to
+*chance* on 2shapes (−0.01, against the reference's 0.12 and plain
+thresholding's 0.16). The loss only looks at phases, so nothing stopped
+the amplitudes running away: the dominant eigenvalue grew from 2.9 to
+5.1 and by the time the readout looks, every image is the same
+eigenvector. The implementor checked the evaluation wasn't broken by
+running the untrained model through it and getting the earlier
+numbers back digit-for-digit.
+
+**So where does the question stand?** Nowhere clean, honestly. It asked
+"when the fixed model fails, is it the parameters or the data?" — and at
+ten seeds it doesn't fail: it ties thresholding on 2shapes and beats it
+nine-fold on MNIST_shapes. The one thing that *did* fail was the trained
+model, for a reason that is neither parameters nor data. The record
+says *unresolved*, which is right.
+
+**What would come next, if anyone wants it:** a loss that penalises
+amplitude growth (a spectral penalty, or normalise inside the surrogate).
+That is a new pursuit under the same question — a different claim about
+a different loss — not a tweak to this one. Nobody has started it.
+
+Everything above is on the record with handles; `labkit why` on any of
+them gives the chain. This note stops here.
