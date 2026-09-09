@@ -95,10 +95,12 @@ def track_magnitude_growth(k2: torch.Tensor, delta_omega: torch.Tensor, images, 
 def check_object_synchrony(k2: torch.Tensor, delta_omega: torch.Tensor, images, labels, seed: int = 1) -> None:
     """Step 3: the check that actually explains chance-level ARI. Per
     object, |z_o| near 1 means good internal coherence (not itself a
-    problem). The cross-object cosine near 1 means the objects have
-    converged to the SAME phase -- that is what makes them indistinguishable
-    to any downstream clustering, regardless of how coherent each is
-    internally."""
+    problem). What matters for segmentation is whether DIFFERENT objects'
+    mean phases actually differ -- compare the printed phase difference and
+    true cos(phase_diff) directly, NOT the 'buggy_metric' value also printed
+    below: that one reproduces loss_m1.py's between-term formula
+    (overlap.abs()/magnitude_product) on purpose, to show it stays near 1
+    regardless of the real phase difference -- see check_surrogate_at_baseline.py."""
     from overlap_bench.loss_m1 import phase_coherence_loss
 
     nrow, ncol = images.shape[-2], images.shape[-1]
@@ -121,11 +123,17 @@ def check_object_synchrony(k2: torch.Tensor, delta_omega: torch.Tensor, images, 
         zs = [unit_phase[truth == oid].mean() for oid in object_ids]
         print(f"  image {i}: " + ", ".join(f"|z_{oid}|={z.abs().item():.4f}" for oid, z in zip(object_ids, zs)))
         if len(zs) == 2:
-            cross = (zs[0] * zs[1].conj()).abs().item() / (zs[0].abs().item() * zs[1].abs().item())
+            overlap = zs[0] * zs[1].conj()
+            magnitude_product = zs[0].abs().item() * zs[1].abs().item()
+            buggy_metric = overlap.abs().item() / magnitude_product  # loss_m1.py's actual formula
+            real_cos_dphi = overlap.real.item() / magnitude_product  # what it should compute
+            phase_diff = torch.angle(overlap).item()  # wrapped to (-pi, pi]
             loss = phase_coherence_loss(x_T, truth).item()
-            print(f"    cross-object cosine={cross:.6f}  loss(between-within)={loss:.6f}")
-            print("    cosine near 1.0 with DIFFERENT mean phases per object is itself worth a second look --")
-            print("    see check_surrogate_at_baseline.py for what that turned out to mean here.")
+            print(f"    phase difference={phase_diff:+.4f} rad, true cos(phase_diff)={real_cos_dphi:+.4f}")
+            print(f"    loss_m1.py's 'between' term (BUGGY, always ~1)={buggy_metric:.6f}"
+                  f"  loss(between-within)={loss:.6f}")
+            print("    the buggy term does NOT reflect the phase difference above -- see")
+            print("    check_surrogate_at_baseline.py for why (|z.conj(z')| == |z||z'| always).")
 
 
 if __name__ == "__main__":

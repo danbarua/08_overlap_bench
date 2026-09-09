@@ -84,9 +84,12 @@ def check_baseline_under_surrogate(images, labels, seed: int = 1) -> None:
         loss = phase_coherence_loss(x_T, truth).item()
         print(f"  image {i}: mean phases {[f'{p:.3f}' for p in phases]}, loss={loss:.3e}")
         if len(zs) == 2:
-            cross = (zs[0] * zs[1].conj()).abs().item() / (zs[0].abs().item() * zs[1].abs().item())
-            print(f"    'between' term reports: {cross:.8f}  <- watch this: does it depend on the")
-            print(f"    phase DIFFERENCE above at all, or is it always ~1 regardless?")
+            overlap = zs[0] * zs[1].conj()
+            magnitude_product = zs[0].abs().item() * zs[1].abs().item()
+            buggy = overlap.abs().item() / magnitude_product
+            correct_cos = overlap.real.item() / magnitude_product
+            print(f"    loss_m1.py's 'between' term (BUGGY): {buggy:.8f}   true cos(phase_diff): {correct_cos:+.4f}")
+            print(f"    the buggy term ignores the phase difference above entirely -- always ~1")
 
 
 def diagnose_the_formula() -> None:
@@ -97,14 +100,18 @@ def diagnose_the_formula() -> None:
     torch.manual_seed(0)
     for _ in range(3):
         # Two arbitrary nonzero complex numbers with a large phase difference.
-        z_o = torch.polar(torch.tensor(1.0 + torch.rand(1).item()), torch.rand(1) * 2 * torch.pi)
-        z_op = torch.polar(torch.tensor(1.0 + torch.rand(1).item()), torch.rand(1) * 2 * torch.pi)
+        # complex128 (not the torch.polar default complex64) so the coded
+        # term's "always ~1" claim isn't obscured by single-precision noise.
+        z_o = torch.polar(torch.tensor(1.0 + torch.rand(1).item(), dtype=torch.float64),
+                           (torch.rand(1) * 2 * torch.pi).to(torch.float64))
+        z_op = torch.polar(torch.tensor(1.0 + torch.rand(1).item(), dtype=torch.float64),
+                            (torch.rand(1) * 2 * torch.pi).to(torch.float64))
         overlap = z_o * z_op.conj()
         magnitude_product = z_o.abs() * z_op.abs()
         coded_between = (overlap.abs() / magnitude_product).item()
         # What a real "phase alignment" measure should give:
         correct_cosine = (overlap.real / magnitude_product).item()
-        phase_diff = (torch.angle(z_o) - torch.angle(z_op)).item()
+        phase_diff = torch.angle(overlap).item()  # angle of the product -- wrapped to (-pi, pi]
         print(f"  z_o={z_o.item():.3f}, z_o'={z_op.item():.3f}, phase_diff={phase_diff:.3f} rad")
         print(f"    loss_m1.py's formula (overlap.abs()/mag):  {coded_between:.8f}  <- always ~1")
         print(f"    what it should be (Re(overlap)/mag = cos): {correct_cosine:.8f}  <- varies with phase")

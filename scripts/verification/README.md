@@ -24,10 +24,14 @@ PYTHONPATH=src uv run --locked python scripts/verification/<script>.py
 
 3. **`diagnose_model_collapse.py`** — inspected the trained model directly:
    parameter magnitude and dominant eigenvalue grew substantially (2.94 →
-   5.07), the trajectory's magnitude blew up geometrically (to ~1e97, still
-   finite in float64), and — the check that actually explains a chance-level
-   *segmentation* score — the two objects' phases had converged to nearly
-   the same value (cross-object cosine ≈ 1.000000).
+   5.07), and the trajectory's magnitude blew up geometrically (to ~1e97,
+   still finite in float64). What actually explains a chance-level
+   *segmentation* score is the two objects' MEAN PHASES themselves — on
+   several trained images they had converged to within a few thousandths
+   of a radian of each other (e.g. 0.470 vs 0.470). The "cross-object
+   cosine" the script also prints reads ≈1.000000 here too, but — as item 5
+   found — that number reads ≈1.000000 unconditionally, whether phases
+   actually match or not; the real evidence is the phases themselves.
 
 4. A plausible mechanism ("training discovered the loss surrogate's trivial
    global-synchrony fixed point") was proposed and *checked before being
@@ -37,26 +41,32 @@ PYTHONPATH=src uv run --locked python scripts/verification/<script>.py
    phase-space argument (within/between both individually maximized at
    exact synchrony) was real, but didn't fully explain the observation.
 
-5. **`check_surrogate_at_baseline.py`** — the check that actually found the
-   root cause: does the *untrained, already-correct* baseline model *also*
-   look collapsed under this same loss surrogate? It did — the "between"
-   term reported cosine ≈ 1.000000 even for two objects with mean phases
-   0.86 radians apart. That is not synchrony; it is an algebraic identity:
-   `|z·conj(z')| = |z|·|z'|` for *any* complex `z`, `z'`, so
-   `overlap.abs() / magnitude_product` is always ≈ 1, regardless of phase.
-   The surrogate's between-object term never measured anything. This was a
-   specification defect (in `loss_m1.py`, tracing back to the design note
-   that first wrote the formula), not a training pathology.
+5. **`check_surrogate_at_baseline.py`** / **`demonstrate_between_term_bug.py`**
+   — the check that actually found the root cause: does the *untrained,
+   already-correct* baseline model *also* look collapsed under this same
+   loss surrogate? It did — the "between" term reported cosine ≈ 1.000000
+   even for two objects with mean phases 0.86 radians apart (image 2). That
+   is not synchrony; it is an algebraic identity: `|z·conj(z')| = |z|·|z'|`
+   for *any* complex `z`, `z'`, so `overlap.abs() / magnitude_product` is
+   always ≈ 1, regardless of phase. The surrogate's between-object term
+   never measured anything. This was a specification defect (in
+   `loss_m1.py`, tracing back to the design note that first wrote the
+   formula), not a training pathology.
 
 6. **`check_gradient_conditioning.py`** — a separate thread, hit while
    re-verifying an earlier gradient check: a criterion asked for "1e-6
    relative" finite-difference agreement, but the analytic gradients being
    checked were themselves tiny (~1e-9), which makes a fixed-eps per-entry
    relative check ill-conditioned (its own floating-point-cancellation floor
-   is comparable to the quantity being measured). A directional-derivative
-   check and an eps-sweep distinguish "correct gradient, tested imprecisely"
-   from "actually wrong gradient" — the V-shaped error curve (falling ~100x
-   per decade, then rising again) is the signature of the former.
+   is comparable to the quantity being measured). What actually resolved
+   it: scaling eps to the parameter's own magnitude (`1e-3*max(|param|,1)`)
+   instead of fixing it at 1e-6 — this pushes the loss difference being
+   measured far above the floor, and all entries then agree cleanly. A
+   directional-derivative check and an eps-sweep are useful DIAGNOSTICS for
+   telling "correct gradient, tested imprecisely" apart from "actually
+   wrong gradient" (the V-shaped error curve — falling ~100x per decade,
+   then rising again — is the signature of the former), but the scaled-eps
+   method is what actually closed the check out.
 
 ## General lessons, reusable beyond this project
 

@@ -11,11 +11,13 @@ the check's own floating-point-cancellation floor is comparable to the
 quantity being measured. See NOTE_27/NOTE_32/NOTE_37 in this project's
 LabKit record for the full trail.
 
-Three escalating techniques, each more informative than the last:
+Four escalating techniques, each more informative than the last:
 
-1. Per-entry check at a fixed eps (naive, and *ill-conditioned* whenever the
-   true gradient is small relative to eps * loss_scale / eps -- i.e.
-   whenever eps isn't matched to the gradient's own magnitude).
+1. Per-entry check at a fixed eps (naive, and *ill-conditioned* whenever
+   the true gradient is small). Central-difference cancellation error is
+   roughly ulp(L)/eps ~ 1e-16*|L|/eps: with |L| ~ 1e-2 and eps=1e-6, that
+   floor is ~1e-12 absolute -- the same order as the ~1e-9 K_2 gradients
+   themselves, which is exactly why the relative error reads 1-10%.
 2. Directional-derivative check: perturb along the unit gradient direction
    d = g/||g||, compare [L(p+eps*d) - L(p-eps*d)]/(2*eps) against g.d =
    ||g||. This tests an O(||g||)-scale quantity instead of a possibly-tiny
@@ -23,8 +25,18 @@ Three escalating techniques, each more informative than the last:
 3. An eps-sweep: if relative error falls ~100x per decade of eps (O(eps^2)
    truncation error shrinking) and then rises again at very small eps
    (floating-point cancellation), that V-shape is the signature of a
-   *correct* gradient tested imprecisely -- not a wrong one. The minimum of
-   the sweep is the honest achievable number; don't cherry-pick a single eps.
+   *correct* gradient tested imprecisely -- not a wrong one. Report the
+   FLOOR of the sweep, not the single lowest point: several nearby eps
+   values often land on the identical error (the loss difference itself
+   is quantised to the same few ulps there), which is the honest
+   resolution limit, not one eps happening to do better than its neighbours.
+4. Scaled eps, matched to the parameter's own magnitude (here
+   eps=1e-3*max(|param|,1)): this sidesteps the conditioning problem
+   instead of just diagnosing it. At eps=1e-3, L(p+eps)-L(p-eps) is of
+   order 1e-12 or larger -- far above the loss's own ulp(L)~1e-18 floor --
+   while truncation error for a single-entry perturbation of this size
+   stays small, because the loss is smooth in any one entry even though
+   the full 140-step recurrence is highly nonlinear overall.
 
 Run against this project's actual harness-M1d model and checkpoint to
 reproduce the numbers discussed above.
