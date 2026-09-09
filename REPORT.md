@@ -41,6 +41,34 @@ distinguishable from thresholding on `2shapes` — 0.121 ± 0.040 against
 was a single low draw; the per-seed spread runs 0.046 to 0.180.
 (`CLM_4`, `CLM_5`, synthesised as `CLM_19`.)
 
+**What the meter's numbers mean.** Foreground ARI is 1.0 for a perfect
+labelling and 0.0 for chance; measured on this data, a random two-way split
+of the foreground scores 0.000 and labelling everything one object scores
+0.000. So every number in this report — 0.16, 0.121, 0.135 — sits in the
+bottom sixth of the scale. Nothing here segments these images well.
+
+And the two baselines fail differently in a way the scalar hides. Breaking
+`cc`'s 0.160 down by how many components it found on the foreground:
+
+| `2shapes` | images | mean FG ARI |
+|---|---:|---:|
+| one component found | 42 | 0.000 |
+| two components found | 8 | 1.000 |
+
+8/50 × 1.000 = 0.160, exactly. **`cc`'s entire score is the fraction of
+images whose two objects happen not to touch.** Where they touch — 35 of
+50 images have overlap pixels, and that is the benchmark's whole point — it
+merges them into one blob and scores zero, every time. On `MNIST_shapes`,
+where objects touch on 49 of 50, it manages 0.016 the same way. `M0`'s
+scores are spread across images rather than bimodal, so it is partially
+solving genuinely overlapping images while `cc` is not solving them at all.
+
+Which means "not distinguishable from thresholding on `2shapes`" is
+arithmetically right and the wrong comparison: the two are incommensurable,
+not tied. `P1` was written as a scalar comparison of means, and a scalar
+cannot see the difference between solving 16% of a task perfectly and
+solving most of it slightly. (`NOTE_52`, measured after closure.)
+
 That killed the question as posed. "When it fails, is it the parameters or
 the data" has no instance: at ten seeds the fixed mechanism does not fail on
 either dataset. The parameter sweep that would have decided between
