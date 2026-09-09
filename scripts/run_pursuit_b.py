@@ -412,6 +412,9 @@ def main(argv: list[str] | None = None) -> dict:
         "batch": BATCH,
         "lr": LR,
         "train_images": n_train,
+        "eval_images": args.eval_images,
+        "eval_seeds": args.eval_seeds,
+        "at_init_oracle": oracle,
         "known_answers": known,
         "old_formula_control": control,
         "training_curve": curve,
@@ -441,8 +444,16 @@ if __name__ == "__main__":
         f"+/- {e['seed_std_foreground_ari']:.4f}   "
         f"(M0 at defaults {e['m0_at_defaults']:.4f}, cc {e['cc_baseline']:.2f})"
     )
-    print(
-        f"P6 (above cc 0.16): {e['p6_above_cc']}\n"
-        f"diagnostic, above M0 at defaults 0.1209: {e['diagnostic_above_m0_at_defaults']}"
-        f"  (by >2 seed SD: {e['diagnostic_exceeds_m0_by_two_seed_sd']})"
+    locked_eval = (
+        len(e["per_seed_mean_foreground_ari"]) == len(EVAL_SEEDS)
+        and result["eval_images"] == EVAL_IMAGES
     )
+    if not locked_eval:
+        print("smoke only - no P6 verdict (eval was not the locked 50 images x 10 seeds)")
+    else:
+        print(
+            f"P6 (above cc 0.16): {e['p6_above_cc']}\n"
+            f"diagnostic, above M0 at defaults 0.1209: "
+            f"{e['diagnostic_above_m0_at_defaults']}"
+            f"  (by >2 seed SD: {e['diagnostic_exceeds_m0_by_two_seed_sd']})"
+        )
