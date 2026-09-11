@@ -317,7 +317,12 @@ def _evaluate(
         images_np = np.asarray(data["images"][:n_images, 0], dtype=np.float64)
         labels_np = np.asarray(data["labels"][:n_images], dtype=np.int64)
 
+    # Per image, not just per seed. The mean is what the criteria are stated
+    # against, but the distribution is what tells you whether a budget is
+    # uniformly mediocre or excellent-except-for-three-images, and the two have
+    # different implications. Computing it is free; only keeping it was missing.
     per_seed = []
+    per_seed_per_image: list[list[float]] = []
     for seed in EVAL_SEEDS[:n_seeds]:
         scores = []
         for i in range(n_images):
@@ -340,6 +345,7 @@ def _evaluate(
             )
             scores.append(foreground_ari(labels_np[i], cluster_map.numpy()))
         per_seed.append(float(np.mean(scores)))
+        per_seed_per_image.append([float(s) for s in scores])
         _progress(f"eval seed {seed}: mean FG ARI {per_seed[-1]:+.4f}")
 
     mean = float(np.mean(per_seed))
@@ -348,6 +354,16 @@ def _evaluate(
     return {
         "dataset": dataset,
         "per_seed_mean_foreground_ari": per_seed,
+        # [seed][image], seeds in EVAL_SEEDS order. Enables the per-image
+        # distribution, and lets a later reader ask which images a budget fails
+        # rather than only how it did on average.
+        "per_seed_per_image_foreground_ari": per_seed_per_image,
+        # Ground-truth overlap fraction per image: the obvious difficulty
+        # covariate, and without it an unstable image cannot be told from a
+        # hard one. -1 is the excluded overlap label.
+        "per_image_overlap_fraction": [
+            float(np.mean(labels_np[i] == -1)) for i in range(n_images)
+        ],
         "seed_averaged_foreground_ari": mean,
         "seed_std_foreground_ari": own_sd,
         "m0_at_defaults": base["m0_at_defaults"],

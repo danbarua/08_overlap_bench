@@ -143,6 +143,18 @@ def main(argv: list[str] | None = None) -> dict:
         help="compare eval seeds 1..N pairwise, all C(N,2) pairs (locked eval uses 10)",
     )
     parser.add_argument(
+        "--save-maps",
+        default=None,
+        help=(
+            "write the cluster maps to this .npz: keys map_s<seed>_i<image>, "
+            "plus the images and ground truth. Off by default. Without it the "
+            "segmentations are discarded, and no figure showing what the model "
+            "actually produces can be drawn afterwards at any price short of a "
+            "rerun. Limited by --save-maps-images to keep the file small."
+        ),
+    )
+    parser.add_argument("--save-maps-images", type=int, default=4)
+    parser.add_argument(
         "--out", default=str(Path(__file__).resolve().parents[1] / "outputs" / "label-identity.json")
     )
     args = parser.parse_args(argv)
@@ -198,6 +210,16 @@ def main(argv: list[str] | None = None) -> dict:
             ari[seed].append(foreground_ari(labels_np[i], cluster_map))
         _progress(f"  seed {seed}: mean FG ARI {float(np.mean(ari[seed])):+.6f}")
 
+    if args.save_maps:
+        keep = min(args.save_maps_images, n_images)
+        bundle = {
+            f"map_s{seed}_i{i}": maps[seed][i] for seed in seeds for i in range(keep)
+        }
+        bundle["images"] = images_np[:keep]
+        bundle["ground_truth"] = labels_np[:keep]
+        np.savez_compressed(args.save_maps, **bundle)
+        _progress(f"saved {len(bundle) - 2} cluster maps for {keep} images to {args.save_maps}")
+
     pairs = []
     for a_idx, seed_a in enumerate(seeds):
         for seed_b in seeds[a_idx + 1 :]:
@@ -251,6 +273,13 @@ def main(argv: list[str] | None = None) -> dict:
         "n_pairs_all_images_raw_identical": all_raw,
         "n_pixels_differing_that_foreground_ari_scores": scored_diffs,
         "per_seed_mean_foreground_ari": per_seed_mean,
+        # [seed][image]. The pairwise test already computes every seed's score
+        # on every image; keeping only the means made "which images does the
+        # unstable set consist of, and do they also score badly?" unanswerable
+        # without a rerun. That correlation is the point of having both halves.
+        "per_seed_per_image_foreground_ari": [
+            [float(v) for v in ari[s]] for s in seeds
+        ],
         "n_distinct_per_seed_means": len(set(per_seed_mean)),
         "pairs": pairs,
     }
