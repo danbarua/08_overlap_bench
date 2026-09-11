@@ -268,7 +268,22 @@ def _train(
     x0s: torch.Tensor,
     steps: int,
     device: torch.device,
+    order: torch.Tensor | None = None,
 ) -> list[dict]:
+    """Train layer 2. `order` permutes which training image each slot draws.
+
+    Without it the batch for step s is images [s*32, s*32+32) mod n_train, an
+    index-derived cycle. Nothing else in training consumes randomness either --
+    the init IS M0 (K_2 the Gaussian sheet, delta_omega zeros) and each x0 is
+    seeded by its own image index -- so there is no training seed to vary and
+    every run of a given budget is the same trajectory to the last bit. That is
+    why the budgets form exact prefixes of one another.
+
+    `order` is therefore the only way to obtain a genuinely different
+    trajectory, which is what is needed to ask whether a result like the
+    seed-invariance transition is a property of the model or of this one
+    optimisation path.
+    """
     optimiser = torch.optim.Adam(model.parameters(), lr=LR)
     n_train = images.shape[0]
     curve = []
@@ -276,6 +291,8 @@ def _train(
     for step in range(steps):
         lo = (step * BATCH) % n_train
         idx = torch.arange(lo, lo + BATCH, device=device) % n_train
+        if order is not None:
+            idx = order[idx]
         optimiser.zero_grad()
         x_T = model.orbit_final(x0s[idx], images[idx], masks[idx])
         losses = [cos_coherence_loss(x_T[b], labels[idx[b]]) for b in range(BATCH)]
@@ -416,6 +433,19 @@ def main(argv: list[str] | None = None) -> dict:
     parser.add_argument("--eval-seeds", type=int, default=len(EVAL_SEEDS))
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument(
+        "--shuffle-batches",
+        type=int,
+        default=None,
+        metavar="SEED",
+        help=(
+            "permute the training order with this seed. Default order is "
+            "index-derived and nothing else in training consumes randomness, so "
+            "without this every run of a budget is the same trajectory bit for "
+            "bit and the budgets are exact prefixes of each other. This is the "
+            "only way to get a second trajectory."
+        ),
+    )
+    parser.add_argument(
         "--skip-oracle",
         action="store_true",
         help="skip the at-init identity check against M0. Do not use for a real run.",
@@ -484,10 +514,18 @@ def main(argv: list[str] | None = None) -> dict:
     precompute_s = time.monotonic() - precompute_started
 
     steps = args.steps if args.epochs == 0 else (args.epochs * n_train) // BATCH
+    # The one genuine source of trajectory variation. Seeded explicitly and
+    # recorded in the output, so a shuffled run is identifiable as such rather
+    # than being mistaken for a second sample of the default trajectory.
+    order = None
+    if args.shuffle_batches is not None:
+        generator = torch.Generator(device="cpu").manual_seed(args.shuffle_batches)
+        order = torch.randperm(n_train, generator=generator).to(device)
+        _progress(f"shuffled batch order, permutation seed {args.shuffle_batches}")
     _progress(f"training {steps} steps, batch {BATCH}, lr {LR}, on {device}")
     model = Layer2(k2, n).to(device)
     train_started = time.monotonic()
-    curve = _train(model, images, labels, masks, x0s, steps, device)
+    curve = _train(model, images, labels, masks, x0s, steps, device, order=order)
     train_s = time.monotonic() - train_started
 
     checkpoint_path = None
@@ -505,6 +543,7 @@ def main(argv: list[str] | None = None) -> dict:
                 "train_images": n_train,
                 "dataset": args.dataset,
                 "layer2_steps": LAYER2_STEPS,
+                "shuffle_batches": args.shuffle_batches,
             },
             checkpoint_path,
         )
@@ -523,6 +562,9 @@ def main(argv: list[str] | None = None) -> dict:
         "pursuit": "b: the loss NOTE_16 intended (cos between-object term)",
         "device": str(device),
         "dataset": args.dataset,
+        # None means the default index-derived order. Recorded either way: a
+        # shuffled trajectory and the default one are not comparable as repeats.
+        "shuffle_batches": args.shuffle_batches,
         "steps": steps,
         "batch": BATCH,
         "lr": LR,
