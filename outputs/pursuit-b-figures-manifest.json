@@ -22,6 +22,7 @@
     "pursuit-b-weights.png": "1495801f8cb277881e269d7b3e89526a1b07a92c59d6eba5142b55d180b09a8b"
   },
   "inputs": {
+    "2shapes_val.npz": "9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59",
     "ckpt-10000.pt": "c8fcd29ed251011d65a12ccd90b7c0fb4177abbf84ff9773d02ecf9ff8fdb1ec",
     "ckpt-2000.pt": "08235b7dbf1af9ab8127c6afea1f39e165c996f2779a3e3cc026cad2732dd8e6",
     "ckpt-500.pt": "31816cc06bfb51c11ca6749cb44d8c249a45274d9cb730dfa3e1587dbb4e63d7",

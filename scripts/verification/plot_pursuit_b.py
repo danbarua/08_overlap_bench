@@ -40,11 +40,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
+from overlap_bench.dataset_hashes import CAE_DIR
 from overlap_bench.paths import ROOT_DIR
 
 OUT_DIR = Path(ROOT_DIR) / "figures"
 ARTEFACTS = Path(ROOT_DIR) / "outputs"
 BUDGETS = (250, 500, 1000, 2000, 4000, 6000, 8000, 10000)
+VAL_DATASET = CAE_DIR / "2shapes_val.npz"
 NROW = NCOL = 32
 M0_AT_DEFAULTS = 0.12085737825541296
 CC_BASELINE = 0.16
@@ -262,9 +264,7 @@ def _val_overlap_fractions(n_images: int) -> np.ndarray:
     A property of the benchmark, not of any run, so it is read from the locked
     npz rather than taken from an artefact. -1 is the excluded overlap label.
     """
-    from overlap_bench.dataset_hashes import CAE_DIR
-
-    with np.load(CAE_DIR / "2shapes_val.npz") as data:
+    with np.load(VAL_DATASET) as data:
         labels = np.asarray(data["labels"][:n_images], dtype=np.int64)
     return np.mean(labels == -1, axis=(1, 2))
 
@@ -291,7 +291,7 @@ def _per_image_budget_data() -> tuple[np.ndarray, np.ndarray, list[Path]] | None
 
     scores = np.vstack(by_budget)
     overlap = _val_overlap_fractions(scores.shape[1])
-    return scores, overlap, paths
+    return scores, overlap, [*paths, VAL_DATASET]
 
 
 def _fig_per_image_trajectories(scores: np.ndarray, overlap: np.ndarray) -> Path:
