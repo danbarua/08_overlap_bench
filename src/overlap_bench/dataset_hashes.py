@@ -6,6 +6,7 @@ file is not the one the design document's numbers were computed against.
 """
 
 import hashlib
+from collections.abc import Iterable
 from pathlib import Path
 
 from overlap_bench.paths import CAE_DIR
@@ -34,12 +35,30 @@ def sha256_of(path: Path) -> str:
     return digest.hexdigest()
 
 
-def verify_locked_dataset_hashes(directory: Path | None = None) -> dict[str, str]:
-    """Return {filename: actual_sha256} for every locked file; raise on any mismatch."""
+def verify_locked_dataset_hashes(
+    directory: Path | None = None, only: Iterable[str] | None = None
+) -> dict[str, str]:
+    """Return {filename: actual_sha256} for the locked files; raise on any mismatch.
+
+    `only` narrows the check to the named files, for a run that reads a subset
+    of the benchmark. Hashing a file the run never opens is evidence about
+    nothing, and on a slow link it costs the transfer of every other file. A
+    name absent from the locked table is an error, so a typo cannot quietly
+    skip a check instead of narrowing one. Callers that narrow should record
+    which files they verified; "verified" alone does not say how many.
+    """
     directory = directory if directory is not None else CAE_DIR
+    if only is None:
+        wanted = LOCKED_SHA256
+    else:
+        names = list(only)
+        unknown = [n for n in names if n not in LOCKED_SHA256]
+        if unknown:
+            raise ValueError(f"not in the locked table: {', '.join(sorted(unknown))}")
+        wanted = {n: LOCKED_SHA256[n] for n in names}
     actual = {}
     mismatches = []
-    for filename, expected in LOCKED_SHA256.items():
+    for filename, expected in wanted.items():
         path = directory / filename
         if not path.exists():
             mismatches.append(f"{filename}: missing at {path}")

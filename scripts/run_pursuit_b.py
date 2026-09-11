@@ -361,7 +361,11 @@ def main(argv: list[str] | None = None) -> dict:
     if args.check_only:
         return {"known_answers": known, "old_formula_control": control}
 
-    verify_locked_dataset_hashes()
+    # Only the files this run opens. Hashing 3shapes and MNIST_shapes would be
+    # evidence about nothing here, and costs 90 MB of transfer to a remote VM.
+    verified = verify_locked_dataset_hashes(
+        only=[f"{DATASET}_train.npz", f"{DATASET}_val.npz"]
+    )
     device = torch.device(args.device)
     torch.manual_seed(0)
 
@@ -415,6 +419,7 @@ def main(argv: list[str] | None = None) -> dict:
         "eval_images": args.eval_images,
         "eval_seeds": args.eval_seeds,
         "at_init_oracle": oracle,
+        "dataset_hashes_verified": verified,
         "known_answers": known,
         "old_formula_control": control,
         "training_curve": curve,
