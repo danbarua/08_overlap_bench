@@ -13,3 +13,5 @@ __pycache__/
 # Trained weights: hash-locked on the record, not in git history (K_2 alone is
 # ~16MB of complex128). Same treatment as the CAE datasets.
 outputs/*.pt
+
+.DS_Store
