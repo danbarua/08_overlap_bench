@@ -1,0 +1,51 @@
+{
+  "cc_mean_foreground_ari": 0.2355807978311852,
+  "cc_mean_valid_region_ari_diagnostic": 0.9603573572855431,
+  "dataset": "3shapes",
+  "dataset_hashes_verified": {
+    "3shapes_train.npz": "f79e21ca86e151f010e51ed4c9ededcbc8f515d03bb2261ef209c9c3b6ea4064",
+    "3shapes_val.npz": "9baec24f4e4dded964794e52f71a1dc934505533845d275f2d29aa35a6e24984"
+  },
+  "m0_per_seed_mean_foreground_ari": [
+    0.251422091520115,
+    0.21806334104946107,
+    0.23418339997807536,
+    0.2411067129779275,
+    0.26107037561550617,
+    0.23965207242345876,
+    0.21095711504978876,
+    0.25988994970497586,
+    0.2433782692480081,
+    0.23511520255584212
+  ],
+  "m0_per_seed_mean_valid_region_ari_diagnostic": [
+    0.9664685130736734,
+    0.9652294778847436,
+    0.9663648106533824,
+    0.9668443986252183,
+    0.9679401252641135,
+    0.9670009768194539,
+    0.9649921497711922,
+    0.9680884883610799,
+    0.9670367927675686,
+    0.9666157637786548
+  ],
+  "m0_seed_averaged_foreground_ari": 0.23948385301231592,
+  "m0_seed_averaged_valid_region_ari_diagnostic": 0.966658149699908,
+  "m0_seed_std_foreground_ari": 0.01537052292462737,
+  "n_clusters": 3,
+  "n_files_hash_verified": 2,
+  "n_images": 50,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+}
