@@ -534,11 +534,17 @@ def main(argv: list[str] | None = None) -> dict:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
 
-    # Wall-clock lives beside the artefact, not inside it. The artefact's hash
-    # is then a reproducibility lock -- a re-run with the same code and data
-    # re-derives it -- rather than merely an integrity lock on one file. The
-    # timings are still worth keeping; they just cannot be part of what is
-    # hashed and cited.
+    # Wall-clock lives beside the artefact, not inside it, so the artefact's
+    # hash is a reproducibility lock -- a re-run re-derives it -- rather than
+    # merely an integrity lock on one file.
+    #
+    # The claim is precisely: same code, same data, same --device re-derives
+    # this hash. `device` stays IN the artefact deliberately. It is not
+    # incidental machine detail: CUDA and CPU differ in fp64 reduction order,
+    # so a cuda number and a cpu number are not required to be equal and an
+    # artefact that hid which one produced it would be claiming more than it
+    # can. A hash that changes with the device is correct; one that changes
+    # with the wall-clock or the working directory is not.
     timing = out.with_suffix(".timing.json")
     timing.write_text(
         json.dumps(
