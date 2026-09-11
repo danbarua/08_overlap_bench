@@ -9,6 +9,11 @@ What the record does not give, and what this document is for, is the
 Read this for the trail. Read `labkit now`, `labkit known` and
 `labkit why <handle>` for the state. Handles below are that record's.
 
+The corrected-loss successor named below has since been run. Its results and
+their later corrections are kept separately in `PURSUIT-B.md` so this report
+remains the trail of the original programme. The LabKit record wins if either
+document disagrees with it.
+
 ---
 
 ## The question
@@ -251,18 +256,22 @@ superseded reading left readable beside it. Nothing was silently rewritten.
 
 ---
 
-## What would come next
+## What came next, and what remains
 
-Not started, and each a new pursuit rather than a fix to this one:
+The intended corrected-loss experiment was run as a separate successor
+pursuit. See `PURSUIT-B.md` for its protocol, results, correction trail and
+limits; importing those results here would erase the boundary between the
+original failed objective and its replacement.
 
-- **The intended loss.** $\cos(\phi_o - \phi_{o'})$ between objects, same
-  model, same budget shape, with `NOTE_49`'s constructed-input check run
-  before the first training step. One hour of compute. This is the
-  experiment the programme meant to run.
-- **The parameter sweep**, if a seed count or dataset is ever found on which
-  the fixed model genuinely loses — the instance `Q_1`'s second clause needs.
-- **`M2`**, abandoned (`NOTE_15`) because the premise for a third mechanism
-  disappeared when the fixed model turned out not to fail.
+Two branches remain intentionally unrun:
+
+- **The parameter sweep** remains blocked because no measured dataset makes
+  the fixed model lose by the prespecified margin. There is still no failure
+  instance for the sweep to explain (`GATE_2`).
+- **`M2`** remains behind the legacy `GATE_4`. Pursuit B supplies a positive
+  trainable-M1d result, but the gate's literal criteria refer to the original
+  failed-loss work. Whether to replace that gate is a new design decision, not
+  a conclusion licensed by the completed runs.
 
 ---
 
