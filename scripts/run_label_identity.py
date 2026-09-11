@@ -49,6 +49,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from run_pursuit_b import (  # noqa: E402
+    BASELINES,
     DATASET,
     LAYER1_STEPS,
     Layer2,
@@ -126,6 +127,12 @@ def main(argv: list[str] | None = None) -> dict:
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--images", type=int, default=50)
     parser.add_argument(
+        "--dataset",
+        default=DATASET,
+        choices=sorted(BASELINES),
+        help="must match the dataset the checkpoint was trained on; checked below",
+    )
+    parser.add_argument(
         "--seeds",
         type=int,
         default=10,
@@ -136,16 +143,22 @@ def main(argv: list[str] | None = None) -> dict:
     )
     args = parser.parse_args(argv)
 
-    verified = verify_locked_dataset_hashes(only=[f"{DATASET}_val.npz"])
+    verified = verify_locked_dataset_hashes(only=[f"{args.dataset}_val.npz"])
     device = torch.device(args.device)
     ensure_on_path()
 
-    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+    with np.load(CAE_DIR / f"{args.dataset}_val.npz") as data:
         images_np = np.asarray(data["images"][: args.images, 0], dtype=np.float64)
         labels_np = np.asarray(data["labels"][: args.images], dtype=np.int64)
     n_images, nrow, ncol = images_np.shape
 
     blob = torch.load(args.checkpoint, map_location="cpu")
+    if blob.get("dataset") != args.dataset:
+        raise ValueError(
+            f"checkpoint was trained on {blob.get('dataset')!r} but this is "
+            f"evaluating {args.dataset!r}. Comparing partitions across datasets "
+            "would produce a number about nothing."
+        )
     _, k2 = _sheets(nrow, ncol, device)
     model = Layer2(k2, nrow * ncol).to(device)
     model.load_state_dict({k: v.to(device) for k, v in blob["state_dict"].items()})

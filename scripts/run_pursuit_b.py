@@ -66,7 +66,7 @@ from overlap_bench.loss_m1_cos import (
 from overlap_bench.paths import ROOT_DIR
 from overlap_bench.reference_repo import ensure_on_path
 
-DATASET = "2shapes"
+DATASET = "2shapes"  # default; --dataset selects, BASELINES gates what is allowed
 LAYER1_STEPS = 60
 LAYER2_STEPS = 140
 BATCH = 32
@@ -74,8 +74,31 @@ LR = 1e-3
 EVAL_IMAGES = 50
 EVAL_SEEDS = tuple(range(1, 11))
 TRAIN_SEED_OFFSET = 100_000  # NOTE_21: disjoint from the eval seeds
-M0_AT_DEFAULTS = 0.12085737825541296  # arc1a, ART_6
-CC_BASELINE = 0.16  # H0b's locked value
+
+# Comparators are per-dataset and must travel with the dataset. Leaving them as
+# 2shapes globals while parameterising the data would compute every non-2shapes
+# verdict against the wrong baseline, and it would do it silently.
+#
+# m0_seed_sd is M0's own spread (ddof=0), not the trained model's. Both appear
+# in the output: at a budget where the trained model's per-seed values collapse,
+# two of ITS SDs is ~0 and that test degenerates into the plain above-M0
+# comparison -- which is what happened to pursuit-b at 10,000 steps.
+BASELINES: dict[str, dict[str, float]] = {
+    "2shapes": {
+        "m0_at_defaults": 0.12085737825541296,  # arc1a, ART_6
+        "m0_seed_sd": 0.0403,  # arc1a, as reported on the record
+        "cc": 0.16,  # H0b's locked value
+    },
+    "MNIST_shapes": {
+        "m0_at_defaults": 0.13545693221331362,  # arc1a, EV_8, commit 31d80d3
+        "m0_seed_sd": 0.017840792268879264,  # EV_8, ddof=0
+        "cc": 0.01552888819008583,  # EV_8
+    },
+    # 3shapes is deliberately absent. It has no cc/M0 baseline in arc1a at all,
+    # and its images hold three objects against a readout with n_clusters=2
+    # hardcoded (here and in harness_m1d), which arc1a's own scope note put out
+    # of scope. Two separate blockers; adding a row here would hide both.
+}
 
 
 def _progress(message: str) -> None:
@@ -169,7 +192,7 @@ class Layer2(torch.nn.Module):
 
 
 def assert_matches_m0_at_init(
-    k2: torch.Tensor, device: torch.device, n_images: int = 3
+    k2: torch.Tensor, device: torch.device, n_images: int = 3, dataset: str = DATASET
 ) -> dict:
     """The oracle. Before training: this reimplementation must BE M0.
 
@@ -187,7 +210,7 @@ def assert_matches_m0_at_init(
         spatiotemporal_segmentation_torch,
     )
 
-    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+    with np.load(CAE_DIR / f"{dataset}_val.npz") as data:
         images_np = np.asarray(data["images"][:n_images, 0], dtype=np.float64)
 
     model = Layer2(k2, k2.shape[0]).to(device)
@@ -277,6 +300,7 @@ def _evaluate(
     device: torch.device,
     n_images: int = EVAL_IMAGES,
     n_seeds: int = len(EVAL_SEEDS),
+    dataset: str = DATASET,
 ) -> dict:
     """Val through M0's own readout, foreground ARI as the protocol note locks it.
 
@@ -286,7 +310,7 @@ def _evaluate(
     ensure_on_path()
     from src.cv_rnn.cv_rnn_segmentation import run_2layer_torch, spatiotemporal_segmentation_torch
 
-    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+    with np.load(CAE_DIR / f"{dataset}_val.npz") as data:
         images_np = np.asarray(data["images"][:n_images, 0], dtype=np.float64)
         labels_np = np.asarray(data["labels"][:n_images], dtype=np.int64)
 
@@ -316,29 +340,55 @@ def _evaluate(
         _progress(f"eval seed {seed}: mean FG ARI {per_seed[-1]:+.4f}")
 
     mean = float(np.mean(per_seed))
+    own_sd = float(np.std(per_seed, ddof=0))
+    base = BASELINES[dataset]
     return {
+        "dataset": dataset,
         "per_seed_mean_foreground_ari": per_seed,
         "seed_averaged_foreground_ari": mean,
-        "seed_std_foreground_ari": float(np.std(per_seed, ddof=0)),
-        "m0_at_defaults": M0_AT_DEFAULTS,
-        "cc_baseline": CC_BASELINE,
-        # P6 (CRIT_14) as written: above cc's 0.16. This is the answer.
-        "p6_above_cc": mean > CC_BASELINE,
+        "seed_std_foreground_ari": own_sd,
+        "m0_at_defaults": base["m0_at_defaults"],
+        "m0_seed_sd": base["m0_seed_sd"],
+        "cc_baseline": base["cc"],
+        # P6 (CRIT_14) as written: above cc. This is the answer for 2shapes.
+        # For MNIST_shapes it is close to vacuous -- M0 already beats cc there
+        # ninefold -- so the informative prespecified bar on that dataset is the
+        # M0-relative one below, not this.
+        "p6_above_cc": mean > base["cc"],
         # NOT P5. CRIT_15 requires exceeding M0's best swept cell by more than
         # two seed SDs, and that cell does not exist -- GATE_2 blocked, arc1b
         # never ran, and DEC_1 amended the comparator to M0 at defaults for
         # exactly this reason. This is that amended comparison, and it is a
         # diagnostic here rather than a verdict: a verdict needs an evaluation
         # recorded against CRIT_15 on the record, not a boolean in a JSON file.
-        "diagnostic_above_m0_at_defaults": mean > M0_AT_DEFAULTS,
+        "diagnostic_above_m0_at_defaults": mean > base["m0_at_defaults"],
+        # Two SDs of the TRAINED model's own per-seed means. Degenerates when
+        # those collapse: at pursuit-b's 10,000 steps the ten values were
+        # bit-identical, so this reduces to the plain above-M0 test and must
+        # not be cited as variance-aware there. Read it next to
+        # seed_std_foreground_ari, never alone.
         "diagnostic_exceeds_m0_by_two_seed_sd": mean
-        > M0_AT_DEFAULTS + 2 * float(np.std(per_seed, ddof=0)),
+        > base["m0_at_defaults"] + 2 * own_sd,
+        # Two SDs of M0's own spread, which does not collapse with training.
+        # Reported so the margin stays interpretable at every budget.
+        "diagnostic_exceeds_m0_by_two_m0_seed_sd": mean
+        > base["m0_at_defaults"] + 2 * base["m0_seed_sd"],
     }
 
 
 def main(argv: list[str] | None = None) -> dict:
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", default="cpu")
+    parser.add_argument(
+        "--dataset",
+        default=DATASET,
+        choices=sorted(BASELINES),
+        help=(
+            "which CAE benchmark to train and evaluate on. Restricted to the "
+            "datasets with locked cc/M0 comparators on the record: a dataset "
+            "without them cannot produce a verdict, only a number."
+        ),
+    )
     parser.add_argument("--steps", type=int, default=500, help="Adam steps (NOTE_21's budget)")
     parser.add_argument("--epochs", type=int, default=0, help="if set, overrides --steps")
     parser.add_argument("--train-images", type=int, default=16_000)
@@ -371,15 +421,15 @@ def main(argv: list[str] | None = None) -> dict:
     if args.check_only:
         return {"known_answers": known, "old_formula_control": control}
 
-    # Only the files this run opens. Hashing 3shapes and MNIST_shapes would be
+    # Only the files this run opens. Hashing the other benchmarks would be
     # evidence about nothing here, and costs 90 MB of transfer to a remote VM.
     verified = verify_locked_dataset_hashes(
-        only=[f"{DATASET}_train.npz", f"{DATASET}_val.npz"]
+        only=[f"{args.dataset}_train.npz", f"{args.dataset}_val.npz"]
     )
     device = torch.device(args.device)
     torch.manual_seed(0)
 
-    with np.load(CAE_DIR / f"{DATASET}_train.npz") as data:
+    with np.load(CAE_DIR / f"{args.dataset}_train.npz") as data:
         images_np = np.asarray(data["images"][: args.train_images, 0], dtype=np.float64)
         labels_np = np.asarray(data["labels"][: args.train_images], dtype=np.int64)
     n_train, nrow, ncol = images_np.shape
@@ -391,7 +441,11 @@ def main(argv: list[str] | None = None) -> dict:
 
     # The oracle, before any training: this reimplementation must be M0 at
     # initialisation, or nothing it produces is comparable to arc1a.
-    oracle = None if args.skip_oracle else assert_matches_m0_at_init(k2, device)
+    oracle = (
+        None
+        if args.skip_oracle
+        else assert_matches_m0_at_init(k2, device, dataset=args.dataset)
+    )
 
     _progress(f"precomputing M0 layer-1 masks for {n_train} images on {device}")
     masks = torch.empty((n_train, n), dtype=torch.bool, device=device)
@@ -425,7 +479,7 @@ def main(argv: list[str] | None = None) -> dict:
                 "batch": BATCH,
                 "lr": LR,
                 "train_images": n_train,
-                "dataset": DATASET,
+                "dataset": args.dataset,
                 "layer2_steps": LAYER2_STEPS,
             },
             checkpoint_path,
@@ -433,7 +487,9 @@ def main(argv: list[str] | None = None) -> dict:
         _progress(f"saved trained K_2 and delta_omega to {checkpoint_path}")
 
     _progress(f"evaluating on val: {args.eval_images} images, {args.eval_seeds} seeds")
-    evaluation = _evaluate(model, device, args.eval_images, args.eval_seeds)
+    evaluation = _evaluate(
+        model, device, args.eval_images, args.eval_seeds, dataset=args.dataset
+    )
 
     with torch.no_grad():
         k2_change = float((model.K2 - k2).norm() / k2.norm())
@@ -442,6 +498,7 @@ def main(argv: list[str] | None = None) -> dict:
     output = {
         "pursuit": "b: the loss NOTE_16 intended (cos between-object term)",
         "device": str(device),
+        "dataset": args.dataset,
         "steps": steps,
         "batch": BATCH,
         "lr": LR,
