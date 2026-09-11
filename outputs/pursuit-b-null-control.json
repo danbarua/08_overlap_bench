@@ -1,0 +1,88 @@
+{
+  "at_init_oracle": {
+    "n_images": 3,
+    "per_image": [
+      {
+        "image": 0,
+        "labels_identical": true,
+        "orbit_relative_error": 5.2119230194416844e-15
+      },
+      {
+        "image": 1,
+        "labels_identical": true,
+        "orbit_relative_error": 3.546599760789938e-15
+      },
+      {
+        "image": 2,
+        "labels_identical": true,
+        "orbit_relative_error": 2.3399326090743562e-15
+      }
+    ]
+  },
+  "batch": 32,
+  "dataset_hashes_verified": {
+    "2shapes_train.npz": "304b3224e453429e7fef1ee96fcff1c3c3cf138ce0804ca31f6dc2d135006730",
+    "2shapes_val.npz": "9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59"
+  },
+  "device": "cpu",
+  "diagnostics": {
+    "delta_omega_norm": 0.0,
+    "k2_frobenius_relative_change": 0.0
+  },
+  "eval_images": 50,
+  "eval_seeds": 10,
+  "evaluation": {
+    "cc_baseline": 0.16,
+    "diagnostic_above_m0_at_defaults": false,
+    "diagnostic_exceeds_m0_by_two_seed_sd": false,
+    "m0_at_defaults": 0.12085737825541296,
+    "p6_above_cc": false,
+    "per_seed_mean_foreground_ari": [
+      0.08275986885554312,
+      0.12081303720127806,
+      0.18019217520344558,
+      0.1592501000011282,
+      0.15676890081152461,
+      0.1536487441500005,
+      0.04596555123311932,
+      0.08904092509627003,
+      0.12685934279401315,
+      0.09327513720780711
+    ],
+    "seed_averaged_foreground_ari": 0.12085737825541296,
+    "seed_std_foreground_ari": 0.04028502026304219
+  },
+  "known_answers": {
+    "antiphase": {
+      "error": 2.000177801164682e-12,
+      "expected": -2.0,
+      "got": -1.9999999999979998
+    },
+    "d_apart": {
+      "error": 3.497202527569243e-13,
+      "expected": -0.3496110824027905,
+      "got": -0.34961108240244076
+    },
+    "half_coherent": {
+      "error": 1.2498890811230012e-12,
+      "expected": 0.25,
+      "got": 0.2499999999987501
+    },
+    "in_phase": {
+      "error": 1.1102230246251565e-16,
+      "expected": 0.0,
+      "got": 1.1102230246251565e-16
+    }
+  },
+  "layer1_precompute_seconds": 0.4126152329990873,
+  "lr": 0.001,
+  "old_formula_control": {
+    "corrected_antiphase": -1.9999999999979998,
+    "old_formula_antiphase": 1.1102230246251565e-16
+  },
+  "pursuit": "b: the loss NOTE_16 intended (cos between-object term)",
+  "steps": 0,
+  "train_images": 32,
+  "training_curve": [],
+  "training_seconds": 1.167141501995502
+}
