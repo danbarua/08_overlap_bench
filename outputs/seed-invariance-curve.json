@@ -1,0 +1,172 @@
+{
+  "adjacent_rises": [
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 250,
+      "gap": 0.07374559220066901,
+      "to_steps": 500,
+      "two_seed_sd": 0.0023763234694768984
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 500,
+      "gap": 0.05236518998903661,
+      "to_steps": 1000,
+      "two_seed_sd": 0.002798631008100047
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 1000,
+      "gap": 0.06271854823130874,
+      "to_steps": 2000,
+      "two_seed_sd": 0.006096160610933551
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 2000,
+      "gap": 0.1090212336667653,
+      "to_steps": 4000,
+      "two_seed_sd": 0.007262929686138183
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 4000,
+      "gap": 0.060021500881788925,
+      "to_steps": 6000,
+      "two_seed_sd": 0.007262929686138183
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 6000,
+      "gap": 0.024591307940814766,
+      "to_steps": 8000,
+      "two_seed_sd": 0.0010095514684259138
+    },
+    {
+      "exceeds_two_sd": true,
+      "from_steps": 8000,
+      "gap": 0.021124671376427706,
+      "to_steps": 10000,
+      "two_seed_sd": 0.0
+    }
+  ],
+  "dataset": "2shapes",
+  "derived_from": [
+    "pursuit-b-labels-1000.json",
+    "pursuit-b-labels-10000.json",
+    "pursuit-b-labels-2000.json",
+    "pursuit-b-labels-250.json",
+    "pursuit-b-labels-4000.json",
+    "pursuit-b-labels-500.json",
+    "pursuit-b-labels-6000.json",
+    "pursuit-b-labels-8000.json"
+  ],
+  "eval_images": 50,
+  "every_adjacent_rise_exceeds_two_sd": true,
+  "points": [
+    {
+      "ari_10seed": 0.5159303300261148,
+      "ari_10seed_sd": 0.0008713898498896317,
+      "ari_2seed_from_run": 0.5163283218404799,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 1936,
+      "steps": 250
+    },
+    {
+      "ari_10seed": 0.5896759222267838,
+      "ari_10seed_sd": 0.0011881617347384492,
+      "ari_2seed_from_run": 0.5896759222267839,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 10,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 4802,
+      "steps": 500
+    },
+    {
+      "ari_10seed": 0.6420411122158204,
+      "ari_10seed_sd": 0.0013993155040500234,
+      "ari_2seed_from_run": 0.6418783647989286,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 4023,
+      "steps": 1000
+    },
+    {
+      "ari_10seed": 0.7047596604471291,
+      "ari_10seed_sd": 0.0030480803054667755,
+      "ari_2seed_from_run": 0.7056990523312997,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 5309,
+      "steps": 2000
+    },
+    {
+      "ari_10seed": 0.8137808941138944,
+      "ari_10seed_sd": 0.0036314648430690916,
+      "ari_2seed_from_run": 0.8127772988546491,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 2770,
+      "steps": 4000
+    },
+    {
+      "ari_10seed": 0.8738023949956834,
+      "ari_10seed_sd": 0.0005047757342129569,
+      "ari_2seed_from_run": 0.8735315472783283,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 0,
+      "pixels_differing_that_foreground_ari_scores": 302,
+      "steps": 6000
+    },
+    {
+      "ari_10seed": 0.8983937029364981,
+      "ari_10seed_sd": 0.0,
+      "ari_2seed_from_run": 0.8983937029364981,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 2,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 45,
+      "pixels_differing_that_foreground_ari_scores": 0,
+      "steps": 8000
+    },
+    {
+      "ari_10seed": 0.9195183743129258,
+      "ari_10seed_sd": 0.0,
+      "ari_2seed_from_run": 0.9195183743129258,
+      "n_seeds": 10,
+      "n_seeds_in_run_json": 10,
+      "pairs": 45,
+      "pairs_all_images_same_partition": 45,
+      "pixels_differing_that_foreground_ari_scores": 0,
+      "steps": 10000
+    }
+  ],
+  "seed_invariance_bracket_steps": [
+    6000,
+    8000
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+}
