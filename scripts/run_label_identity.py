@@ -239,7 +239,7 @@ def main(argv: list[str] | None = None) -> dict:
             "does the trained layer 2 reach the same partition under different "
             "phase seeds, or merely the same score?"
         ),
-        "checkpoint": str(args.checkpoint),
+        "checkpoint": Path(args.checkpoint).name,
         "checkpoint_steps": blob["steps"],
         "dataset": dataset,
         "device": str(device),
@@ -252,12 +252,29 @@ def main(argv: list[str] | None = None) -> dict:
         "n_pixels_differing_that_foreground_ari_scores": scored_diffs,
         "per_seed_mean_foreground_ari": per_seed_mean,
         "n_distinct_per_seed_means": len(set(per_seed_mean)),
-        "elapsed_seconds": time.monotonic() - started,
         "pairs": pairs,
     }
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
+
+    # Wall-clock beside the artefact, never inside it: the hash has to be
+    # re-derivable by re-running, not just verifiable against one file.
+    out.with_suffix(".timing.json").write_text(
+        json.dumps(
+            {
+                "checkpoint_path": str(args.checkpoint),
+                "artefact": out.name,
+                "elapsed_seconds": time.monotonic() - started,
+                "device": str(device),
+                "n_images": n_images,
+                "seeds": seeds,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
     _progress(f"wrote {out}")
     return output
 

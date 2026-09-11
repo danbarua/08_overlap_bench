@@ -286,8 +286,11 @@ def _train(
         loss.backward()
         optimiser.step()
         if (step + 1) % 25 == 0 or step + 1 == steps:
+            # Timing goes to stderr and to the sidecar, never into the artefact:
+            # run_arc1a.py's rule is that a re-run with the same code and data
+            # must hash identically, and wall-clock makes that impossible.
             elapsed = time.monotonic() - started
-            curve.append({"step": step + 1, "loss": float(loss), "elapsed_s": elapsed})
+            curve.append({"step": step + 1, "loss": float(loss)})
             _progress(
                 f"step {step + 1}/{steps} loss {float(loss):+.6f} "
                 f"({elapsed / (step + 1):.3f}s/step)"
@@ -515,23 +518,43 @@ def main(argv: list[str] | None = None) -> dict:
         "known_answers": known,
         "old_formula_control": control,
         "training_curve": curve,
-        "layer1_precompute_seconds": precompute_s,
-        "training_seconds": train_s,
         "diagnostics": {
             "k2_frobenius_relative_change": k2_change,
             "delta_omega_norm": delta_omega_norm,
         },
         "evaluation": evaluation,
     }
-    # Only present when a checkpoint was actually written. Emitting
-    # "model_checkpoint": null unconditionally would change the JSON of every
-    # run that does not use --save-model, which is exactly the runs whose
-    # output is supposed to stay comparable to the recorded artifacts.
+    # Present only when a checkpoint was written, and the basename rather than
+    # the path: an absolute path makes the artefact's hash depend on which
+    # directory it was produced in, which is the same reproducibility defect as
+    # wall-clock wearing different clothes. The full path goes in the sidecar.
     if checkpoint_path is not None:
-        output["model_checkpoint"] = str(checkpoint_path)
+        output["model_checkpoint"] = checkpoint_path.name
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
+
+    # Wall-clock lives beside the artefact, not inside it. The artefact's hash
+    # is then a reproducibility lock -- a re-run with the same code and data
+    # re-derives it -- rather than merely an integrity lock on one file. The
+    # timings are still worth keeping; they just cannot be part of what is
+    # hashed and cited.
+    timing = out.with_suffix(".timing.json")
+    timing.write_text(
+        json.dumps(
+            {
+                "artefact": out.name,
+                "model_checkpoint_path": str(checkpoint_path) if checkpoint_path else None,
+                "layer1_precompute_seconds": precompute_s,
+                "training_seconds": train_s,
+                "device": str(device),
+                "steps": steps,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
+    )
     _progress(f"wrote {out}")
     return output
 
