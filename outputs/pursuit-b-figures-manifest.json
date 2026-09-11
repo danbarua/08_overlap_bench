@@ -11,8 +11,12 @@
   ],
   "figures": {
     "pursuit-b-curve.png": "c5449057dfba1f52895400afcf5fc2dc8f01e150fef1251ca969430f605e1a89",
+    "pursuit-b-hard-vs-unstable-10000.png": "ecd0d9ccfd05f26bd85aab96872ef7cd1fe95516915efaabce20da4f8a94cbcd",
+    "pursuit-b-hard-vs-unstable-4000.png": "f2f71ba0310f7b50f180cb2e8089b9c7a64f9e5cfb45df4664a02b3b22e04b63",
     "pursuit-b-instability.png": "e5d616e224b69ce23c20971e268c80920a273ff5ddbe1808af144a7faeba6f58",
     "pursuit-b-loss.png": "ed3c1d482864805a41b1d19211b6a94d4889248001a3c10c3f34fa036049c25e",
+    "pursuit-b-maps-10000.png": "dbf93f26267b3a711b173a9151b704a58ca84dace3e58c9314e8db5c40058c8a",
+    "pursuit-b-maps-500.png": "cff61ea7a42ea96f0507d8b6662a5a8e2c6a7e746be97cf3b0cfc3a5aa6087d0",
     "pursuit-b-weights.png": "1495801f8cb277881e269d7b3e89526a1b07a92c59d6eba5142b55d180b09a8b"
   },
   "inputs": {
@@ -28,6 +32,10 @@
     "pursuit-b-labels-500.json": "8ec68dbb4302d47b08924780ff12b550cabd24bff1446d721e14f419db1dd648",
     "pursuit-b-labels-6000.json": "36bf6023c5b27526b03345d9b0f51aa2e70b6859412a4c8fe74a3fd775722c4c",
     "pursuit-b-labels-8000.json": "ef390dd44e6863e714c79e7235ac97b1e1ea0bde345f7b2dd55d254c09c04900",
+    "pursuit-b-labels2-10000.json": "4eb1fcd09347b7ce8f55dfbe07a7bc400d0f0fbe27377bfddc4068776f320d7e",
+    "pursuit-b-labels2-4000.json": "e4a85f307030690a0fdc7b005808f8a5bc6e5cc9b6828162c6bc4db93147e5d1",
+    "pursuit-b-maps-10000.npz": "8a8baae33a07c988e834e1a14e844c10167553d2271dd84fc3509c916b9ea934",
+    "pursuit-b-maps-500.npz": "607de76e540d2f44cc388fbb7abf06e714db3a75c21ac86bd9c8e5e423e35905",
     "pursuit-b-run-1000.json": "26f0a346ee31cf7ca7a766ba4c3f6631097752806fe4c891ee519c40835c913b",
     "pursuit-b-run-10000.json": "3f22aa2e8b71e9c46e3e1f515f2e59c1581d9706a212dd1ab2788da8800ac11f",
     "pursuit-b-run-2000.json": "577a94b679a9e08479fae7a665270cb240b9333a3ec71dcca67a58525e740f7c",

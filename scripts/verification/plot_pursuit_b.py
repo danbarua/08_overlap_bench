@@ -256,6 +256,114 @@ def _fig_loss(rows: list[dict]) -> Path:
     return path
 
 
+def _val_overlap_fractions(n_images: int) -> np.ndarray:
+    """Ground-truth overlap share per val image.
+
+    A property of the benchmark, not of any run, so it is read from the locked
+    npz rather than taken from an artefact. -1 is the excluded overlap label.
+    """
+    from overlap_bench.dataset_hashes import CAE_DIR
+
+    with np.load(CAE_DIR / "2shapes_val.npz") as data:
+        labels = np.asarray(data["labels"][:n_images], dtype=np.int64)
+    return np.mean(labels == -1, axis=(1, 2))
+
+
+def _fig_hard_vs_unstable(budget: int) -> Path | None:
+    """Is a seed-unstable image also a hard image, or an overlap-heavy one?
+
+    Needs per-image ARI, which the first programme computed and discarded; this
+    reads the recomputed labels2-* artefacts. Returns None if they are absent,
+    so the script still runs against the original set.
+    """
+    path_in = ARTEFACTS / f"pursuit-b-labels2-{budget}.json"
+    if not path_in.exists():
+        return None
+    labels = json.loads(path_in.read_text())
+    per_image_ari = np.mean(np.array(labels["per_seed_per_image_foreground_ari"]), axis=0)
+    disagreeing = np.zeros(labels["n_images"], dtype=int)
+    for pair in labels["pairs"]:
+        for mismatch in pair["partition_mismatches"]:
+            disagreeing[mismatch["image"]] += 1
+    overlap = _val_overlap_fractions(labels["n_images"])
+
+    fig, (left, right) = plt.subplots(1, 2, figsize=(11, 4.5))
+    scatter = left.scatter(
+        overlap, per_image_ari, c=disagreeing, cmap="magma_r", vmin=0, vmax=45, s=45,
+        edgecolor="#333333", linewidth=0.4,
+    )
+    left.set_xlabel("ground-truth overlap fraction")
+    left.set_ylabel("mean foreground ARI over 10 seeds")
+    left.set_title(f"Difficulty vs overlap, {budget} steps")
+    left.grid(alpha=0.3)
+    fig.colorbar(scatter, ax=left, label="pairs disagreeing (of 45)")
+
+    unstable = disagreeing > 0
+    right.scatter(
+        per_image_ari[~unstable], disagreeing[~unstable], s=40, color="#1f4e79",
+        label=f"seed-stable ({int((~unstable).sum())} images)",
+    )
+    right.scatter(
+        per_image_ari[unstable], disagreeing[unstable], s=60, color="#a02020",
+        label=f"seed-unstable ({int(unstable.sum())} images)",
+    )
+    right.set_xlabel("mean foreground ARI over 10 seeds")
+    right.set_ylabel("pairs disagreeing (of 45)")
+    right.set_title("Do the unstable images also score badly?")
+    right.legend(fontsize=8)
+    right.grid(alpha=0.3)
+
+    fig.tight_layout()
+    path = OUT_DIR / f"pursuit-b-hard-vs-unstable-{budget}.png"
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    return path
+
+
+def _fig_maps(budget: int) -> Path | None:
+    """What the model actually produces. Impossible before --save-maps existed."""
+    npz = ARTEFACTS / f"pursuit-b-maps-{budget}.npz"
+    if not npz.exists():
+        return None
+    with np.load(npz) as data:
+        images, truth = data["images"], data["ground_truth"]
+        seed_a = [data[f"map_s1_i{i}"] for i in range(len(images))]
+        seed_b = [data[f"map_s2_i{i}"] for i in range(len(images))]
+
+    n = len(images)
+    fig, axes = plt.subplots(4, n, figsize=(2.1 * n, 8.8))
+    rows = ("input", "ground truth", "prediction, seed 1", "prediction, seed 2")
+    for col in range(n):
+        for row, field in enumerate((images[col], truth[col], seed_a[col], seed_b[col])):
+            ax = axes[row][col]
+            if row == 0:
+                ax.imshow(field.T, cmap="gray", interpolation="nearest")
+            elif row == 1:
+                # -1 excluded overlap, 0 background, 1..k objects. Fixed range
+                # so a class reads the same way in every column.
+                ax.imshow(field.T, cmap="tab10", vmin=-1, vmax=8, interpolation="nearest")
+            else:
+                # Cluster ids from k-means, arbitrary by construction: a colour
+                # here means "same group", never "same class as the row above".
+                ax.imshow(field.T, cmap="Set2", vmin=0, vmax=7, interpolation="nearest")
+            ax.set_xticks([])
+            ax.set_yticks([])
+            if col == 0:
+                ax.set_ylabel(rows[row], fontsize=8)
+            if row == 0:
+                ax.set_title(f"val image {col}", fontsize=8)
+    fig.suptitle(
+        f"Segmentations at {budget} steps, two eval seeds\n"
+        "prediction colours are arbitrary cluster ids: compare groupings, not colours",
+        fontsize=10,
+    )
+    fig.tight_layout()
+    path = OUT_DIR / f"pursuit-b-maps-{budget}.png"
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    return path
+
+
 def main() -> dict:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     rows, inputs = _budget_data()
@@ -264,6 +372,20 @@ def main() -> dict:
     weights_fig, ckpts = _fig_weights(rows)
     figures.append(weights_fig)
     inputs += ckpts
+
+    # These need the per-image data the first programme discarded, so they are
+    # drawn only when the recomputed artefacts are present. Their absence is
+    # not an error; it is the state the repo was in before the recompute.
+    for budget in (4000, 10000):
+        extra = _fig_hard_vs_unstable(budget)
+        if extra is not None:
+            figures.append(extra)
+            inputs.append(ARTEFACTS / f"pursuit-b-labels2-{budget}.json")
+    for budget in (500, 10000):
+        extra = _fig_maps(budget)
+        if extra is not None:
+            figures.append(extra)
+            inputs.append(ARTEFACTS / f"pursuit-b-maps-{budget}.npz")
 
     manifest = {
         "figures": {p.name: _sha256(p) for p in figures},
