@@ -1,6 +1,7 @@
 {
   "component_ablation_at_10000": [
     {
+      "delta_omega_l2": 0.0,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 500,
       "mean_foreground_ari": 0.9195183743129258,
@@ -63,6 +64,7 @@
       "unstable_images": 0
     },
     {
+      "delta_omega_l2": 0.0,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 110,
       "mean_foreground_ari": 0.9097796278977961,
@@ -125,6 +127,7 @@
       "unstable_images": 0
     },
     {
+      "delta_omega_l2": 1.5678611752907117,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 110,
       "mean_foreground_ari": 0.9088326858219762,
@@ -187,6 +190,7 @@
       "unstable_images": 0
     },
     {
+      "delta_omega_l2": 0.0,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 160,
       "mean_foreground_ari": 0.9134838980924463,
@@ -249,6 +253,7 @@
       "unstable_images": 0
     },
     {
+      "delta_omega_l2": 1.5678611752907117,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 160,
       "mean_foreground_ari": 0.9134838980924463,
@@ -311,6 +316,7 @@
       "unstable_images": 0
     },
     {
+      "delta_omega_l2": 1.5678611752907117,
       "maps_compared_to_full": 500,
       "maps_matching_full_10000_partition": 34,
       "mean_foreground_ari": 0.1506134776535913,

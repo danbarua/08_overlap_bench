@@ -356,6 +356,7 @@ def _component_ablation(
     per_seed = [float(np.mean(values)) for values in ari]
     return {
         "name": name,
+        "delta_omega_l2": float(np.linalg.norm(delta)),
         "mean_foreground_ari": float(np.mean(per_seed)),
         "seed_sd_foreground_ari": float(np.std(per_seed, ddof=0)),
         **_pair_summary(maps),
@@ -588,9 +589,27 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
         ),
     ]
 
+    trained_delta_l2 = float(np.linalg.norm(delta10000))
+
     stationary_result = component_ablation[1]
     assert round(stationary_result["mean_foreground_ari"], 5) == 0.90978
     assert stationary_result["pairs_all_images_same_partition"] == 45
+    assert stationary_result["delta_omega_l2"] == 0.0
+
+    stationary_trained_result = component_ablation[2]
+    assert round(stationary_trained_result["mean_foreground_ari"], 5) == 0.90883
+    assert stationary_trained_result["pairs_all_images_same_partition"] == 45
+    assert stationary_trained_result["maps_matching_full_10000_partition"] == 110
+    assert stationary_trained_result["delta_omega_l2"] == trained_delta_l2
+
+    far_zero_result = component_ablation[3]
+    assert far_zero_result["delta_omega_l2"] == 0.0
+
+    far_trained_result = component_ablation[4]
+    assert round(far_trained_result["mean_foreground_ari"], 5) == 0.91348
+    assert far_trained_result["pairs_all_images_same_partition"] == 45
+    assert far_trained_result["maps_matching_full_10000_partition"] == 160
+    assert far_trained_result["delta_omega_l2"] == trained_delta_l2
 
     output = {
         "question": "what changed in oscillator dynamics while segmentation improved and tested-seed sensitivity vanished?",

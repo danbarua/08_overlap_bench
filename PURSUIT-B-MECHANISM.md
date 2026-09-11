@@ -272,6 +272,6 @@ shasum -a 256 outputs/pursuit-b-mechanism.json
 ```
 
 The output is `outputs/pursuit-b-mechanism.json`. Its CPU artifact SHA-256 is
-`ed4849c272f9df6d8f14cea6fc1276122a29d7e66e9cb25e9c1034af73d7373a`.
+`96807b8cf13a42bda17b16a67199eb1a14ee0912cf760b063b32a43077d2bbb4`.
 The reproducibility claim is same code, input files, software versions, and CPU
 execution; it is not a cross-device bit-identity claim.
