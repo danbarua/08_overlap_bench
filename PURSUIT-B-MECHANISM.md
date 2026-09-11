@@ -23,7 +23,8 @@ The ablations show specifically that the learned frequency offset is not needed
 to preserve 10,000-step ARI or tested-seed partition agreement: setting
 `delta_omega = 0` reproduces all 500 full-model partitions. With that offset
 fixed at zero, the $K_0+\Delta K\,\mathbf{1}[d>4]$ intervention retains most
-of the aggregate ARI and all tested-seed agreement. This is evidence for a
+of the aggregate ARI and all tested-seed agreement. Keeping the trained offset
+does not improve either projected-operator summary. This is evidence for a
 finite-time projective mechanism, not proof of a unique causal decomposition or
 convergence for arbitrary initial states.
 
@@ -175,19 +176,24 @@ mean $\Delta K$ among edges with the same signed row and column displacement.
 |---|---:|---:|---:|---:|
 | full trained `K2`, `delta_omega = 0` | 0.919518 | $1.1\times10^{-16}$ | 45/45 | 500/500 |
 | $K_0+S(\Delta K)$, `delta_omega = 0` | 0.909780 | 0 | 45/45 | 110/500 |
+| $K_0+S(\Delta K)$, trained `delta_omega` | 0.908833 | $1.1\times10^{-16}$ | 45/45 | 110/500 |
 | $K_0+\Delta K\,\mathbf{1}[d>4]$, `delta_omega = 0` | 0.913484 | $1.1\times10^{-16}$ | 45/45 | 160/500 |
+| $K_0+\Delta K\,\mathbf{1}[d>4]$, trained `delta_omega` | 0.913484 | $1.1\times10^{-16}$ | 45/45 | 160/500 |
 | untrained $K_0$, trained `delta_omega` | 0.150613 | 0.020916 | 0/45 | 34/500 |
 
 Removing `delta_omega` from the full model changes none of the 500 partitions.
 Conversely, retaining it with the untrained Gaussian matrix loses both high ARI
-and seed agreement. Both projected operators start from $K_0$. The stationary
-variant replaces every $\Delta K$ entry by its displacement-shared mean; the
-far-only variant adds exact $\Delta K$ only for $d>4$ and leaves $d\leq4$ at
-$K_0$. Both retain high aggregate ARI and complete agreement for the tested
-seeds, although neither reproduces most individual full-model partitions. Exact
-position-specific weights are therefore not required for those two aggregate
-properties on this evaluation set; the interventions do not show that one
-projected component is the unique mechanism.
+and seed agreement. Adding the trained offset to the stationary projection
+changes mean ARI from 0.909780 to 0.908833; the far-only summary remains
+0.913484. All four projected-operator runs retain 45/45 seed-pair agreement.
+
+Both projected coupling structures start from $K_0$. The stationary variant
+replaces every $\Delta K$ entry by its displacement-shared mean; the far-only
+variant adds exact $\Delta K$ only for $d>4$ and leaves $d\leq4$ at $K_0$.
+Both retain high aggregate ARI, although neither reproduces most individual
+full-model partitions. Exact position-specific weights are therefore not
+required for those two aggregate properties on this evaluation set; the
+interventions do not show that one projected component is the unique mechanism.
 
 ## Same operator, different readout times
 
@@ -266,6 +272,6 @@ shasum -a 256 outputs/pursuit-b-mechanism.json
 ```
 
 The output is `outputs/pursuit-b-mechanism.json`. Its CPU artifact SHA-256 is
-`bbc0812404f547f4666ec9251acd10920f3547c317d9762f0fef85465e9f0e84`.
+`ed4849c272f9df6d8f14cea6fc1276122a29d7e66e9cb25e9c1034af73d7373a`.
 The reproducibility claim is same code, input files, software versions, and CPU
 execution; it is not a cross-device bit-identity claim.
