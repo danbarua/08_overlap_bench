@@ -9,9 +9,10 @@ What the record does not give, and what this document is for, is the
 Read this for the trail. Read `labkit now`, `labkit known` and
 `labkit why <handle>` for the state. Handles below are that record's.
 
-The corrected-loss successor named below has since been run. Its results and
-their later corrections are kept separately in `PURSUIT-B.md` so this report
-remains the trail of the original programme. The LabKit record wins if either
+This report describes the original programme through its closure. As of
+2026-09-11, the corrected-loss successor named below has been run. Its results
+and later corrections are kept separately in `PURSUIT-B.md` so this report
+remains the original programme's trail. The LabKit record wins if either
 document disagrees with it.
 
 ---
@@ -178,9 +179,10 @@ amplitude growth (explanation 1) is the mechanism it used to get there.
 
 The intended quantity was
 $\mathrm{Re}(z_o \overline{z_{o'}})/(|z_o||z_{o'}|) = \cos(\phi_o - \phi_{o'})$.
-It has never been trained.
+At this programme's closure, it had not been trained; the later corrected-loss
+run is reported separately in `PURSUIT-B.md`.
 
-**So the M1 numbers are evidence that this programme never tested a
+**So the original M1 numbers are evidence that this programme never tested a
 discriminating objective — not evidence that the model cannot learn under
 one** (`CLM_21`). The numbers themselves stand; what they are evidence *of*
 changed after closure.
@@ -263,11 +265,18 @@ pursuit. See `PURSUIT-B.md` for its protocol, results, correction trail and
 limits; importing those results here would erase the boundary between the
 original failed objective and its replacement.
 
-Two branches remain intentionally unrun:
+All active or gated science has therefore reached a terminal decision: it was
+either carried out or intentionally blocked by a prespecified gate. That does
+not mean every experiment considered in the original design was run. Three
+branches remain intentionally unrun:
 
 - **The parameter sweep** remains blocked because no measured dataset makes
   the fixed model lose by the prespecified margin. There is still no failure
   instance for the sweep to explain (`GATE_2`).
+- **The continuous-exponential `M1` task** remains blocked at `GATE_3`
+  because its propagator failed the required equality with `M0` at
+  initialisation. Pursuit B uses the separately verified discrete `M1d`
+  recurrence; it does not execute or retroactively satisfy the original task.
 - **`M2`** remains behind the legacy `GATE_4`. Pursuit B supplies a positive
   trainable-M1d result, but the gate's literal criteria refer to the original
   failed-loss work. Whether to replace that gate is a new design decision, not

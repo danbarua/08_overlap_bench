@@ -52,13 +52,15 @@ Pursuit B replaces only that term with
 $$
 \frac{\operatorname{Re}(z_o\overline{z}_{o'})}
 {|z_o||z_{o'}| + 10^{-12}}
-= \cos(\phi_o-\phi_{o'}),
+= \cos(\phi_o-\phi_{o'})
+  \frac{|z_o||z_{o'}|}{|z_o||z_{o'}|+10^{-12}},
 $$
 
 while retaining the verified discrete recurrence, reference readout, datasets,
 and foreground-ARI meter. It asks whether training under the intended phase
 separation improves the model on `2shapes`, whether the result persists with a
-larger budget, and whether the improvement transfers to `MNIST_shapes`.
+larger budget, and whether the same corrected-loss procedure improves a model
+trained separately from scratch on `MNIST_shapes`.
 
 ## Controls before the result
 
@@ -177,11 +179,12 @@ orders. The 8,000- and 10,000-step ARIs are retained only to four decimal
 places, and their full remote JSONs were not downloaded before teardown;
 `outputs/pursuit-b-shuffle7-summary.json` records that provenance limit.
 
-## Generalization to MNIST_shapes
+## Cross-dataset procedure check on MNIST_shapes
 
-`MNIST_shapes` is the clean two-object transfer case because `n_clusters=2` is
-valid and the fixed model already has a measured comparator. At 500 steps, the
-corrected-loss model produced
+`MNIST_shapes` is the clean two-object cross-dataset procedure check because
+`n_clusters=2` is valid and the fixed model already has a measured comparator.
+This is a separate model trained from scratch on MNIST_shapes, not a transfer
+of the 2shapes weights. At 500 steps, the corrected-loss model produced
 
 $$
 0.2724268538807503 \pm 0.005783712026447483,
@@ -215,7 +218,7 @@ overlap fraction has a negative Spearman association with per-image score at
 every retained budget; the plotted coefficients range from -0.70 to -0.56.
 This is an association, not evidence that overlap causes a failure.
 
-At 4,000 steps, seed disagreements are concentrated in a few difficult images:
+At 4,000 steps, seed disagreements are concentrated in three images:
 image 6 differs in 43/45 seed pairs, image 43 in 42/45, and image 32 in 9/45.
 By 10,000 steps no evaluated image differs across seed pairs. The corresponding
 maps, distributions, trajectories, and weight diagnostics are in `figures/`;
