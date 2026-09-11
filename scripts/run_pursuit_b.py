@@ -406,9 +406,14 @@ def main(argv: list[str] | None = None) -> dict:
         default=None,
         help=(
             "write the trained K_2 and delta_omega here after training. Off by "
-            "default, so a run without it is byte-for-byte the run that produced "
-            "ART_16/ART_17. Without a checkpoint the trained weights die with the "
-            "process, and any later question about them costs a full retrain."
+            "default, and the output JSON gains the model_checkpoint key only "
+            "when it is used, so passing it is what changes the JSON rather than "
+            "merely having the flag. Note this does not make a run byte-identical "
+            "to ART_16/ART_17: the schema has since gained dataset, m0_seed_sd "
+            "and a second M0-relative diagnostic. What reproduces bit-for-bit is "
+            "the arithmetic -- verified on different hardware -- not the file. "
+            "Without a checkpoint the trained weights die with the process, and "
+            "any later question about them costs a full retrain."
         ),
     )
     args = parser.parse_args(argv)
@@ -517,8 +522,13 @@ def main(argv: list[str] | None = None) -> dict:
             "delta_omega_norm": delta_omega_norm,
         },
         "evaluation": evaluation,
-        "model_checkpoint": str(checkpoint_path) if checkpoint_path else None,
     }
+    # Only present when a checkpoint was actually written. Emitting
+    # "model_checkpoint": null unconditionally would change the JSON of every
+    # run that does not use --save-model, which is exactly the runs whose
+    # output is supposed to stay comparable to the recorded artifacts.
+    if checkpoint_path is not None:
+        output["model_checkpoint"] = str(checkpoint_path)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")

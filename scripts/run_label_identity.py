@@ -128,9 +128,14 @@ def main(argv: list[str] | None = None) -> dict:
     parser.add_argument("--images", type=int, default=50)
     parser.add_argument(
         "--dataset",
-        default=DATASET,
+        default=None,
         choices=sorted(BASELINES),
-        help="must match the dataset the checkpoint was trained on; checked below",
+        help=(
+            "defaults to the dataset recorded in the checkpoint, which is the "
+            "only value that can be right. Pass it only to assert that value; a "
+            "mismatch raises rather than quietly evaluating a model against "
+            "another benchmark's images."
+        ),
     )
     parser.add_argument(
         "--seeds",
@@ -143,22 +148,33 @@ def main(argv: list[str] | None = None) -> dict:
     )
     args = parser.parse_args(argv)
 
-    verified = verify_locked_dataset_hashes(only=[f"{args.dataset}_val.npz"])
+    # The checkpoint knows which benchmark it was trained on; read it there
+    # rather than trusting a flag to agree with it.
+    blob = torch.load(args.checkpoint, map_location="cpu")
+    dataset = blob.get("dataset")
+    if dataset not in BASELINES:
+        raise ValueError(
+            f"checkpoint does not record a known dataset (got {dataset!r}). It "
+            "predates --save-model's dataset metadata, or was written by "
+            "something else; either way what it should be evaluated against is "
+            "not knowable from the file."
+        )
+    if args.dataset is not None and args.dataset != dataset:
+        raise ValueError(
+            f"checkpoint was trained on {dataset!r} but --dataset says "
+            f"{args.dataset!r}. Comparing partitions across datasets would "
+            "produce a number about nothing."
+        )
+
+    verified = verify_locked_dataset_hashes(only=[f"{dataset}_val.npz"])
     device = torch.device(args.device)
     ensure_on_path()
 
-    with np.load(CAE_DIR / f"{args.dataset}_val.npz") as data:
+    with np.load(CAE_DIR / f"{dataset}_val.npz") as data:
         images_np = np.asarray(data["images"][: args.images, 0], dtype=np.float64)
         labels_np = np.asarray(data["labels"][: args.images], dtype=np.int64)
     n_images, nrow, ncol = images_np.shape
 
-    blob = torch.load(args.checkpoint, map_location="cpu")
-    if blob.get("dataset") != args.dataset:
-        raise ValueError(
-            f"checkpoint was trained on {blob.get('dataset')!r} but this is "
-            f"evaluating {args.dataset!r}. Comparing partitions across datasets "
-            "would produce a number about nothing."
-        )
     _, k2 = _sheets(nrow, ncol, device)
     model = Layer2(k2, nrow * ncol).to(device)
     model.load_state_dict({k: v.to(device) for k, v in blob["state_dict"].items()})
