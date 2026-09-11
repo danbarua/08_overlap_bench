@@ -25,9 +25,14 @@ overlap pixels would falsify strict identity while still explaining why the
 foreground ARI came out the same, because foreground ARI does not score those
 pixels. That outcome is more informative than either clean answer.
 
+Every eval seed's cluster maps are kept rather than reduced to a score, and
+every one of the C(10,2)=45 seed pairs is compared. A single pair only rules
+out the trivial bug; the full pairwise picture at two budgets is what separates
+gradual convergence from a step function.
+
     PYTHONPATH=src uv run --locked python scripts/run_label_identity.py \
-        --checkpoint outputs/pursuit-b-full.pt --device cuda \
-        --out outputs/pursuit-b-label-identity.json
+        --checkpoint outputs/pursuit-b-full.pt --device cuda --seeds 10 \
+        --out outputs/pursuit-b-label-identity-full.json
 """
 
 from __future__ import annotations
@@ -120,8 +125,12 @@ def main(argv: list[str] | None = None) -> dict:
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--images", type=int, default=50)
-    parser.add_argument("--seed-a", type=int, default=1)
-    parser.add_argument("--seed-b", type=int, default=2)
+    parser.add_argument(
+        "--seeds",
+        type=int,
+        default=10,
+        help="compare eval seeds 1..N pairwise, all C(N,2) pairs (locked eval uses 10)",
+    )
     parser.add_argument(
         "--out", default=str(Path(__file__).resolve().parents[1] / "outputs" / "label-identity.json")
     )
@@ -144,31 +153,58 @@ def main(argv: list[str] | None = None) -> dict:
         f"loaded checkpoint trained {blob['steps']} steps on {blob['train_images']} images"
     )
 
+    seeds = list(range(1, args.seeds + 1))
     started = time.monotonic()
-    per_image = []
-    for i in range(n_images):
-        image = torch.from_numpy(images_np[i])
-        map_a = _cluster_map(model, image, args.seed_a, device)
-        map_b = _cluster_map(model, image, args.seed_b, device)
-        row = {
-            "image": i,
-            "raw_labels_identical": bool(np.array_equal(map_a, map_b, equal_nan=True)),
-            "same_partition_up_to_relabelling": _same_partition(map_a, map_b),
-            "foreground_ari_seed_a": foreground_ari(labels_np[i], map_a),
-            "foreground_ari_seed_b": foreground_ari(labels_np[i], map_b),
-        }
-        row["foreground_ari_identical"] = (
-            row["foreground_ari_seed_a"] == row["foreground_ari_seed_b"]
-        )
-        row["mismatch"] = _mismatch_breakdown(map_a, map_b, labels_np[i])
-        per_image.append(row)
-        if (i + 1) % 10 == 0 or i + 1 == n_images:
-            _progress(f"  compared {i + 1}/{n_images}")
 
-    n_raw = sum(r["raw_labels_identical"] for r in per_image)
-    n_part = sum(r["same_partition_up_to_relabelling"] for r in per_image)
-    n_ari = sum(r["foreground_ari_identical"] for r in per_image)
-    scored_diffs = sum(r["mismatch"].get("scored_by_foreground_ari", 0) for r in per_image)
+    # Every seed's cluster map for every image, kept rather than reduced to a
+    # score. The eval loop already computes these; discarding them is what made
+    # the question unanswerable from ART_17 alone.
+    maps: dict[int, list[np.ndarray]] = {}
+    ari: dict[int, list[float]] = {}
+    for seed in seeds:
+        maps[seed] = []
+        ari[seed] = []
+        for i in range(n_images):
+            cluster_map = _cluster_map(model, torch.from_numpy(images_np[i]), seed, device)
+            maps[seed].append(cluster_map)
+            ari[seed].append(foreground_ari(labels_np[i], cluster_map))
+        _progress(f"  seed {seed}: mean FG ARI {float(np.mean(ari[seed])):+.6f}")
+
+    pairs = []
+    for a_idx, seed_a in enumerate(seeds):
+        for seed_b in seeds[a_idx + 1 :]:
+            mismatches = []
+            n_raw = n_part = 0
+            for i in range(n_images):
+                map_a, map_b = maps[seed_a][i], maps[seed_b][i]
+                raw = bool(np.array_equal(map_a, map_b, equal_nan=True))
+                part = _same_partition(map_a, map_b)
+                n_raw += raw
+                n_part += part
+                if not part:
+                    mismatches.append(
+                        {"image": i, **_mismatch_breakdown(map_a, map_b, labels_np[i])}
+                    )
+            pairs.append(
+                {
+                    "seed_a": seed_a,
+                    "seed_b": seed_b,
+                    "n_images_raw_identical": n_raw,
+                    "n_images_same_partition": n_part,
+                    "n_images_foreground_ari_identical": sum(
+                        ari[seed_a][i] == ari[seed_b][i] for i in range(n_images)
+                    ),
+                    "partition_mismatches": mismatches,
+                }
+            )
+
+    n_pairs = len(pairs)
+    all_part = sum(p["n_images_same_partition"] == n_images for p in pairs)
+    all_raw = sum(p["n_images_raw_identical"] == n_images for p in pairs)
+    scored_diffs = sum(
+        m.get("scored_by_foreground_ari", 0) for p in pairs for m in p["partition_mismatches"]
+    )
+    per_seed_mean = [float(np.mean(ari[s])) for s in seeds]
 
     output = {
         "question": (
@@ -178,16 +214,17 @@ def main(argv: list[str] | None = None) -> dict:
         "checkpoint": str(args.checkpoint),
         "checkpoint_steps": blob["steps"],
         "device": str(device),
-        "seed_a": args.seed_a,
-        "seed_b": args.seed_b,
+        "seeds": seeds,
+        "n_pairs": n_pairs,
         "n_images": n_images,
         "dataset_hashes_verified": verified,
-        "n_raw_labels_identical": n_raw,
-        "n_same_partition_up_to_relabelling": n_part,
-        "n_foreground_ari_identical": n_ari,
+        "n_pairs_all_images_same_partition": all_part,
+        "n_pairs_all_images_raw_identical": all_raw,
         "n_pixels_differing_that_foreground_ari_scores": scored_diffs,
+        "per_seed_mean_foreground_ari": per_seed_mean,
+        "n_distinct_per_seed_means": len(set(per_seed_mean)),
         "elapsed_seconds": time.monotonic() - started,
-        "per_image": per_image,
+        "pairs": pairs,
     }
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -199,13 +236,16 @@ def main(argv: list[str] | None = None) -> dict:
 if __name__ == "__main__":
     result = main()
     print(
-        f"\npartition identical up to relabelling on "
-        f"{result['n_same_partition_up_to_relabelling']}/{result['n_images']} images; "
-        f"raw labels identical on {result['n_raw_labels_identical']}/{result['n_images']}; "
-        f"FG ARI identical on {result['n_foreground_ari_identical']}/{result['n_images']}"
+        f"\n{result['checkpoint_steps']} steps: partitions identical on all "
+        f"{result['n_images']} images for {result['n_pairs_all_images_same_partition']}"
+        f"/{result['n_pairs']} seed pairs "
+        f"(raw, ignoring relabelling: {result['n_pairs_all_images_raw_identical']}"
+        f"/{result['n_pairs']}); "
+        f"{result['n_distinct_per_seed_means']} distinct per-seed mean ARI"
     )
-    if result["n_pixels_differing_that_foreground_ari_scores"] == 0 and (
-        result["n_same_partition_up_to_relabelling"] < result["n_images"]
+    if (
+        result["n_pixels_differing_that_foreground_ari_scores"] == 0
+        and result["n_pairs_all_images_same_partition"] < result["n_pairs"]
     ):
         print(
             "partitions differ, but nowhere foreground ARI scores -- identical "
