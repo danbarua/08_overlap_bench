@@ -351,6 +351,16 @@ def main(argv: list[str] | None = None) -> dict:
         action="store_true",
         help="skip the at-init identity check against M0. Do not use for a real run.",
     )
+    parser.add_argument(
+        "--save-model",
+        default=None,
+        help=(
+            "write the trained K_2 and delta_omega here after training. Off by "
+            "default, so a run without it is byte-for-byte the run that produced "
+            "ART_16/ART_17. Without a checkpoint the trained weights die with the "
+            "process, and any later question about them costs a full retrain."
+        ),
+    )
     args = parser.parse_args(argv)
 
     # 1 and 2. Before anything else, and before any GPU is touched.
@@ -402,6 +412,26 @@ def main(argv: list[str] | None = None) -> dict:
     curve = _train(model, images, labels, masks, x0s, steps, device)
     train_s = time.monotonic() - train_started
 
+    checkpoint_path = None
+    if args.save_model:
+        # Before the eval, not after: the eval is the long tail and a crash in
+        # it would otherwise throw away the training it just spent.
+        checkpoint_path = Path(args.save_model)
+        checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "state_dict": {k: v.cpu() for k, v in model.state_dict().items()},
+                "steps": steps,
+                "batch": BATCH,
+                "lr": LR,
+                "train_images": n_train,
+                "dataset": DATASET,
+                "layer2_steps": LAYER2_STEPS,
+            },
+            checkpoint_path,
+        )
+        _progress(f"saved trained K_2 and delta_omega to {checkpoint_path}")
+
     _progress(f"evaluating on val: {args.eval_images} images, {args.eval_seeds} seeds")
     evaluation = _evaluate(model, device, args.eval_images, args.eval_seeds)
 
@@ -430,6 +460,7 @@ def main(argv: list[str] | None = None) -> dict:
             "delta_omega_norm": delta_omega_norm,
         },
         "evaluation": evaluation,
+        "model_checkpoint": str(checkpoint_path) if checkpoint_path else None,
     }
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
