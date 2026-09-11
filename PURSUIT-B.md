@@ -157,9 +157,11 @@ At 10,000 steps the mean is 0.9195183743129258 and all ten per-seed means are
 identical. The direct map comparison is stronger: every one of the 45 seed
 pairs has the same partition on all 50 images at 8,000 and 10,000 steps. This
 establishes seed-independent evaluation partitions for the ten tested initial
-phase seeds on this checkpoint and device. It does not establish why the model
-has that property. The proposed dominant-eigenvector mechanism remains an
-unverified explanation, and `CLM_24` remains exploratory.
+phase seeds on this checkpoint and device. A subsequent operator, orbit, and
+component-intervention analysis supports a finite-time projective account of
+that property; `PURSUIT-B-MECHANISM.md` records its evidence and limits. The
+account remains exploratory and does not establish convergence outside the ten
+tested seeds, 50 images, checkpoints, and CPU analysis path.
 
 ## A second training order
 
