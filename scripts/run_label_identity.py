@@ -50,7 +50,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from run_pursuit_b import (  # noqa: E402
     BASELINES,
-    DATASET,
     LAYER1_STEPS,
     Layer2,
     _progress,
@@ -242,6 +241,7 @@ def main(argv: list[str] | None = None) -> dict:
         ),
         "checkpoint": str(args.checkpoint),
         "checkpoint_steps": blob["steps"],
+        "dataset": dataset,
         "device": str(device),
         "seeds": seeds,
         "n_pairs": n_pairs,
