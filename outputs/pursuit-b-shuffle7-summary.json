@@ -1,0 +1,54 @@
+{
+  "dataset": "2shapes",
+  "device": "cuda",
+  "eval_images": 50,
+  "eval_seeds": 10,
+  "measurement_precision": {
+    "seed_averaged_foreground_ari": "four decimal places from the live comparison output"
+  },
+  "provenance": {
+    "code_commit": "a547cc7",
+    "remote_hash_manifest": "pursuit-b-shuffle7-remote.sha256",
+    "source_files_downloaded_before_teardown": [
+      "run-shuf7-6000.json"
+    ],
+    "source_files_not_downloaded_before_teardown": [
+      "labels-shuf7-6000.json",
+      "run-shuf7-8000.json",
+      "labels-shuf7-8000.json",
+      "run-shuf7-10000.json",
+      "labels-shuf7-10000.json"
+    ]
+  },
+  "shuffle_batches": 7,
+  "measurements": [
+    {
+      "steps": 6000,
+      "seed_averaged_foreground_ari": 0.8601,
+      "n_pairs_all_images_same_partition": 0,
+      "n_seed_pairs": 45,
+      "mean_images_same_partition_per_pair": 47.18,
+      "n_images": 50,
+      "n_pixels_differing_that_foreground_ari_scores": 3587
+    },
+    {
+      "steps": 8000,
+      "seed_averaged_foreground_ari": 0.9099,
+      "n_pairs_all_images_same_partition": 45,
+      "n_seed_pairs": 45,
+      "mean_images_same_partition_per_pair": 50.0,
+      "n_images": 50,
+      "n_pixels_differing_that_foreground_ari_scores": 0
+    },
+    {
+      "steps": 10000,
+      "seed_averaged_foreground_ari": 0.9215,
+      "n_pairs_all_images_same_partition": 45,
+      "n_seed_pairs": 45,
+      "mean_images_same_partition_per_pair": 50.0,
+      "n_images": 50,
+      "n_pixels_differing_that_foreground_ari_scores": 0
+    }
+  ],
+  "scope": "The two sampled training orders both change from 0/45 pairwise all-image agreement at 6000 steps to 45/45 at 8000 steps. This establishes the same (6000, 8000] transition bracket for these two trajectories; it does not establish invariance over all training orders."
+}
