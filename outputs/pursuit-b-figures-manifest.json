@@ -17,6 +17,8 @@
     "pursuit-b-loss.png": "ed3c1d482864805a41b1d19211b6a94d4889248001a3c10c3f34fa036049c25e",
     "pursuit-b-maps-10000.png": "dbf93f26267b3a711b173a9151b704a58ca84dace3e58c9314e8db5c40058c8a",
     "pursuit-b-maps-500.png": "cff61ea7a42ea96f0507d8b6662a5a8e2c6a7e746be97cf3b0cfc3a5aa6087d0",
+    "pursuit-b-per-image-distributions.png": "c50b0c43b69f28de3587c45a95e543dc59356569f8e93b7c9856ca3865481d02",
+    "pursuit-b-per-image-trajectories.png": "ac11cc356b3d49fa9f5fd6610d69eea786e63aefc50db41bb104f83fe5ed1d20",
     "pursuit-b-weights.png": "1495801f8cb277881e269d7b3e89526a1b07a92c59d6eba5142b55d180b09a8b"
   },
   "inputs": {
@@ -32,8 +34,14 @@
     "pursuit-b-labels-500.json": "8ec68dbb4302d47b08924780ff12b550cabd24bff1446d721e14f419db1dd648",
     "pursuit-b-labels-6000.json": "36bf6023c5b27526b03345d9b0f51aa2e70b6859412a4c8fe74a3fd775722c4c",
     "pursuit-b-labels-8000.json": "ef390dd44e6863e714c79e7235ac97b1e1ea0bde345f7b2dd55d254c09c04900",
+    "pursuit-b-labels2-1000.json": "85596e40a78e254d126f3cc735bf88bd5afe95d5f6b80105b9e8d53ddcf98ca6",
     "pursuit-b-labels2-10000.json": "4eb1fcd09347b7ce8f55dfbe07a7bc400d0f0fbe27377bfddc4068776f320d7e",
+    "pursuit-b-labels2-2000.json": "7ce020b501ba10244e9b0b88887e7f5f52eefa2def4741f3f3302613f873574b",
+    "pursuit-b-labels2-250.json": "d290792a5232b02c941f0e817cad9d8f10bbfc0ff7d6745ff96b6057ca0191f7",
     "pursuit-b-labels2-4000.json": "e4a85f307030690a0fdc7b005808f8a5bc6e5cc9b6828162c6bc4db93147e5d1",
+    "pursuit-b-labels2-500.json": "a480fd989825da7a6ed639eb4377f046926b6eed2e5885c91e0c966d47d24156",
+    "pursuit-b-labels2-6000.json": "9d1f04723315cfafaf33bd7d994950738ff3edfc26a4d65a6e0dee043503efbe",
+    "pursuit-b-labels2-8000.json": "ec25a2d8853c25903b325d47489e195a6a3c65641e2f75074e02fc0d423b8b5d",
     "pursuit-b-maps-10000.npz": "8a8baae33a07c988e834e1a14e844c10167553d2271dd84fc3509c916b9ea934",
     "pursuit-b-maps-500.npz": "607de76e540d2f44cc388fbb7abf06e714db3a75c21ac86bd9c8e5e423e35905",
     "pursuit-b-run-1000.json": "26f0a346ee31cf7ca7a766ba4c3f6631097752806fe4c891ee519c40835c913b",

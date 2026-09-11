@@ -36,11 +36,11 @@ import matplotlib
 
 matplotlib.use("Agg")
 
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
-import torch  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
 
-from overlap_bench.paths import ROOT_DIR  # noqa: E402
+from overlap_bench.paths import ROOT_DIR
 
 OUT_DIR = Path(ROOT_DIR) / "figures"
 ARTEFACTS = Path(ROOT_DIR) / "outputs"
@@ -269,6 +269,127 @@ def _val_overlap_fractions(n_images: int) -> np.ndarray:
     return np.mean(labels == -1, axis=(1, 2))
 
 
+
+def _per_image_budget_data() -> tuple[np.ndarray, np.ndarray, list[Path]] | None:
+    """Mean FG-ARI for every image at every retained training budget."""
+    paths = [ARTEFACTS / f"pursuit-b-labels2-{budget}.json" for budget in BUDGETS]
+    if not all(path.exists() for path in paths):
+        return None
+
+    by_budget = []
+    n_images = None
+    for path in paths:
+        labels = json.loads(path.read_text())
+        values = np.asarray(labels["per_seed_per_image_foreground_ari"], dtype=float)
+        if values.shape[0] != 10:
+            raise ValueError(f"{path.name}: expected 10 eval seeds, got {values.shape[0]}")
+        if n_images is None:
+            n_images = values.shape[1]
+        elif values.shape[1] != n_images:
+            raise ValueError(f"{path.name}: inconsistent image count {values.shape[1]}")
+        by_budget.append(values.mean(axis=0))
+
+    scores = np.vstack(by_budget)
+    overlap = _val_overlap_fractions(scores.shape[1])
+    return scores, overlap, paths
+
+
+def _fig_per_image_trajectories(scores: np.ndarray, overlap: np.ndarray) -> Path:
+    """Show image-level progress hidden by the aggregate learning curve."""
+    order = np.argsort(overlap)[::-1]
+    ordered_scores = scores[:, order].T
+    monotone = int(np.all(np.diff(scores, axis=0) >= -1e-12, axis=0).sum())
+
+    fig, (heat, share) = plt.subplots(
+        1,
+        2,
+        figsize=(10, 9),
+        gridspec_kw={"width_ratios": (8, 1.4), "wspace": 0.08},
+    )
+    image = heat.imshow(
+        ordered_scores,
+        aspect="auto",
+        cmap="viridis",
+        vmin=-0.05,
+        vmax=1.0,
+        interpolation="nearest",
+    )
+    heat.set_xticks(range(len(BUDGETS)))
+    heat.set_xticklabels(BUDGETS, rotation=35, ha="right")
+    heat.set_yticks(range(len(order)))
+    heat.set_yticklabels(order, fontsize=6)
+    heat.set_xlabel("Adam steps")
+    heat.set_ylabel("validation image index (highest overlap first)")
+    heat.set_title(
+        "Per-image mean FG-ARI over 10 eval seeds\n"
+        f"only {monotone}/{scores.shape[1]} images improve monotonically"
+    )
+    fig.colorbar(image, ax=heat, label="mean foreground ARI")
+
+    share.barh(range(len(order)), overlap[order], color="#a02020", alpha=0.8)
+    share.set_ylim(len(order) - 0.5, -0.5)
+    share.set_yticks([])
+    share.set_xlabel("overlap\nfraction")
+    share.set_title("Ground truth", fontsize=9)
+    share.grid(axis="x", alpha=0.25)
+
+    path = OUT_DIR / "pursuit-b-per-image-trajectories.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return path
+
+
+def _fig_per_image_distributions(scores: np.ndarray, overlap: np.ndarray) -> Path:
+    """Distributional progress and its association with overlap."""
+    from scipy.stats import spearmanr
+
+    fig, (dist, corr) = plt.subplots(1, 2, figsize=(12, 4.8))
+    positions = np.arange(len(BUDGETS))
+    dist.boxplot(
+        [scores[i] for i in positions],
+        positions=positions,
+        widths=0.62,
+        whis=(10, 90),
+        showmeans=True,
+        meanprops={"marker": "o", "markerfacecolor": "#a02020", "markeredgecolor": "none"},
+        medianprops={"color": "#1f4e79", "linewidth": 1.5},
+        flierprops={"marker": ".", "markersize": 3, "alpha": 0.5},
+    )
+    dist.set_xticks(positions)
+    dist.set_xticklabels(BUDGETS, rotation=35, ha="right")
+    dist.set_xlabel("Adam steps")
+    dist.set_ylabel("per-image mean foreground ARI")
+    dist.set_title("Image-level score distribution\nwhiskers: 10th–90th percentile")
+    dist.set_ylim(-0.08, 1.05)
+    dist.grid(axis="y", alpha=0.3)
+
+    correlations = [spearmanr(overlap, scores[i]).statistic for i in positions]
+    corr.plot(BUDGETS, correlations, "o-", color="#6a3d9a")
+    corr.axhline(0.0, color="#999999", linewidth=0.8)
+    corr.set_xscale("log")
+    corr.set_ylim(-1.0, 0.05)
+    corr.set_xlabel("Adam steps")
+    corr.set_ylabel("Spearman rho")
+    corr.set_title(
+        "Ground-truth overlap vs per-image ARI\nnegative at every retained budget"
+    )
+    corr.grid(alpha=0.3)
+    for budget, value in zip(BUDGETS, correlations, strict=True):
+        corr.annotate(
+            f"{value:.2f}",
+            (budget, value),
+            xytext=(0, -13),
+            textcoords="offset points",
+            ha="center",
+            fontsize=7,
+        )
+
+    fig.tight_layout()
+    path = OUT_DIR / "pursuit-b-per-image-distributions.png"
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    return path
+
 def _fig_hard_vs_unstable(budget: int) -> Path | None:
     """Is a seed-unstable image also a hard image, or an overlap-heavy one?
 
@@ -372,6 +493,17 @@ def main() -> dict:
     weights_fig, ckpts = _fig_weights(rows)
     figures.append(weights_fig)
     inputs += ckpts
+
+    per_image = _per_image_budget_data()
+    if per_image is not None:
+        scores, overlap, per_image_inputs = per_image
+        figures.extend(
+            [
+                _fig_per_image_trajectories(scores, overlap),
+                _fig_per_image_distributions(scores, overlap),
+            ]
+        )
+        inputs += per_image_inputs
 
     # These need the per-image data the first programme discarded, so they are
     # drawn only when the recomputed artefacts are present. Their absence is
