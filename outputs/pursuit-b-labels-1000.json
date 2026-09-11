@@ -1,0 +1,2439 @@
+{
+  "checkpoint": "outputs/ckpt-1000.pt",
+  "checkpoint_steps": 1000,
+  "dataset_hashes_verified": {
+    "2shapes_val.npz": "9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59"
+  },
+  "device": "cuda",
+  "elapsed_seconds": 201.93821924299982,
+  "n_distinct_per_seed_means": 10,
+  "n_images": 50,
+  "n_pairs": 45,
+  "n_pairs_all_images_raw_identical": 0,
+  "n_pairs_all_images_same_partition": 0,
+  "n_pixels_differing_that_foreground_ari_scores": 4023,
+  "pairs": [
+    {
+      "n_images_foreground_ari_identical": 48,
+      "n_images_raw_identical": 46,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 9,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 9,
+          "scored_by_foreground_ari": 9
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 2
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 145,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 109,
+          "scored_by_foreground_ari": 109
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 3
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 47,
+      "n_images_same_partition": 47,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 110,
+          "scored_by_foreground_ari": 110
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 43,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 110,
+          "scored_by_foreground_ari": 110
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 13,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 10,
+          "scored_by_foreground_ari": 10
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 137,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 34,
+          "on_object_labels_positive": 103,
+          "scored_by_foreground_ari": 103
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 145,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 109,
+          "scored_by_foreground_ari": 109
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 15,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 14,
+          "scored_by_foreground_ari": 14
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 1,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 145,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 109,
+          "scored_by_foreground_ari": 109
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 9,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 3
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 110,
+          "scored_by_foreground_ari": 110
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 110,
+          "scored_by_foreground_ari": 110
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 46,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 12,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 13,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 10,
+          "scored_by_foreground_ari": 10
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 10,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 9,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 9,
+          "scored_by_foreground_ari": 9
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 137,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 34,
+          "on_object_labels_positive": 103,
+          "scored_by_foreground_ari": 103
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 46,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 145,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 109,
+          "scored_by_foreground_ari": 109
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 43,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 15,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 14,
+          "scored_by_foreground_ari": 14
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 2,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 18,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 17,
+          "scored_by_foreground_ari": 17
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 10,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 9,
+          "scored_by_foreground_ari": 9
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 132,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 33,
+          "on_object_labels_positive": 99,
+          "scored_by_foreground_ari": 99
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 21,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 26,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 6,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 46,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 21,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 9,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 138,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 34,
+          "on_object_labels_positive": 104,
+          "scored_by_foreground_ari": 104
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 112,
+          "scored_by_foreground_ari": 112
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 3,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 135,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 35,
+          "on_object_labels_positive": 100,
+          "scored_by_foreground_ari": 100
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 5,
+          "n_pixels_differing": 171,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 18,
+          "on_object_labels_positive": 153,
+          "scored_by_foreground_ari": 153
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 23,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 19,
+          "scored_by_foreground_ari": 19
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 5,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 141,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 105,
+          "scored_by_foreground_ari": 105
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 43,
+      "partition_mismatches": [
+        {
+          "image": 5,
+          "n_pixels_differing": 171,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 18,
+          "on_object_labels_positive": 153,
+          "scored_by_foreground_ari": 153
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 15,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 14,
+          "scored_by_foreground_ari": 14
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 151,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 113,
+          "scored_by_foreground_ari": 113
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 4,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 135,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 35,
+          "on_object_labels_positive": 100,
+          "scored_by_foreground_ari": 100
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        }
+      ],
+      "seed_a": 5,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 23,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 19,
+          "scored_by_foreground_ari": 19
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 5,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 5,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 43,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 43,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 18,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 17,
+          "scored_by_foreground_ari": 17
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 141,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 105,
+          "scored_by_foreground_ari": 105
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 5,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 14,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 13,
+          "scored_by_foreground_ari": 13
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 5,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 151,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 38,
+          "on_object_labels_positive": 113,
+          "scored_by_foreground_ari": 113
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        }
+      ],
+      "seed_a": 5,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 43,
+      "n_images_raw_identical": 42,
+      "n_images_same_partition": 43,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 7,
+          "scored_by_foreground_ari": 7
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 150,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 37,
+          "on_object_labels_positive": 113,
+          "scored_by_foreground_ari": 113
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 6,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 44,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 132,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 33,
+          "on_object_labels_positive": 99,
+          "scored_by_foreground_ari": 99
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 10,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 4,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 6,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 42,
+      "n_images_raw_identical": 42,
+      "n_images_same_partition": 42,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 19,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 18,
+          "scored_by_foreground_ari": 18
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 8,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 6,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 15,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 14,
+          "scored_by_foreground_ari": 14
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 6,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 16,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 13,
+          "scored_by_foreground_ari": 13
+        },
+        {
+          "image": 42,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 9,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 3,
+          "on_object_labels_positive": 6,
+          "scored_by_foreground_ari": 6
+        }
+      ],
+      "seed_a": 6,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 26,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 6,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 7,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 21,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 144,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 108,
+          "scored_by_foreground_ari": 108
+        }
+      ],
+      "seed_a": 7,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 44,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 17,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 16,
+          "scored_by_foreground_ari": 16
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 12,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 1,
+          "scored_by_foreground_ari": 1
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 134,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 34,
+          "on_object_labels_positive": 100,
+          "scored_by_foreground_ari": 100
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 7,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 46,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 45,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 21,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 20,
+          "scored_by_foreground_ari": 20
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 138,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 34,
+          "on_object_labels_positive": 104,
+          "scored_by_foreground_ari": 104
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 2,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 8,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 47,
+      "n_images_raw_identical": 45,
+      "n_images_same_partition": 46,
+      "partition_mismatches": [
+        {
+          "image": 6,
+          "n_pixels_differing": 17,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 16,
+          "scored_by_foreground_ari": 16
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 148,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 36,
+          "on_object_labels_positive": 112,
+          "scored_by_foreground_ari": 112
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 8,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 45,
+      "n_images_raw_identical": 43,
+      "n_images_same_partition": 44,
+      "partition_mismatches": [
+        {
+          "image": 0,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 2,
+          "scored_by_foreground_ari": 2
+        },
+        {
+          "image": 6,
+          "n_pixels_differing": 4,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 4,
+          "scored_by_foreground_ari": 4
+        },
+        {
+          "image": 9,
+          "n_pixels_differing": 3,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 0,
+          "on_object_labels_positive": 3,
+          "scored_by_foreground_ari": 3
+        },
+        {
+          "image": 11,
+          "n_pixels_differing": 7,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 5,
+          "scored_by_foreground_ari": 5
+        },
+        {
+          "image": 32,
+          "n_pixels_differing": 10,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 2,
+          "on_object_labels_positive": 8,
+          "scored_by_foreground_ari": 8
+        },
+        {
+          "image": 43,
+          "n_pixels_differing": 1,
+          "on_background_label_0": 0,
+          "on_excluded_overlap_label_minus_1": 1,
+          "on_object_labels_positive": 0,
+          "scored_by_foreground_ari": 0
+        }
+      ],
+      "seed_a": 9,
+      "seed_b": 10
+    }
+  ],
+  "per_seed_mean_foreground_ari": [
+    0.6404329809882959,
+    0.6433237486095612,
+    0.6408888931053807,
+    0.6428232796592094,
+    0.6452293653557141,
+    0.6426484063991544,
+    0.641143730947041,
+    0.6408125505140467,
+    0.6417631122258873,
+    0.6413450543539133
+  ],
+  "question": "does the trained layer 2 reach the same partition under different phase seeds, or merely the same score?",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+}

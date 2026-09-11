@@ -1,0 +1,402 @@
+{
+  "checkpoint": "outputs/ckpt-10000.pt",
+  "checkpoint_steps": 10000,
+  "dataset_hashes_verified": {
+    "2shapes_val.npz": "9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59"
+  },
+  "device": "cuda",
+  "elapsed_seconds": 201.0505084729998,
+  "n_distinct_per_seed_means": 1,
+  "n_images": 50,
+  "n_pairs": 45,
+  "n_pairs_all_images_raw_identical": 45,
+  "n_pairs_all_images_same_partition": 45,
+  "n_pixels_differing_that_foreground_ari_scores": 0,
+  "pairs": [
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 2
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 3
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 1,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 3
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 2,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 4
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 3,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 5
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 4,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 5,
+      "seed_b": 6
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 5,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 5,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 5,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 5,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 6,
+      "seed_b": 7
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 6,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 6,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 6,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 7,
+      "seed_b": 8
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 7,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 7,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 8,
+      "seed_b": 9
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 8,
+      "seed_b": 10
+    },
+    {
+      "n_images_foreground_ari_identical": 50,
+      "n_images_raw_identical": 50,
+      "n_images_same_partition": 50,
+      "partition_mismatches": [],
+      "seed_a": 9,
+      "seed_b": 10
+    }
+  ],
+  "per_seed_mean_foreground_ari": [
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257,
+    0.9195183743129257
+  ],
+  "question": "does the trained layer 2 reach the same partition under different phase seeds, or merely the same score?",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+}
