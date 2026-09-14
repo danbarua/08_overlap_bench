@@ -21,11 +21,11 @@ code:
     - outputs/ckpt-20000.pt
 
 deps:
-  - numpy==1.24.3
-  - scipy==1.11.4
-  - scikit-learn==1.3.2
+  - numpy==2.1.2
+  - scipy==1.14.1
+  - scikit-learn==1.5.2
   - torch==2.8.0
-  - torchvision==0.19.0
+  - torchvision==0.23.0
 
 data:
   - url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/07_posn.bundle?x-goog-signature=1eb2985850c4f44b4d1aa344412eb463c5fd9efe471ce032794651f3617ac69e4381d582ed49f22766b17d0da430d0f09e64727bcec5df2be17a94c36dba6344341a717634e4529291819f2f0f86f6a0dcf16f0f3fd75b57f5eb0240650fc860a61978b13a89435d43f7f563c33cb37cee0af5456874c55a53852f007475f91357d9c1b82cdfe965687e290bf2b8c891452cdb0ecbfa40d76d30c3e08723afb62a208bbbbfb0f5125f83063663c293e16c3900359fc47a1e802d6a456800b0657f914c0ea7c3639b7ef6470d5b44314747e3e14f62baf1e0b00ad4e8b109899f7946693b041a85f4e6e6fa451c40076af5cf2814f6dd9281eb7eac305400d4fc&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=7200&x-goog-signedheaders=host
