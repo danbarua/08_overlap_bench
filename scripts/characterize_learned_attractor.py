@@ -237,6 +237,7 @@ def main():
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--out", required=True, help="Output JSON file")
     args = parser.parse_args()
+    device = torch.device(args.device)
 
     # verify_locked_dataset_hashes()  # Skip when running with partial datasets
     _progress(f"device={device}")
