@@ -21,50 +21,11 @@ code:
     - outputs/ckpt-1000-verify.pt
 
 deps:
-  - numpy==1.24.3
-  - scipy==1.11.4
-  - scikit-learn==1.3.2
+  - numpy==2.1.2
+  - scipy==1.14.1
+  - scikit-learn==1.5.2
   - torch==2.8.0
-  - torchvision==0.19.0
+  - torchvision==0.23.0
 
 data:
-  - url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/07_posn.bundle?x-goog-signature=1eb2985850c4f44b4d1aa344412eb463c5fd9efe471ce032794651f3617ac69e4381d582ed49f22766b17d0da430d0f09e64727bcec5df2be17a94c36dba6344341a717634e4529291819f2f0f86f6a0dcf16f0f3fd75b57f5eb0240650fc860a61978b13a89435d43f7f563c33cb37cee0af5456874c55a53852f007475f91357d9c1b82cdfe965687e290bf2b8c891452cdb0ecbfa40d76d30c3e08723afb62a208bbbbfb0f5125f83063663c293e16c3900359fc47a1e802d6a456800b0657f914c0ea7c3639b7ef6470d5b44314747e3e14f62baf1e0b00ad4e8b109899f7946693b041a85f4e6e6fa451c40076af5cf2814f6dd9281eb7eac305400d4fc&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=7200&x-goog-signedheaders=host
-    dest: inputs/07_posn.bundle
-    sha256: ee863262b2dfc86f6d32a6225625557e7abc24b0aecc1ac89a5908e78c9b74c4
-    size_bytes: 16547677
-
-  - url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/2shapes_train.npz?x-goog-signature=b8b529338f152b9a050016d800d8f50fb15b218208630ad9742ebb8e891ba9341eca7ba6f712a37f78a1a281b1611d87e01d2b2abab3cec035c5b954dfa4d42db43f8b194d1cb5fc4209d5da7fd7729ca5d3aeed8166b7f4f88ce7b9daca55f7e11698aa0266b4d8cf730f3e84ef0ecd1355479860dba993e618dc4587cac7174c570b83ac6ec3e5b99833cf7742ccdcb71878dabb851334a562ea01fc04f4e4f28af257800f4b3e73b6df12b1f89448d1743df16c777d4c7688d1d933eb285c26a932c91d5ef316bc31abfe270f334ac33620f8fdc0a5e62c5442299022b65dc181cb908984a3292484cf79b769f675c5f6f33de498a36d448135b1fa5b6bf1&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T052259Z&x-goog-expires=7200&x-goog-signedheaders=host
-    dest: src/08_overlap_bench/data/cae/2shapes_train.npz
-    sha256: 304b3224e453429e7fef1ee96fcff1c3c3cf138ce0804ca31f6dc2d135006730
-    size_bytes: 7402151
-
-  - url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/2shapes_val.npz?x-goog-signature=2a391a171788a41084d42f1ff9ee481600a91f413a3cececc1298329f6158694174cdf3bdeb48983189090ea3968293db900f43197085feeabbc8d66b03f5fd2a51f292189018270b3954256725b6cf1f0dcf6041a9c2ef075c38ba5308e23d26c8c2de89f7705d4f9bbe583e6e4eb9feecf1e43dbc0b77d86d948ca4760e94aaf5a14fede3ec55fdf76fbf1c1584190bae5369e52ed02be78890040846739f03fb29b879f602967d0da81ba412a03575d8f17eaec43bbfd9cf670de6c7b4e8a1cc9671c2f7538a53bc4739f0f91835e541ed2dfd65eed55504c623610c0524e1b5108b9187f25009438a412ddd6b2c62cc0736acafb7b18c7b364780a16b9f2&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T052259Z&x-goog-expires=7200&x-goog-signedheaders=host
-    dest: src/08_overlap_bench/data/cae/2shapes_val.npz
-    sha256: 9772425914944b31a07b40fdea967aab08d36d2461f202387eea6690c66fbb59
-    size_bytes: 1480536
-
-artifacts:
-  - path: src/08_overlap_bench/outputs/pursuit-b-1000-verify.json
-    url: https://labkit-build-colab-jobs.storage.googleapis.com/outputs/pursuit-b-1000-verify.json?x-goog-signature=48fce5004162f50741e23b2e835e05fc78ff474e9a8e0714041529c9c3cbe5a04c2cb978478f9bc2fb1e77f3a2d77865653194cce2951a693e90b6c1226949c25ca594a377e0aae4ae8292e67bda3b96784f607d2b8bcd18b812b127da85971fd18b7c84e6e31d1d3ea302c67e421dbc26abb9b570e39bd2dff3350545da0cde53772616a73bf2b0706b3803f16ee213750cfe8ffb36d416ef9a9d998a7d7854ebe0155c6a0b9e81dd5735664e13c7b14785c03351e8eea7ddf2c33f7279a6f846802da7d9fc9b9daa40b1c8241436da0dd1db33c501c1f6db3a1e59836fdfccfe424f4b84ff2c1cca71d96f275a38b8d6189a4812c17a094ceb08118f16bdab&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=28800&x-goog-signedheaders=host
-    required: true
-    size_bytes: 100000
-
-  - path: src/08_overlap_bench/outputs/pursuit-b-1000-verify.timing.json
-    url: https://labkit-build-colab-jobs.storage.googleapis.com/outputs/pursuit-b-1000-verify.timing.json?x-goog-signature=2d4690d2e60cc3e799cb23b63f0ff391c340acc3dd20e31b5a3e80b967f0443e7617ffd2967f700b6ffaefeab8e119be377d949448307cd0577069ff046b55aa04afa68ff5563e5b8d4cae99531f6021bb20dcf2f34592127db1621b5c957e1aabb4e785775cf572cec56513d53d06055b5053ca9a7f7dc58ea2502a64555b6a07918a9577de602825b03b2fb27f47f44527bbfbd653c5bf6e896025bc4c1a4bc7b52fdfd6615fccbebd2823e100f41fc262d9582630aa07b6648e8224fb4b4037d4131f15c13fb85a8eefcf73a66937123719108f9456f61d1800f711432c1acee963368af0c5313a6a45a3da4359d88b0b4b2d4bc55178f4611544216e1f13&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=28800&x-goog-signedheaders=host
-    required: true
-    size_bytes: 2000
-
-  - path: src/08_overlap_bench/outputs/ckpt-1000-verify.pt
-    url: https://labkit-build-colab-jobs.storage.googleapis.com/outputs/ckpt-1000-verify.pt?x-goog-signature=55b2a374b5ba11042d83c57ca904ad284c5fa08a47df5b0003bbd23513ae19e83183fcbbff652a87ab33f1a54a1478bd8167e33e181f43641c22a801eaaf2872b5bffc3f42e337ccd59205dc80ef0b2be02b9086dc72516f7b57c271f4bfa229d5caff46f1adf6b865a29d154eb2144e54fc9e4be5554cb460b57b23d5daa7e983b3a7135f1a501710b9ec91f237d47c4d1ba974868f08504aba2d0d48ae08d805b3cdd6a8f4c7ebf0b6e51ca7f2e44f05d0111b12c69c03001ee67936b3d2d8492826865b2b24b0329e0321a1988585696bcf99de1221d3f12a03f9955e79d2db2eede511663580122da878b9f9f83b3182049e8bf9e9e93772fad3a6a2f0de&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=28800&x-goog-signedheaders=host
-    required: true
-    size_bytes: 8400000
-
-control:
-  result:
-    put_url: https://labkit-build-colab-jobs.storage.googleapis.com/control/pursuit-b-1000-verify/result.json?x-goog-signature=0691bd5050c1a145516a528a18d95c23bfdda7f64459a97d8531349b8f199e86c292e5ee0f023b00b7250099100002eef681cd659f2c45a67bcae0729d4101b720b2afbc85cffd1098cba1ef5e865a6dadb5b20467f5f7805ee651fb970aee29550697b1a14ce02bae82f23354cf522c12c3532b11820141ca427cb2cb42fa655631c9de0e9811c031e5ec528faf6f4597b5e47a88ef0154f99c89c362ff16fd8b5a0885dcbe09ad6fb6193901109ccc19dbe58e443302923c4d8f08d6795a02be936875bfdb38729a5d04923859b6d32538738ef2e0a3177a835b2479ab78e715a320004a430daec5934f63b64f05027a62045669a27cd4441d4e9c008f9939&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=28800&x-goog-signedheaders=host
-    get_url: https://labkit-build-colab-jobs.storage.googleapis.com/control/pursuit-b-1000-verify/result.json?x-goog-signature=58402afb8170ac6f76da192c3dda3eb434ad1d91ad608749d459cfc48992cef3c7e9899eaafa62b688073ae309802f72e7d2270d14c3cf231b182e3035ebe7ffc0e56d6275e813ac0417d4bdbef0e475cf3da55d408dc872a236d96df87dc20259ccb455537f9b4e9fb1f8d9a143e801770a0ff129cb5a7c7773cf4b47f8d9ac6be86df1c0faf90f5676eee3aadc9d17c4a144ce98f290e1f4942ce5098895186f963e396256c6f6a9cff543cc1a1febb5e286bbcef0e95afcf9c803fbc3817642a04c81ade6c9c65a8df8155b99f621bfb9fcc547667a10d6230e078541ceb24842eb54fc837466cb4055f7bdcc18fa20c8995ef2cc43160ac34e97909520df&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260913%2Fus%2Fstorage%2Fgoog4-rsa-sha256&x-goog-date=20260913T055232Z&x-goog-expires=28800&x-goog-signedheaders=host
-
-budgets:
-  wall_clock: 1800
-
-on_offload_fail: leave_up
+  - url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/07_posn.bundle?x-goog-signature=3d0982c988a641022d54bfbe0227a49d0f0112dfe23e066266a0c99c163199c40b2d9e75193c59c195518f5641be82832b9041edacc07186213c08eeab5bfbd28072b8d621e06770b2de7da18533a33e1b2057e98745c7e617509aa20c36e97ee881cc8107ab077f226fcf742ddb57d4b5a35b09e0fd29ff2d8b68aae940746cdd8f07a30aa0773d63c67b773592676bc903e64c073d41d1610abdf0903661e13eb0efd587a7b5f02d0039d24897acd3530afb3261cc55d131d252af68260ab512440f3ed6fc5f30a1b8b0f702b3d29ecbc27c6dcc4b1d2c4fd44e5ca8aca14539d3ab63a5661dea6b1cc8a9570cbfa5221f6e4d007d808bb840caaac8a9d1dd&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260914%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260914T023004Z&x-goog-expires=7200&x-goog-signedheaders=host
