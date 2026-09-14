@@ -7,12 +7,19 @@ this project would either shadow it or be shadowed by it. This project's own
 package is imported as ``overlap_bench`` via ``src/`` on the path (see
 ``pyproject.toml``'s ``pythonpath``), never via 08's repo root -- so there is
 nothing here for 07's modules to collide with.
+
+Note: In mighty-colab bundle environments, REFERENCE_REPO may be overridden
+via REFERENCE_REPO_OVERRIDE environment variable for path isolation.
 """
 
+import os
 import subprocess
 import sys
 
-from overlap_bench.paths import REFERENCE_COMMIT, REFERENCE_REPO
+from overlap_bench.paths import REFERENCE_COMMIT, REFERENCE_REPO as _DEFAULT_REFERENCE_REPO
+
+# Allow override in bundle environments
+REFERENCE_REPO = os.environ.get("REFERENCE_REPO_OVERRIDE", _DEFAULT_REFERENCE_REPO)
 
 _inserted = False
 
