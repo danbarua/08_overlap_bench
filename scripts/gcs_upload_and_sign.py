@@ -110,7 +110,7 @@ def main():
 
     # Create control-result placeholders
     print("\n=== Creating control-result placeholders ===", file=sys.stderr)
-    for job_name in ["pursuit-b-20000", "pursuit-b-mechanism"]:
+    for job_name in ["pursuit-b-1000-verify", "pursuit-b-20000", "pursuit-b-mechanism"]:
         obj_path = f"control/{job_name}/result.json"
         create_placeholder(obj_path, bucket)
 
@@ -127,6 +127,9 @@ def main():
 
     # Output PUT URLs (8-hour duration)
     artifacts = [
+        "outputs/pursuit-b-1000-verify.json",
+        "outputs/pursuit-b-1000-verify.timing.json",
+        "outputs/ckpt-1000-verify.pt",
         "outputs/pursuit-b-20000.json",
         "outputs/pursuit-b-20000.timing.json",
         "outputs/ckpt-20000.pt",
@@ -140,6 +143,7 @@ def main():
 
     # Control result URLs (PUT and GET, 8-hour)
     controls = [
+        "control/pursuit-b-1000-verify/result.json",
         "control/pursuit-b-20000/result.json",
         "control/pursuit-b-mechanism/result.json",
     ]
