@@ -23,3 +23,5 @@ outputs/*.pt
 
 
 **/.mighty-colab-secrets.json
+# mighty-colab plan files (regenerable; sidecars contain credentials)
+plans/
