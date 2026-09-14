@@ -54,9 +54,9 @@ def _sheets(nrow: int, ncol: int, device: torch.device) -> tuple[torch.Tensor, t
     ensure_on_path()
     from src.cv_rnn.cv_rnn_segmentation import gaussian_sheet_torch
 
-    k1 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.9, dtype=torch.float64).real.clone()
-    k2 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.0313, dtype=torch.float64).real.clone()
-    return k1.to(device), k2.to(device)
+    k1 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.9, device=device, dtype=torch.float64).real.clone()
+    k2 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.0313, device=device, dtype=torch.float64).real.clone()
+    return k1, k2
 
 
 def _layer1_masks(
