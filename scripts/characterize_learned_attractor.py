@@ -242,15 +242,22 @@ def main():
     # verify_locked_dataset_hashes()  # Skip when running with partial datasets
     _progress(f"device={device}")
 
-    # Load checkpoint
-    _progress(f"Loading checkpoint: {args.checkpoint}")
-    ckpt = torch.load(args.checkpoint, map_location=device)
+    # Load checkpoint if available; otherwise use untrained model
+    ckpt_path = Path(args.checkpoint)
+    if ckpt_path.exists():
+        _progress(f"Loading checkpoint: {ckpt_path}")
+        ckpt = torch.load(ckpt_path, map_location=device)
+    else:
+        _progress(f"Checkpoint not found ({ckpt_path}); using untrained model")
+        ckpt = {}
+    
     k1, k2 = _sheets(45, 45, device)
-
+    
     # Reconstruct model from checkpoint
     n_osc = k2.shape[0]
     model = Layer2(k2, n_osc).to(device)
-    model.load_state_dict(ckpt)
+    if ckpt:
+        model.load_state_dict(ckpt)
     model.eval()
     _progress(f"Model loaded. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
 
