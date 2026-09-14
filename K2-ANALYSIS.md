@@ -5,17 +5,32 @@ The `figures/pursuit-b-weights.png` visualization shows K2 coupling matrix growi
 
 ## Finding: Controlled and Expected
 
-### K2 Norm Growth: 1.15× (Matches Mechanism)
+### K2 Norm Growth: two distinct quantities, not one "1.15×"
 
-Frobenius norm inspection across checkpoints:
-- **Initial K₀** (Gaussian sheet): ~75.3 (estimated from 10k scalar fit)
-- **At 10,000 steps**: 86.8
-- **Growth factor**: 1.15× 
+Frobenius norm inspection across checkpoints (`weight_geometry` in
+`outputs/pursuit-b-mechanism.json`):
+- **Measured K₀** (step 0, actual checkpoint): 28.00
+- **At 10,000 steps**: 86.81
+- **Raw growth (measured K₀ → K₁₀ₖ)**: **3.10×**
 
-This matches exactly the mechanism analysis finding (PURSUIT-B-MECHANISM.md, line 92):
-> "the best scalar fit is 1.1522K₀"
+Separately, the mechanism analysis (PURSUIT-B-MECHANISM.md, line 92) reports
+"the best scalar fit is 1.1522K₀" — this is `best_scalar_multiple_of_k0` in
+the JSON: the α that best explains K₁₀ₖ as a scalar rescale of K₀'s
+*direction/structure* (least-squares fit), not a measurement of how much
+the norm grew. Back-solving `86.81 / 1.1522 = 75.34` gives what K₀ would
+have to equal for that scalar-fit relationship to hold exactly — a
+**derived reference value**, not the checkpoint's actual measured norm.
+Earlier drafts of this doc and `figures/pursuit-b-k2-analysis.png` called
+75.3 "Initial K₀" outright and headlined "1.15× growth," which reads as if
+the raw norm barely changed. It changed 3.10×; what's actually modest is
+how well the *shape* of K₁₀ₖ still matches a scalar multiple of K₀'s shape
+(residual factor 1.1522, i.e. only ~15% beyond pure rescaling) despite that
+3.10× magnitude growth.
 
-**Verdict**: ✓ K2 growth is **modest and proportional** to initialization.
+**Verdict**: ✓ K2's magnitude grew substantially (3.10×), but its structure
+stayed close to a scalar rescale of its initialization (1.152× residual) —
+consistent with the mechanism's own scalar-fit check, not evidence that the
+norm was somehow controlled to grow only modestly.
 
 ### Norm-Rescaling Applies Only to State Vectors
 
@@ -36,11 +51,11 @@ From PURSUIT-B-MECHANISM.md, lines 49-51:
 ### K2 vs delta_omega Asymmetry: Expected Behavior
 
 Norm measurements at 10,000 steps:
-| Parameter | L2 Norm | Growth (from init) |
-|-----------|---------|-------------------|
-| K2        | 86.81   | 1.15× (controlled) |
-| delta_ω   | 1.57    | 3.8× (faster init) |
-| **Ratio** | **55.4×** | **(uncoupled)** |
+| Parameter | L2 Norm | Raw growth | Note |
+|-----------|---------|-----------|------|
+| K2        | 86.81   | 3.10× (from measured K₀=28.00) | scalar-fit *residual* is separately 1.152× — see above |
+| delta_ω   | 1.57    | 3.75× (from step-250 checkpoint; no step-0 measurement available) | |
+| **Ratio** | **55.4×** | **(uncoupled)** | |
 
 **Why this asymmetry?**
 
@@ -108,7 +123,7 @@ This confirms **K2 restructuring dominates delta_ω refinement**, consistent wit
 
 | Question | Answer | Evidence |
 |----------|--------|----------|
-| Is K2 growth controlled? | **Yes** | 1.15× matches mechanism scalar fit |
+| Is K2 growth controlled? | **Partially** | Raw norm grew 3.10×; its *shape* stayed close to a 1.152× scalar rescale of K₀ |
 | Should K2 be norm-rescaled? | **No** | Rescaling applies only to state vectors |
 | Is K2/delta_ω asymmetry a problem? | **No** | Different optimization scales; ablation shows delta_ω is expendable |
 | Do norms compromise the mechanism? | **No** | All diagnostic metrics are scale/magnitude-invariant |
