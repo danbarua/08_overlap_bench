@@ -244,22 +244,29 @@ def main():
 
     # Load checkpoint if available; otherwise use untrained model
     ckpt_path = Path(args.checkpoint)
+    state_dict = None
     if ckpt_path.exists():
         _progress(f"Loading checkpoint: {ckpt_path}")
         ckpt = torch.load(ckpt_path, map_location=device)
+        # Checkpoint has nested structure: {"state_dict": {...}, "steps": ..., ...}
+        if isinstance(ckpt, dict) and "state_dict" in ckpt:
+            state_dict = ckpt["state_dict"]
     else:
         _progress(f"Checkpoint not found ({ckpt_path}); using untrained model")
-        ckpt = {}
     
+    # Create model
     k1, k2 = _sheets(45, 45, device)
-    
-    # Reconstruct model from checkpoint
     n_osc = k2.shape[0]
     model = Layer2(k2, n_osc).to(device)
-    if ckpt:
-        model.load_state_dict(ckpt)
+    
+    # Load weights if checkpoint available
+    if state_dict:
+        model.load_state_dict(state_dict)
+        _progress(f"Model loaded from checkpoint. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
+    else:
+        _progress("Model initialized fresh (no checkpoint loaded)")
+    
     model.eval()
-    _progress(f"Model loaded. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
 
     # Load data
     with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
