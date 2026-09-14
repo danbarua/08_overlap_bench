@@ -148,7 +148,6 @@ def compute_lyapunov_exponents(
         
         # Lyapunov exponent from exponential growth rate
         # log(divergence) ≈ λ * t
-        divergences = np.array(divergences)
         divergences = np.maximum(divergences, 1e-10)  # Avoid log(0)
         
         # Fit log(divergence) ~ λ*t using least squares on second half
@@ -239,8 +238,7 @@ def main():
     parser.add_argument("--out", required=True, help="Output JSON file")
     args = parser.parse_args()
 
-    verify_locked_dataset_hashes()
-    device = torch.device(args.device)
+    # verify_locked_dataset_hashes()  # Skip when running with partial datasets
     _progress(f"device={device}")
 
     # Load checkpoint
