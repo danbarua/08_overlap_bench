@@ -11,7 +11,7 @@ code:
   args:
     - scripts/characterize_learned_attractor.py
     - --checkpoint
-    - outputs/ckpt-10000.pt
+    - outputs/ckpt-1000-verify.pt
     - --device
     - cuda
     - --out
