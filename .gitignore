@@ -20,3 +20,6 @@ outputs/*.pt
 # application_default_credentials.json -- a live refresh token. Never commit.
 .gcloud/
 .envrc
+
+
+**/.mighty-colab-secrets.json
