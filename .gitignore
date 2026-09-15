@@ -26,3 +26,5 @@ outputs/*.pt
 
 # Job plans (mighty-colab temporary files)
 plans/
+
+.omp/
