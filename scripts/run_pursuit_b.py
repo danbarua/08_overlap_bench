@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -114,6 +115,24 @@ BASELINES: dict[str, dict[str, float | int]] = {
 def _progress(message: str) -> None:
     print(f"[pursuit-b] {message}", file=sys.stderr, flush=True)
 
+
+def _atomic_torch_save(obj, path: Path) -> None:
+    """Write via a temp file then os.replace, so a concurrent reader (a
+    periodic re-upload watchdog, an --resume-from load) only ever sees the
+    complete previous file or the complete new one, never a torn write from
+    a process killed mid-save. os.replace is atomic on the same filesystem;
+    the temp file must therefore be a sibling of the target, not /tmp.
+    """
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    torch.save(obj, tmp)
+    os.replace(tmp, path)
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    """Same guarantee as `_atomic_torch_save`, for the JSON side writes."""
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text)
+    os.replace(tmp, path)
 
 def _sheets(nrow: int, ncol: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
     """M0's two Gaussian sheets, from 07_posn itself, at the locked parameters."""
@@ -272,6 +291,7 @@ def assert_matches_m0_at_init(
 
 def _train(
     model: Layer2,
+    optimiser: torch.optim.Optimizer,
     images: torch.Tensor,
     labels: torch.Tensor,
     masks: torch.Tensor,
@@ -279,27 +299,40 @@ def _train(
     steps: int,
     device: torch.device,
     order: torch.Tensor | None = None,
+    start_step: int = 0,
+    checkpoint_every: int = 0,
+    checkpoint_fn=None,
 ) -> list[dict]:
-    """Train layer 2. `order` permutes which training image each slot draws.
+    """Train layer 2 for `steps` more steps, starting from global step `start_step`.
 
-    Without it the batch for step s is images [s*32, s*32+32) mod n_train, an
+    `optimiser` is caller-owned so a resumed run can load its state before
+    training starts -- Adam's momentum/variance are part of the trajectory
+    too, and reinitializing them at a resume point is a different (if usually
+    close) optimization path, not a continuation of the same one.
+
+    `order` permutes which training image each slot draws. Without it the
+    batch for global step s is images [s*32, s*32+32) mod n_train, an
     index-derived cycle. Nothing else in training consumes randomness either --
     the init IS M0 (K_2 the Gaussian sheet, delta_omega zeros) and each x0 is
-    seeded by its own image index -- so there is no training seed to vary and
-    every run of a given budget is the same trajectory to the last bit. That is
-    why the budgets form exact prefixes of one another.
+    seeded by its own image index -- so a from-scratch run of a given budget
+    is the same trajectory to the last bit, and a resumed run with restored
+    optimizer state continues that same trajectory exactly. `start_step`
+    keeps the batch-cycling index continuous across a resume; without it a
+    "resumed" run would silently restart the image-visitation cycle from the
+    beginning instead of continuing it.
 
-    `order` is therefore the only way to obtain a genuinely different
-    trajectory, which is what is needed to ask whether a result like the
-    seed-invariance transition is a property of the model or of this one
-    optimisation path.
+    `checkpoint_every`: if nonzero, calls `checkpoint_fn(global_step, curve)`
+    every that many steps (and once more at the end) so a mid-run crash or
+    lost VM leaves a resumable checkpoint and the loss trajectory up to that
+    point, not nothing. `checkpoint_fn` is responsible for actually writing
+    files; this function only decides when to call it.
     """
-    optimiser = torch.optim.Adam(model.parameters(), lr=LR)
     n_train = images.shape[0]
     curve = []
     started = time.monotonic()
-    for step in range(steps):
-        lo = (step * BATCH) % n_train
+    for local_step in range(steps):
+        global_step = start_step + local_step
+        lo = (global_step * BATCH) % n_train
         idx = torch.arange(lo, lo + BATCH, device=device) % n_train
         if order is not None:
             idx = order[idx]
@@ -307,21 +340,27 @@ def _train(
         x_T = model.orbit_final(x0s[idx], images[idx], masks[idx])
         losses = [cos_coherence_loss(x_T[b], labels[idx[b]]) for b in range(BATCH)]
         loss = torch.stack(losses).mean()
-        if step == 0:
+        if global_step == 0:
             # NOTE_21: the t=0 loss on the first batch, before any update.
             curve.append({"step": 0, "loss": float(loss), "before_first_update": True})
         loss.backward()
         optimiser.step()
-        if (step + 1) % 25 == 0 or step + 1 == steps:
+        if (local_step + 1) % 25 == 0 or local_step + 1 == steps:
             # Timing goes to stderr and to the sidecar, never into the artefact:
             # run_arc1a.py's rule is that a re-run with the same code and data
             # must hash identically, and wall-clock makes that impossible.
             elapsed = time.monotonic() - started
-            curve.append({"step": step + 1, "loss": float(loss)})
+            curve.append({"step": global_step + 1, "loss": float(loss)})
             _progress(
-                f"step {step + 1}/{steps} loss {float(loss):+.6f} "
-                f"({elapsed / (step + 1):.3f}s/step)"
+                f"step {global_step + 1}/{start_step + steps} loss {float(loss):+.6f} "
+                f"({elapsed / (local_step + 1):.3f}s/step)"
             )
+        if (
+            checkpoint_fn is not None
+            and checkpoint_every > 0
+            and ((local_step + 1) % checkpoint_every == 0 or local_step + 1 == steps)
+        ):
+            checkpoint_fn(global_step + 1, curve)
     return curve
 
 
@@ -464,15 +503,53 @@ def main(argv: list[str] | None = None) -> dict:
         "--save-model",
         default=None,
         help=(
-            "write the trained K_2 and delta_omega here after training. Off by "
-            "default, and the output JSON gains the model_checkpoint key only "
-            "when it is used, so passing it is what changes the JSON rather than "
-            "merely having the flag. Note this does not make a run byte-identical "
-            "to ART_16/ART_17: the schema has since gained dataset, m0_seed_sd "
-            "and a second M0-relative diagnostic. What reproduces bit-for-bit is "
-            "the arithmetic -- verified on different hardware -- not the file. "
-            "Without a checkpoint the trained weights die with the process, and "
-            "any later question about them costs a full retrain."
+            "write K_2, delta_omega, and Adam's optimizer state here, "
+            "periodically during training (see --checkpoint-every) and again "
+            "at the end. Off by default, and the output JSON gains the "
+            "model_checkpoint key only when it is used, so passing it is what "
+            "changes the JSON rather than merely having the flag. Note this "
+            "does not make a run byte-identical to ART_16/ART_17: the schema "
+            "has since gained dataset, m0_seed_sd, and a second M0-relative "
+            "diagnostic. What reproduces bit-for-bit is the arithmetic -- "
+            "verified on different hardware -- not the file. Without a "
+            "checkpoint the trained weights die with the process, and any "
+            "later question about them, or any wish to train further, costs "
+            "a full retrain from step 0."
+        ),
+    )
+    parser.add_argument(
+        "--resume-from",
+        default=None,
+        metavar="PATH",
+        help=(
+            "load model + optimizer state from a checkpoint written by "
+            "--save-model and continue training from its recorded step count "
+            "up to --steps. Requires the checkpoint's dataset to match "
+            "--dataset and its recorded steps to be < --steps. If the "
+            "checkpoint predates optimizer-state saving (no "
+            "'optimizer_state_dict' key), Adam is reinitialized fresh at the "
+            "resume point -- a close but NOT bit-identical continuation of "
+            "what a from-scratch run to the same total step count would be, "
+            "since Adam's momentum/variance do not carry over. Checkpoints "
+            "written after this flag was added always carry optimizer state, "
+            "so resuming from one of those IS bit-identical to a from-scratch "
+            "run of the same total steps."
+        ),
+    )
+    parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=500,
+        metavar="N",
+        help=(
+            "write --save-model (with optimizer state) and a partial --out "
+            "every N steps during training, not just once at the end. 0 "
+            "disables periodic checkpointing. This is what makes a lost VM "
+            "or a mid-run crash cost at most N steps of training instead of "
+            "the whole run: without it, a job that dies before the final "
+            "write leaves nothing at all, checkpoint or curve, regardless of "
+            "how much GPU time it actually spent. Only takes effect when "
+            "--save-model is also set."
         ),
     )
     args = parser.parse_args(argv)
@@ -532,32 +609,119 @@ def main(argv: list[str] | None = None) -> dict:
         generator = torch.Generator(device="cpu").manual_seed(args.shuffle_batches)
         order = torch.randperm(n_train, generator=generator).to(device)
         _progress(f"shuffled batch order, permutation seed {args.shuffle_batches}")
-    _progress(f"training {steps} steps, batch {BATCH}, lr {LR}, on {device}")
-    model = Layer2(k2, n).to(device)
-    train_started = time.monotonic()
-    curve = _train(model, images, labels, masks, x0s, steps, device, order=order)
-    train_s = time.monotonic() - train_started
 
-    checkpoint_path = None
-    if args.save_model:
-        # Before the eval, not after: the eval is the long tail and a crash in
-        # it would otherwise throw away the training it just spent.
+    model = Layer2(k2, n).to(device)
+    optimiser = torch.optim.Adam(model.parameters(), lr=LR)
+    start_step = 0
+    prior_curve: list[dict] = []
+    resumed_from = None
+    if args.resume_from:
+        ckpt = torch.load(args.resume_from, map_location=device)
+        if ckpt.get("dataset") != args.dataset:
+            raise ValueError(
+                f"--resume-from {args.resume_from} was trained on "
+                f"{ckpt.get('dataset')!r}, not --dataset {args.dataset!r}. "
+                "Refusing to resume across datasets."
+            )
+        start_step = int(ckpt["steps"])
+        if start_step >= steps:
+            raise ValueError(
+                f"--resume-from {args.resume_from} already has {start_step} steps, "
+                f">= --steps {steps}. Nothing to do."
+            )
+        model.load_state_dict(ckpt["state_dict"])
+        if "optimizer_state_dict" in ckpt:
+            optimiser.load_state_dict(ckpt["optimizer_state_dict"])
+            _progress(
+                f"resumed from {args.resume_from} at step {start_step} "
+                "with optimizer state -- bit-identical continuation"
+            )
+        else:
+            _progress(
+                f"resumed from {args.resume_from} at step {start_step} "
+                "WITHOUT optimizer state (older checkpoint) -- Adam "
+                "reinitialized fresh, NOT a bit-identical continuation of a "
+                "from-scratch run to the same total steps"
+            )
+        prior_curve = list(ckpt.get("training_curve", []))
+        resumed_from = str(args.resume_from)
+
+    train_steps = steps - start_step
+    _progress(
+        f"training {train_steps} steps (global {start_step}->{steps}), "
+        f"batch {BATCH}, lr {LR}, on {device}"
+    )
+
+    def _write_checkpoint(global_step: int, curve_so_far: list[dict]) -> Path:
         checkpoint_path = Path(args.save_model)
         checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
-        torch.save(
+        full_curve = prior_curve + curve_so_far
+        _atomic_torch_save(
             {
                 "state_dict": {k: v.cpu() for k, v in model.state_dict().items()},
-                "steps": steps,
+                "optimizer_state_dict": optimiser.state_dict(),
+                "steps": global_step,
+                "training_curve": full_curve,
                 "batch": BATCH,
                 "lr": LR,
                 "train_images": n_train,
                 "dataset": args.dataset,
                 "layer2_steps": LAYER2_STEPS,
                 "shuffle_batches": args.shuffle_batches,
+                "resumed_from": resumed_from,
             },
             checkpoint_path,
         )
-        _progress(f"saved trained K_2 and delta_omega to {checkpoint_path}")
+        # A partial --out write too: if the job dies before the final write
+        # (evaluation is the long tail after training), a checkpoint alone
+        # tells you the weights but not the loss trajectory at a glance, and
+        # a fully-missing --out looks identical to "never started" instead of
+        # "got to step N of M". This is deliberately not the final schema --
+        # "partial": true marks it as such -- just enough to diagnose or
+        # resume from without waiting on the whole run to fail first.
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        _atomic_write_text(
+            Path(args.out),
+            json.dumps(
+                {
+                    "partial": True,
+                    "dataset": args.dataset,
+                    "steps_completed": global_step,
+                    "steps_target": steps,
+                    "training_curve": full_curve,
+                    "model_checkpoint": checkpoint_path.name,
+                },
+                indent=2,
+            )
+            + "\n",
+        )
+        return checkpoint_path
+
+    train_started = time.monotonic()
+    new_curve = _train(
+        model,
+        optimiser,
+        images,
+        labels,
+        masks,
+        x0s,
+        train_steps,
+        device,
+        order=order,
+        start_step=start_step,
+        checkpoint_every=args.checkpoint_every if args.save_model else 0,
+        checkpoint_fn=_write_checkpoint if args.save_model else None,
+    )
+    train_s = time.monotonic() - train_started
+    curve = prior_curve + new_curve
+
+    checkpoint_path = None
+    if args.save_model:
+        # Final write: identical shape to the periodic ones, just guaranteed
+        # to be at the true final step even if checkpoint_every doesn't
+        # divide evenly into train_steps.
+        checkpoint_path = _write_checkpoint(steps, new_curve)
+        _progress(f"saved trained K_2, delta_omega, and optimizer state to {checkpoint_path}")
 
     _progress(f"evaluating on val: {args.eval_images} images, {args.eval_seeds} seeds")
     evaluation = _evaluate(
@@ -572,6 +736,7 @@ def main(argv: list[str] | None = None) -> dict:
         "pursuit": "b: the loss NOTE_16 intended (cos between-object term)",
         "device": str(device),
         "dataset": args.dataset,
+        "resumed_from": resumed_from,
         # None means the default index-derived order. Recorded either way: a
         # shuffled trajectory and the default one are not comparable as repeats.
         "shuffle_batches": args.shuffle_batches,
@@ -600,7 +765,7 @@ def main(argv: list[str] | None = None) -> dict:
         output["model_checkpoint"] = checkpoint_path.name
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
+    _atomic_write_text(out, json.dumps(output, indent=2, sort_keys=True) + "\n")
 
     # Wall-clock lives beside the artefact, not inside it, so the artefact's
     # hash is a reproducibility lock -- a re-run re-derives it -- rather than

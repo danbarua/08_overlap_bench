@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -48,6 +49,16 @@ COHERENCE_WINDOW = 50  # Sliding window for per-oscillator coherence
 def _progress(message: str) -> None:
     print(f"[attractor] {message}", file=sys.stderr, flush=True)
 
+
+def _atomic_write_json(path: str, obj) -> None:
+    """Write via a temp file then os.replace: a concurrent reader (a periodic
+    re-upload watchdog) only ever sees the complete previous file or the
+    complete new one, never a torn write from a process killed mid-write.
+    """
+    tmp = f"{path}.tmp"
+    with open(tmp, "w") as f:
+        json.dump(obj, f, indent=2)
+    os.replace(tmp, path)
 
 def _sheets(nrow: int, ncol: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
     """M0's two Gaussian sheets."""
@@ -360,9 +371,13 @@ def main():
             "per_seed": per_seed_results,
         })
 
-    # Write output
-    with open(args.out, "w") as f:
-        json.dump(results, f, indent=2)
+        # Write after every image, not just at the end: this loop is the
+        # entire wall-clock cost of the job, and a lost VM or crash partway
+        # through must cost at most one image's worth of GPU time, not all
+        # of it. `partial` distinguishes this from the finished schema.
+        _atomic_write_json(args.out, {**results, "partial": img_idx + 1 < EVAL_IMAGES})
+
+    # Final iteration already wrote the complete results with partial=False.
     
     elapsed = time.monotonic() - started
     _progress(f"Done in {elapsed:.1f}s. Output: {args.out}")
