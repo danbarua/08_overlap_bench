@@ -166,16 +166,45 @@ source-lock check (`undeclared source file`, both jobs failed identically).
 Not an infra flake -- fixed by leaving the bundle untouched between launch
 and completion, then relaunching cleanly.
 
+## Per-image difficulty structure and the mechanism, mapped
+
+Two gaps from above are now filled. `figures/pursuit-b-mnist-3shapes-per-image-trajectories.png`
+maps per-image FG-ARI across all three budgets for both datasets (never
+visualized before): there is a **stable set of persistently hard images**
+for both, not just slow-training ones -- rows that stay dark from 10k
+through 40k regardless of overlap-fraction rank. MNIST_shapes' worst
+(images 2, 38, 20) sit at essentially zero or negative mean FG-ARI even at
+40k. `figures/pursuit-b-mnist-3shapes-persistent-hard-easy.png` renders
+the actual pixels: MNIST_shapes' persistently-hard images visually show the
+shape component tucked into a fold or loop of the digit's own stroke
+(digits like `4`, `7`, `9` with the square/triangle overlapping a curved
+part of the glyph), while easy ones have the shape cleanly separated from
+the digit. This is a plausible, visually-suggested candidate for what
+drives MNIST_shapes' per-image difficulty -- entanglement with the digit's
+own irregular stroke shape, not the same "overlap-pixel-fraction" metric
+that worked for 2shapes -- but unverified quantitatively; the earlier
+Spearman correlation used a simple geometric overlap fraction that doesn't
+capture stroke-shape entanglement, and no better metric has been tested yet.
+
+The mechanism analysis (eigenvalue/spectral-gap picture) has been run on
+both datasets' 40k checkpoints -- see `PURSUIT-B-ATTRACTOR.md`. Headline:
+the eigenvector-lock mechanism generalizes (both lock onto a dominant mode
+near-perfectly), but the spectral gap `q` does **not** narrow monotonically
+with training on either dataset the way it did for 2shapes -- a real
+correction to an assumption made in an earlier draft of that note, caught
+by directly computing `q` at all three checkpoints rather than reasoning
+from a single snapshot.
+
 ## What this does not show
 
 - Whether 40,000 steps is enough for either dataset. MNIST_shapes visibly
   is not (still accelerating); 3shapes' deceleration is suggestive of an
   approaching ceiling but not established from three points. Whether the
   gap to 2shapes' 0.9195 eventually closes for either is untested past 40k.
-- No mechanism analysis (eigenvalue/spectral-gap picture from
-  `PURSUIT-B-MECHANISM.md`) has been run on any of these checkpoints yet.
-- What actually drives per-image difficulty on these two datasets, now that
-  overlap fraction (2shapes' answer) is shown not to obviously apply.
+- What quantitatively drives per-image difficulty on these two datasets.
+  Overlap-pixel fraction (2shapes' answer) doesn't explain it; digit-stroke
+  entanglement is a visually-suggested but untested candidate for
+  MNIST_shapes specifically, and 3shapes has no candidate explanation yet.
 
 ## A real infra failure hit along the way
 
