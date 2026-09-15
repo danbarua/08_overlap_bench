@@ -115,7 +115,7 @@ def main():
 
     # Create control-result placeholders
     print("\n=== Creating control-result placeholders ===", file=sys.stderr)
-    for job_name in ["pursuit-b-1000-verify", "pursuit-b-20000", "pursuit-b-mechanism", "pursuit-b-attractor", "pursuit-b-mnist-10000", "pursuit-b-3shapes-10000"]:
+    for job_name in ["pursuit-b-1000-verify", "pursuit-b-20000", "pursuit-b-mechanism", "pursuit-b-attractor", "pursuit-b-mnist-10000", "pursuit-b-3shapes-10000", "pursuit-b-mnist-20000", "pursuit-b-3shapes-20000"]:
         obj_path = f"control/{job_name}/result.json"
         create_placeholder(obj_path, bucket)
 
@@ -148,6 +148,10 @@ def main():
         "outputs/ckpt-mnist-10000.pt",
         "outputs/pursuit-b-3shapes-10000.json",
         "outputs/ckpt-3shapes-10000.pt",
+        "outputs/pursuit-b-mnist-20000.json",
+        "outputs/ckpt-mnist-20000.pt",
+        "outputs/pursuit-b-3shapes-20000.json",
+        "outputs/ckpt-3shapes-20000.pt",
     ]
     # Control result URLs (PUT and GET, 8-hour)
     controls = [
@@ -157,6 +161,8 @@ def main():
         "control/pursuit-b-attractor/result.json",
         "control/pursuit-b-mnist-10000/result.json",
         "control/pursuit-b-3shapes-10000/result.json",
+        "control/pursuit-b-mnist-20000/result.json",
+        "control/pursuit-b-3shapes-20000/result.json",
     ]
     for gcs in artifacts:
         print(f"Signing PUT {gcs}...", file=sys.stderr)

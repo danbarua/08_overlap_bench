@@ -96,10 +96,44 @@ untested here.
 vs M0 vs cc, all at 10,000 steps, same protocol -- the summary view of the
 results table above.
 
+## 20,000 steps: the loss curve's prediction confirmed
+
+The declining, unplateaued loss curves above (`pursuit-b-mnist-3shapes-loss.png`)
+predicted more steps would help. Ran both to 20,000 steps, matching 2shapes'
+own 10k-to-20k extension (`RESULTS-20K.md`):
+
+| dataset | @10k | @20k | change |
+|---|---:|---:|---:|
+| MNIST_shapes | 0.4343 +/- 0.0011 | 0.4780 +/- 0.0015 | +0.0437 (+10%) |
+| 3shapes | 0.5755 +/- 0.0042 | 0.6654 +/- 0.0050 | +0.0899 (+16%) |
+
+Both artifacts hash-verified against their job envelopes:
+`outputs/pursuit-b-mnist-20000.json`
+(`e7098d094fd59bd7535d5aa0a9e84ec4b25290af496def75ab51aec0ab37fa3a`),
+`outputs/pursuit-b-3shapes-20000.json`
+(`1dd840f8958fe1ce30a2d17f25038bf5d9a68d629d8af4789171a1b1a2eff04a`).
+
+`pursuit-b-mnist-3shapes-loss-20k.png` shows the loss still declining without
+a clear plateau even through 20,000 steps on both datasets -- past the point
+where the 10k run stopped (marked). Neither has reached whatever ceiling it
+will eventually reach; 3shapes' larger relative gain (+16% vs MNIST_shapes'
++10%) is itself an unexplained difference between the two, not just "more
+steps helps everywhere equally." `pursuit-b-mnist-3shapes-10k-vs-20k.png`
+is the side-by-side bar chart.
+
+Launched both with `mighty-colab job apply --job-id <id> --async`
+(`0.8.1.dev64+g79439178b`, shipped mid-session in response to the keep-alive
+failure below) -- spawns the blocking apply as a real detached child and
+returns in ~2s with `{job_id, pid, log_path}`. No local process needed to
+survive either job's ~45-50 minute run; both completed cleanly on the first
+attempt this time.
+
 ## What this does not show
 
-- Whether 10,000 steps is enough for either dataset. The loss curves above
-  suggest probably not; not directly tested by running further.
+- Whether 20,000 steps is enough for either dataset -- confirmed 10k wasn't
+  (both still improved), and the loss curves still haven't plateaued at
+  20k either. Whether the gap to 2shapes' 0.9195 eventually closes, or each
+  dataset has a real lower ceiling, is untested past this point.
 - No mechanism analysis (eigenvalue/spectral-gap picture from
   `PURSUIT-B-MECHANISM.md`) has been run on either checkpoint yet.
 - What actually drives per-image difficulty on these two datasets, now that
