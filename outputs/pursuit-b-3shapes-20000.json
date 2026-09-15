@@ -659,6 +659,7 @@
     "old_formula_antiphase": 1.1102230246251565e-16
   },
   "pursuit": "b: the loss NOTE_16 intended (cos between-object term)",
+  "resumed_from": null,
   "shuffle_batches": null,
   "steps": 20000,
   "train_images": 16000,
