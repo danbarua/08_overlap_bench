@@ -95,9 +95,25 @@ class Layer2(torch.nn.Module):
         self.delta_omega = torch.nn.Parameter(torch.zeros(n, dtype=torch.float64, device=k2_init.device))
 
     def _run(
-        self, x0: torch.Tensor, omega: torch.Tensor, mask: torch.Tensor, steps: int, keep_all: bool
+        self,
+        x0: torch.Tensor,
+        omega: torch.Tensor,
+        mask: torch.Tensor,
+        steps: int,
+        keep_all: bool,
+        renormalize: bool = False,
     ) -> torch.Tensor:
-        """Run dynamics for `steps` iterations."""
+        """Run dynamics for `steps` iterations.
+
+        `renormalize` resets mean |x| to 1 after every step, leaving phase
+        untouched. Off by default -- compute_lyapunov_exponents relies on
+        raw (unrescaled) divergence over its short window and must not be
+        perturbed by this. Long trajectories consumed only through
+        torch.angle() (coherence, spectrum) should pass renormalize=True:
+        the free-running recurrence has a strongly positive Lyapunov
+        exponent and overflows float64 well inside a 500-step rollout,
+        which would otherwise poison every phase-based statistic with NaN.
+        """
         keep = (~mask).to(torch.float64)
         keep_c = keep.to(torch.complex128)
         omega2 = ((omega + self.delta_omega) * keep).to(torch.complex128)
@@ -106,13 +122,23 @@ class Layer2(torch.nn.Module):
         states: list[torch.Tensor] = []
         for _ in range(steps):
             x = (x @ k2t) * keep_c + 1j * omega2 * x
+            if renormalize:
+                scale = x.abs().mean(dim=-1, keepdim=True).clamp_min(1e-300)
+                x = x / scale
             if keep_all:
                 states.append(x)
         return torch.stack(states, dim=-1) if keep_all else x
 
-    def orbit(self, x0: torch.Tensor, omega: torch.Tensor, mask: torch.Tensor, steps: int) -> torch.Tensor:
+    def orbit(
+        self,
+        x0: torch.Tensor,
+        omega: torch.Tensor,
+        mask: torch.Tensor,
+        steps: int,
+        renormalize: bool = False,
+    ) -> torch.Tensor:
         """Return full (B, N, steps) trajectory."""
-        return self._run(x0, omega, mask, steps, keep_all=True)
+        return self._run(x0, omega, mask, steps, keep_all=True, renormalize=renormalize)
 
 
 def compute_lyapunov_exponents(
@@ -307,7 +333,7 @@ def main():
             
             # Generate long trajectory
             with torch.no_grad():
-                orbit = model.orbit(x0, image.unsqueeze(0), mask, TRAJECTORY_STEPS)  # (1, N, steps)
+                orbit = model.orbit(x0, image.unsqueeze(0), mask, TRAJECTORY_STEPS, renormalize=True)  # (1, N, steps)
                 orbit = orbit[0]  # (N, steps)
             
             # Analyses

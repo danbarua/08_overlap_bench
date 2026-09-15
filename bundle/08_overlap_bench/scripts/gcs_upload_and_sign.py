@@ -98,6 +98,7 @@ def main():
         ("data/cae/2shapes_train.npz", "inputs/2shapes_train.npz"),
         ("data/cae/2shapes_val.npz", "inputs/2shapes_val.npz"),
         ("/tmp/07_posn.bundle", "inputs/07_posn.bundle"),
+        ("outputs/ckpt-10000.pt", "inputs/ckpt-10000.pt"),
     ]
 
     if not args.skip_upload:
@@ -118,10 +119,14 @@ def main():
     print("\n=== Signing URLs ===", file=sys.stderr)
     urls = {}
 
-    # Input GET URLs (2-hour duration)
+    # Input GET URLs (8-hour duration -- matches artifact/control PUT/GET.
+    # A shorter window bought nothing: the job's own wall_clock budget is
+    # ~90min, and credentials of this class already sit in the secrets
+    # sidecar for 8h regardless. A short GET window only forced re-signing
+    # mid-debugging-session, racing the clock against unrelated iteration.)
     for local, gcs in files_to_upload:
         print(f"Signing GET {gcs}...", file=sys.stderr)
-        url = sign_url(gcs, "GET", 2, bucket, signer, region)
+        url = sign_url(gcs, "GET", 8, bucket, signer, region)
         if url:
             urls[f"{gcs}:GET"] = url
 
