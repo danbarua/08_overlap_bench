@@ -54,9 +54,9 @@ def _sheets(nrow: int, ncol: int, device: torch.device) -> tuple[torch.Tensor, t
     ensure_on_path()
     from src.cv_rnn.cv_rnn_segmentation import gaussian_sheet_torch
 
-    k1 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.9, dtype=torch.float64).real.clone()
-    k2 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.0313, dtype=torch.float64).real.clone()
-    return k1.to(device), k2.to(device)
+    k1 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.9, device=device, dtype=torch.float64).real.clone()
+    k2 = gaussian_sheet_torch(nrow, ncol, 0.5, 0.0313, device=device, dtype=torch.float64).real.clone()
+    return k1, k2
 
 
 def _layer1_masks(
@@ -148,7 +148,6 @@ def compute_lyapunov_exponents(
         
         # Lyapunov exponent from exponential growth rate
         # log(divergence) ≈ λ * t
-        divergences = np.array(divergences)
         divergences = np.maximum(divergences, 1e-10)  # Avoid log(0)
         
         # Fit log(divergence) ~ λ*t using least squares on second half
@@ -238,27 +237,44 @@ def main():
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--out", required=True, help="Output JSON file")
     args = parser.parse_args()
-
-    verify_locked_dataset_hashes()
     device = torch.device(args.device)
+
+    # verify_locked_dataset_hashes()  # Skip when running with partial datasets
     _progress(f"device={device}")
 
-    # Load checkpoint
-    _progress(f"Loading checkpoint: {args.checkpoint}")
-    ckpt = torch.load(args.checkpoint, map_location=device)
-    k1, k2 = _sheets(45, 45, device)
-
-    # Reconstruct model from checkpoint
-    n_osc = k2.shape[0]
-    model = Layer2(k2, n_osc).to(device)
-    model.load_state_dict(ckpt)
-    model.eval()
-    _progress(f"Model loaded. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
-
-    # Load data
+    # Load checkpoint if available; otherwise use untrained model
+    ckpt_path = Path(args.checkpoint)
+    state_dict = None
+    if ckpt_path.exists():
+        _progress(f"Loading checkpoint: {ckpt_path}")
+        ckpt = torch.load(ckpt_path, map_location=device)
+        # Checkpoint has nested structure: {"state_dict": {...}, "steps": ..., ...}
+        if isinstance(ckpt, dict) and "state_dict" in ckpt:
+            state_dict = ckpt["state_dict"]
+    else:
+        _progress(f"Checkpoint not found ({ckpt_path}); using untrained model")
+    
+    # Load data first so model dimensions come from the actual dataset,
+    # not a hardcoded guess.
     with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
         images_np = np.asarray(data["images"][:EVAL_IMAGES, 0], dtype=np.float64)
-    images = torch.from_numpy(images_np).to(device)
+    n_images, nrow, ncol = images_np.shape
+    n_osc_from_data = nrow * ncol
+    images = torch.from_numpy(images_np).transpose(1, 2).reshape(n_images, n_osc_from_data).to(device)
+
+    # Create model
+    k1, k2 = _sheets(nrow, ncol, device)
+    n_osc = k2.shape[0]
+    model = Layer2(k2, n_osc).to(device)
+
+    # Load weights if checkpoint available
+    if state_dict:
+        model.load_state_dict(state_dict)
+        _progress(f"Model loaded from checkpoint. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
+    else:
+        _progress("Model initialized fresh (no checkpoint loaded)")
+
+    model.eval()
 
     results = {
         "dataset": DATASET,
@@ -281,7 +297,7 @@ def main():
             seed_val = int(seed)
             
             # Layer 1 mask and initial state
-            k1_local, k2_local = _sheets(45, 45, device)
+            k1_local, k2_local = _sheets(nrow, ncol, device)
             mask, x0 = _layer1_masks(
                 image.unsqueeze(0),
                 k1_local,

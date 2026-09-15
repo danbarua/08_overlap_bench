@@ -110,7 +110,7 @@ def main():
 
     # Create control-result placeholders
     print("\n=== Creating control-result placeholders ===", file=sys.stderr)
-    for job_name in ["pursuit-b-20000", "pursuit-b-mechanism"]:
+    for job_name in ["pursuit-b-1000-verify", "pursuit-b-20000", "pursuit-b-mechanism", "pursuit-b-attractor"]:
         obj_path = f"control/{job_name}/result.json"
         create_placeholder(obj_path, bucket)
 
@@ -127,22 +127,28 @@ def main():
 
     # Output PUT URLs (8-hour duration)
     artifacts = [
+        "outputs/pursuit-b-1000-verify.json",
+        "outputs/pursuit-b-1000-verify.timing.json",
+        "outputs/ckpt-1000-verify.pt",
         "outputs/pursuit-b-20000.json",
         "outputs/pursuit-b-20000.timing.json",
         "outputs/ckpt-20000.pt",
         "outputs/pursuit-b-mechanism.json",
+        "outputs/attractor-10000.json",
+    ]
+    # Control result URLs (PUT and GET, 8-hour)
+    controls = [
+        "control/pursuit-b-1000-verify/result.json",
+        "control/pursuit-b-20000/result.json",
+        "control/pursuit-b-mechanism/result.json",
+        "control/pursuit-b-attractor/result.json",
     ]
     for gcs in artifacts:
         print(f"Signing PUT {gcs}...", file=sys.stderr)
-        url = sign_url(gcs, "PUT", 8, bucket, signer, region)
-        if url:
-            urls[f"{gcs}:PUT"] = url
-
-    # Control result URLs (PUT and GET, 8-hour)
-    controls = [
-        "control/pursuit-b-20000/result.json",
-        "control/pursuit-b-mechanism/result.json",
-    ]
+        put_url = sign_url(gcs, "PUT", 8, bucket, signer, region)
+        if put_url:
+            urls[f"{gcs}:PUT"] = put_url
+    
     for gcs in controls:
         print(f"Signing PUT {gcs}...", file=sys.stderr)
         put_url = sign_url(gcs, "PUT", 8, bucket, signer, region)

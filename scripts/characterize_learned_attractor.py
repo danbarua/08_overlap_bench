@@ -254,24 +254,27 @@ def main():
     else:
         _progress(f"Checkpoint not found ({ckpt_path}); using untrained model")
     
+    # Load data first so model dimensions come from the actual dataset,
+    # not a hardcoded guess.
+    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+        images_np = np.asarray(data["images"][:EVAL_IMAGES, 0], dtype=np.float64)
+    n_images, nrow, ncol = images_np.shape
+    n_osc_from_data = nrow * ncol
+    images = torch.from_numpy(images_np).transpose(1, 2).reshape(n_images, n_osc_from_data).to(device)
+
     # Create model
-    k1, k2 = _sheets(45, 45, device)
+    k1, k2 = _sheets(nrow, ncol, device)
     n_osc = k2.shape[0]
     model = Layer2(k2, n_osc).to(device)
-    
+
     # Load weights if checkpoint available
     if state_dict:
         model.load_state_dict(state_dict)
         _progress(f"Model loaded from checkpoint. delta_omega L2 norm: {torch.norm(model.delta_omega).item():.6f}")
     else:
         _progress("Model initialized fresh (no checkpoint loaded)")
-    
-    model.eval()
 
-    # Load data
-    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
-        images_np = np.asarray(data["images"][:EVAL_IMAGES, 0], dtype=np.float64)
-    images = torch.from_numpy(images_np).to(device)
+    model.eval()
 
     results = {
         "dataset": DATASET,
@@ -294,7 +297,7 @@ def main():
             seed_val = int(seed)
             
             # Layer 1 mask and initial state
-            k1_local, k2_local = _sheets(45, 45, device)
+            k1_local, k2_local = _sheets(nrow, ncol, device)
             mask, x0 = _layer1_masks(
                 image.unsqueeze(0),
                 k1_local,
