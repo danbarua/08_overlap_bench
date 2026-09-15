@@ -61,16 +61,49 @@ ties `cc` there (EV_34, gap `0.0039` inside 2 seed-SDs of noise), the same
 is training producing a real result where the fixed-weight mechanism showed
 none, not training padding an existing lead.
 
+## What the plots show (`figures/pursuit-b-mnist-3shapes-*.png`)
+
+`pursuit-b-mnist-3shapes-samples.png` shows what the two datasets actually
+contain, not just their metadata. **MNIST_shapes is not a binary-shapes-only
+task like 2shapes/3shapes**: its "image" channel is a real grayscale,
+antialiased handwritten digit overlapping a clean binary square/triangle.
+That is a strictly harder segmentation problem than separating two flat
+binary regions -- continuous intensity and antialiased edges, not just a
+foreground/background split -- and is a plausible large part of why its
+ceiling (0.4343) sits below 3shapes' (0.5755) despite 3shapes asking the
+harder combinatorial question (3 objects, not 2). 3shapes samples confirm
+the object count and show frequent triple-object overlap.
+
+`pursuit-b-mnist-3shapes-loss.png`: neither training loss curve has
+plateaued by step 10,000 -- both are still declining steadily on a log-x
+axis, unlike what 2shapes' saturated 10k-step ARI implies about its own loss
+curve. This is visual evidence (not proof) that more steps would likely
+still help both datasets, sharpening the open question below from "untested"
+to "worth trying first."
+
+`pursuit-b-mnist-3shapes-per-image.png`: per-image FG-ARI, sorted by the
+same overlap-fraction ordering that cleanly separated 2shapes' hard and easy
+images. Neither dataset shows that clean monotonic decline here -- low-ARI
+images (some near or below the M0 line) are scattered across the sort order
+rather than concentrated at the high-overlap end. **Overlap fraction, the
+dominant difficulty driver identified for 2shapes, does not obviously
+explain per-image difficulty on either of these two datasets.** What does
+is an open question; for MNIST_shapes the antialiased-digit content is an
+obvious candidate (e.g. digit stroke thickness or overlap-with-thin-strokes),
+untested here.
+
+`pursuit-b-three-dataset-comparison.png`: the three-way bar chart, trained
+vs M0 vs cc, all at 10,000 steps, same protocol -- the summary view of the
+results table above.
+
 ## What this does not show
 
-- Whether 10,000 steps is enough for either dataset, or whether they'd keep
-  climbing like 2shapes did to 20,000 (`RESULTS-20K.md`). Not tested here.
+- Whether 10,000 steps is enough for either dataset. The loss curves above
+  suggest probably not; not directly tested by running further.
 - No mechanism analysis (eigenvalue/spectral-gap picture from
   `PURSUIT-B-MECHANISM.md`) has been run on either checkpoint yet.
-- No per-image breakdown akin to `pursuit-b-per-image-trajectories.png`
-  exists for these datasets -- whether MNIST_shapes/3shapes' lower ceiling is
-  a uniform shortfall or concentrated in specific hard images (the way
-  2shapes' was, in overlap) is an open question this run doesn't answer.
+- What actually drives per-image difficulty on these two datasets, now that
+  overlap fraction (2shapes' answer) is shown not to obviously apply.
 
 ## A real infra failure hit along the way
 
