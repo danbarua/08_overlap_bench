@@ -128,14 +128,52 @@ returns in ~2s with `{job_id, pid, log_path}`. No local process needed to
 survive either job's ~45-50 minute run; both completed cleanly on the first
 attempt this time.
 
+## 40,000 steps via checkpoint resume: the datasets diverge
+
+Neither loss curve had plateaued at 20k, so extended both further -- this
+time via `--resume-from` (optimizer state now saved in the checkpoint),
+continuing the *same* optimization trajectory rather than retraining from
+scratch. This was also the first real end-to-end test of the resume
+mechanism on GPU, not just the CPU smoke test that verified it earlier
+(20-then-20-resumed bit-identical to 40-from-scratch, `+0.2870 +/- 0.0021`
+both ways).
+
+| dataset | @10k | @20k | @40k | 20k->40k change |
+|---|---:|---:|---:|---:|
+| MNIST_shapes | 0.4343 | 0.4780 | 0.5765 +/- 0.0007 | +0.0985 (+21%) |
+| 3shapes | 0.5755 | 0.6654 | 0.6934 +/- 0.0058 | +0.0280 (+4.2%) |
+
+The two datasets now behave differently, not just at different absolute
+levels. MNIST_shapes' relative improvement **accelerated** (10k->20k: +10%;
+20k->40k: +21%) -- still far from any visible ceiling. 3shapes'
+**decelerated sharply** (10k->20k: +16%; 20k->40k: +4.2%) -- consistent with
+approaching a slower-growth regime, though three points on one trajectory
+don't prove an asymptote. Neither reaches 2shapes' 0.9195.
+
+Artifacts hash-verified against their job envelopes:
+`outputs/pursuit-b-mnist-40000.json`
+(`1d787e532cdca58a72be87f1046909c3295dc3cc820af60ce987d50191c4c25e`),
+`outputs/pursuit-b-3shapes-40000.json`
+(`50e648fc8f54baf5126353e6265fd448c0e2b67a552d7087359931e95e95bd30`). Both
+checkpoints carry `optimizer_state_dict` and a 1601-entry `training_curve`
+(the full 0->40000 history, not just this run's increment) and are
+themselves resumable further.
+
+Hit one real process bug launching these: running `scripts/sync_bundle.sh`
+to pick up two new helper scripts while the first pair of `--async` applies
+was still staging from the same shared bundle directory raced mighty-colab's
+source-lock check (`undeclared source file`, both jobs failed identically).
+Not an infra flake -- fixed by leaving the bundle untouched between launch
+and completion, then relaunching cleanly.
+
 ## What this does not show
 
-- Whether 20,000 steps is enough for either dataset -- confirmed 10k wasn't
-  (both still improved), and the loss curves still haven't plateaued at
-  20k either. Whether the gap to 2shapes' 0.9195 eventually closes, or each
-  dataset has a real lower ceiling, is untested past this point.
+- Whether 40,000 steps is enough for either dataset. MNIST_shapes visibly
+  is not (still accelerating); 3shapes' deceleration is suggestive of an
+  approaching ceiling but not established from three points. Whether the
+  gap to 2shapes' 0.9195 eventually closes for either is untested past 40k.
 - No mechanism analysis (eigenvalue/spectral-gap picture from
-  `PURSUIT-B-MECHANISM.md`) has been run on either checkpoint yet.
+  `PURSUIT-B-MECHANISM.md`) has been run on any of these checkpoints yet.
 - What actually drives per-image difficulty on these two datasets, now that
   overlap fraction (2shapes' answer) is shown not to obviously apply.
 
