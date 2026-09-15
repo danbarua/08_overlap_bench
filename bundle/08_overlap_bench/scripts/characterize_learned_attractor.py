@@ -38,7 +38,7 @@ LAYER2_STEPS = 140
 BATCH = 32
 EVAL_IMAGES = 50
 EVAL_SEEDS = tuple(range(1, 11))
-DATASET = "2shapes"
+DATASET = "2shapes"  # overridden by --dataset at runtime; kept as the doc default
 
 # Attractor characterization parameters
 TRAJECTORY_STEPS = 500  # Long enough for Lyapunov and spectral analysis
@@ -271,6 +271,7 @@ def compute_spectral_content(orbit: torch.Tensor) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Characterize learned attractor dynamics")
     parser.add_argument("--checkpoint", required=True, help="Path to trained checkpoint (.pt)")
+    parser.add_argument("--dataset", default=DATASET, help="locked CAE benchmark to characterize on")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--out", required=True, help="Output JSON file")
     args = parser.parse_args()
@@ -293,7 +294,7 @@ def main():
     
     # Load data first so model dimensions come from the actual dataset,
     # not a hardcoded guess.
-    with np.load(CAE_DIR / f"{DATASET}_val.npz") as data:
+    with np.load(CAE_DIR / f"{args.dataset}_val.npz") as data:
         images_np = np.asarray(data["images"][:EVAL_IMAGES, 0], dtype=np.float64)
     n_images, nrow, ncol = images_np.shape
     n_osc_from_data = nrow * ncol
@@ -314,7 +315,7 @@ def main():
     model.eval()
 
     results = {
-        "dataset": DATASET,
+        "dataset": args.dataset,
         "checkpoint": str(args.checkpoint),
         "trajectory_steps": TRAJECTORY_STEPS,
         "eval_images": EVAL_IMAGES,

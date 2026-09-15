@@ -92,6 +92,18 @@ JOBS = [
         ckpt_name="ckpt-3shapes-40000",
         resume_from="pursuit-b-3shapes-20000",
     ),
+    JobSpec(
+        "pursuit-b-mnist-attractor-40000",
+        dataset="MNIST_shapes",
+        has_checkpoint=False,
+        resume_from="pursuit-b-mnist-40000",
+    ),
+    JobSpec(
+        "pursuit-b-3shapes-attractor-40000",
+        dataset="3shapes",
+        has_checkpoint=False,
+        resume_from="pursuit-b-3shapes-40000",
+    ),
 ]
 
 DATASET_FILES = {
