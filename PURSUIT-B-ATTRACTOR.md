@@ -155,3 +155,44 @@ step ~140 is amplitude, unboundedly. Training improves ARI by shaping which
 mode gets locked onto and how fast the lock completes within the readout
 window, not by giving the system a genuinely stable long-run fixed point to
 settle into.
+
+## Does this generalize past 2shapes?
+
+Ran the identical protocol (`--dataset` generalized into the script, not
+hardcoded) on MNIST_shapes and 3shapes' 40,000-step checkpoints
+(`PURSUIT-B-BEYOND-2SHAPES.md`). Zero NaN in coherence/spectrum for both,
+500/500 samples each -- the renormalization fix generalizes cleanly.
+
+| dataset (checkpoint) | Lyapunov mean/std | order param step0->499 | q | foreground alignment |
+|---|---:|---:|---:|---:|
+| 2shapes (10k) | 1.985 / 0.218 | 0.824 -> 0.825 | 0.7988 | 1.0000000000000002 |
+| MNIST_shapes (40k) | 2.657 / 0.418 | 0.7703 -> 0.7678 | 0.6459 | 1.0000000000 |
+| 3shapes (40k) | 2.394 / 0.094 | 0.7744 -> 0.7756 | 0.9919 | 0.9998278931 |
+
+`figures/pursuit-b-attractor-three-dataset-mechanism.png`. The mechanism
+itself generalizes: all three lock onto a dominant eigenvector almost
+immediately and stay there, with the same order-of-magnitude Lyapunov
+exponent and near-total (MNIST_shapes: machine-precision) to near-total
+(3shapes) alignment.
+
+**3shapes is a genuine outlier, not noise.** Its top two eigenvalues are
+almost equal (`q=0.9919` vs `0.65-0.80` for the other two), and its
+purification is correspondingly incomplete: `1 - alignment` is `~1.7e-4`
+for 3shapes versus `~0` at machine precision for the other two. Given
+`PURSUIT-B-MECHANISM.md`'s own finding that `q` narrows progressively with
+more training on 2shapes, a near-degenerate gap at 3shapes' 40,000-step
+checkpoint is consistent with (though does not prove) needing
+proportionally more training to fully resolve mode competition --
+a candidate mechanistic explanation for `PURSUIT-B-BEYOND-2SHAPES.md`'s
+observation that 3shapes' relative FG-ARI improvement decelerates
+(10k->20k: +16%, 20k->40k: +4.2%) while MNIST_shapes' accelerates.
+
+**This is not a cross-dataset q-vs-ARI predictor.** MNIST_shapes has the
+*tightest* gap of all three (`0.6459`) yet the *lowest* FG-ARI (`0.5765`) --
+the opposite of what a naive "tighter gap -> higher ARI" rule would predict.
+Confounded by MNIST_shapes' intrinsically harder image content (a real
+grayscale, antialiased handwritten digit, not a binary shape --
+`PURSUIT-B-BEYOND-2SHAPES.md`'s sample-image finding). `q` tracking ARI
+*within* one dataset's own training trajectory (established for 2shapes)
+is a different, narrower claim than `q` predicting ARI *across* datasets,
+and only the former is supported here.
