@@ -83,21 +83,31 @@ TRAIN_SEED_OFFSET = 100_000  # NOTE_21: disjoint from the eval seeds
 # in the output: at a budget where the trained model's per-seed values collapse,
 # two of ITS SDs is ~0 and that test degenerates into the plain above-M0
 # comparison -- which is what happened to pursuit-b at 10,000 steps.
-BASELINES: dict[str, dict[str, float]] = {
+#
+# n_clusters must match each image's actual object count. 3shapes was absent
+# here until LabKit EV_34 measured its comparators under n_clusters=3 (not
+# arc1a's hardcoded 2): cc 0.235581, M0 0.239484 +/- 0.015371 seed-SD. The
+# M0-cc gap (0.0039) does not clear 2 seed-SDs -- 3shapes ties at baseline the
+# same way 2shapes did before training, not MNIST_shapes' nine-fold win.
+BASELINES: dict[str, dict[str, float | int]] = {
     "2shapes": {
+        "n_clusters": 2,
         "m0_at_defaults": 0.12085737825541296,  # arc1a, ART_6
         "m0_seed_sd": 0.0403,  # arc1a, as reported on the record
         "cc": 0.16,  # H0b's locked value
     },
     "MNIST_shapes": {
+        "n_clusters": 2,
         "m0_at_defaults": 0.13545693221331362,  # arc1a, EV_8, commit 31d80d3
         "m0_seed_sd": 0.017840792268879264,  # EV_8, ddof=0
         "cc": 0.01552888819008583,  # EV_8
     },
-    # 3shapes is deliberately absent. It has no cc/M0 baseline in arc1a at all,
-    # and its images hold three objects against a readout with n_clusters=2
-    # hardcoded (here and in harness_m1d), which arc1a's own scope note put out
-    # of scope. Two separate blockers; adding a row here would hide both.
+    "3shapes": {
+        "n_clusters": 3,
+        "m0_at_defaults": 0.23948385301231592,  # LabKit EV_34, outputs/3shapes-baseline.json
+        "m0_seed_sd": 0.01537052292462737,  # EV_34, ddof=0
+        "cc": 0.2355807978311852,  # EV_34
+    },
 }
 
 
@@ -237,10 +247,10 @@ def assert_matches_m0_at_init(
         states[:, LAYER1_STEPS:200] = orbit
         states[mask, LAYER1_STEPS:200] = torch.nan
         mine, *_ = spatiotemporal_segmentation_torch(
-            states, image, mask, nt_mask=LAYER1_STEPS, n_clusters=2
+            states, image, mask, nt_mask=LAYER1_STEPS, n_clusters=BASELINES[dataset]["n_clusters"]
         )
         theirs, *_ = spatiotemporal_segmentation_torch(
-            states_m0, image, mask, nt_mask=LAYER1_STEPS, n_clusters=2
+            states_m0, image, mask, nt_mask=LAYER1_STEPS, n_clusters=BASELINES[dataset]["n_clusters"]
         )
         identical = bool(torch.equal(mine, theirs))
         results.append({"image": i, "orbit_relative_error": relative, "labels_identical": identical})
@@ -358,7 +368,7 @@ def _evaluate(
             states[:, LAYER1_STEPS:200] = trained[0].cpu()
             states[mask, LAYER1_STEPS:200] = torch.nan
             cluster_map, *_ = spatiotemporal_segmentation_torch(
-                states, image, mask, nt_mask=LAYER1_STEPS, n_clusters=2
+                states, image, mask, nt_mask=LAYER1_STEPS, n_clusters=BASELINES[dataset]["n_clusters"]
             )
             scores.append(foreground_ari(labels_np[i], cluster_map.numpy()))
         per_seed.append(float(np.mean(scores)))
