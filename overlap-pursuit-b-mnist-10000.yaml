@@ -1,0 +1,56 @@
+name: pursuit-b-mnist-10000
+accelerator:
+  prefer:
+  - A100
+  accept_cpu: false
+code:
+  kind: bundle
+  root: ./bundle
+  entry: run_repo_script.py
+  args:
+  - scripts/run_pursuit_b.py
+  - --dataset
+  - MNIST_shapes
+  - --device
+  - cuda
+  - --steps
+  - '10000'
+  - --out
+  - outputs/pursuit-b-mnist-10000.json
+  - --save-model
+  - outputs/ckpt-mnist-10000.pt
+deps:
+- numpy==2.1.2
+- scipy==1.14.1
+- scikit-learn==1.5.2
+- torch==2.8.0
+- torchvision==0.23.0
+data:
+- url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/07_posn.bundle?x-goog-signature=348406d643b36ffd0ba90c5238940aaa0134b2c24269113ee64700b5ac447c6259473b142e4243460ef501b32fcf910bcb436016f564b0511d183a318bb99a2c99f6e0bb54a0b1dd4b0829fc9cf7f61474a0b3ef634393d7cd5a1ccb1e3d3bdb1591f9eb582644c214c684eb0d3f95832d699c7ca540b0a04b1deb6b5929cc547e204a9c8f0a9c4b8fb6980813c2be5278833ea453cf901aa724698f629d33e7278cfe7d77c329929cac49cd2eaf3504f15d5f0668b2a4141e1620a8848040f7d6a8a8d06df92a1a492ce7f2b47d88d35b746894f2034b050e2050818a6f5bc91d3708b463b390dca098ca383518e258d2fdc52464e7d96c6e7b0f7a2dd8fd05&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161053Z&x-goog-expires=28800&x-goog-signedheaders=host
+  dest: inputs/07_posn.bundle
+  sha256: ee863262b2dfc86f6d32a6225625557e7abc24b0aecc1ac89a5908e78c9b74c4
+  size_bytes: 16547677
+- url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/MNIST_shapes_train.npz?x-goog-signature=586e138038ef07e0e616c2c818b403df261332fba133694a53b9da0153a3a403cb51f220e3ae371072b8b86e0077f24a48db2ff1f24ef1daef4f348b60b134aee4f94d73e49fa2dacd22f1e91b20f0709809eb6848a2de5b742d70ed053c406d51f9dc2c4fd84a7eee967e8fc7fd28545cfac2269a0445d5103dda40053075d8aef3948a2521f1fe11be535385fba79d816f72f5d19123a49f6b74ee6f2a06d6c050978b0bf6508e6d6effd294d09370539c7b9a2061fa382ed65157266d8b1add26035d997a68f2f00a25e465d4d952d2c73cf1ea58684fa6d21ab7e99ef82ccc55ee3291ad7e77561e3c6d964342a7884ccf2398ae2b697df04364780a7680&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161042Z&x-goog-expires=28800&x-goog-signedheaders=host
+  dest: src/08_overlap_bench/data/cae/MNIST_shapes_train.npz
+  sha256: b0777f2803df09cf1dadfda9a84e093d8be139e2fcb6be6a4142ce2d180b718e
+  size_bytes: 56373661
+- url: https://labkit-build-colab-jobs.storage.googleapis.com/inputs/MNIST_shapes_val.npz?x-goog-signature=9b779175bce91e6b04f6db9c8b0cb01af8617d89b68f45e97147a5e257e9f49f7ac94593a9b2428af725a60ac18a7e419226d81dc6e5963ef297480f766aa106e23dbfba8857b65cb2865cd7bfb038a8bca05ee54756047467f204bdce0b5118cb06ed33a2f2df2193cad3cbba4df1cac635e527089cbea8e0fe0e95a8109eb067e457a782fcd967e1d8ef2bbc5ad1dab576b1f5e5a584dc1c2a46bc8f736e0c0ebfc28382f47370390b6bed1dfef24c65cc8e38fcfcfd86407dba5591e8202670685addcb9ddcd3aa0f49ae2f8a95773d9582b0648480b2ac58ff5022e66a64786418f5b7dae831640b5d709af0404ef931fd3341805f24121bcf42f3e4268c&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161045Z&x-goog-expires=28800&x-goog-signedheaders=host
+  dest: src/08_overlap_bench/data/cae/MNIST_shapes_val.npz
+  sha256: 09900916adbd1d5011b285c5a1f3613c5969bb5cb87e76f43e33e545b2474d23
+  size_bytes: 11300509
+artifacts:
+- path: src/08_overlap_bench/outputs/pursuit-b-mnist-10000.json
+  url: https://labkit-build-colab-jobs.storage.googleapis.com/outputs/pursuit-b-mnist-10000.json?x-goog-signature=194daf73b12a3ad95443099d4c9f8085ee37453fddab1dd68e5b1cadb0c54781a08fe374008a880644f6b309234ea39b8601ee8d67b260c389c7fddfb558eb1a9e7b0431d89fff823ae1ea9f5c7f56eb1deed124fc3c154495baf2270c9792cee1825687f39622fca8366462d00d973b3b48d1d42ac873ec89883898499c1ed6ae58d313f4dda2b0385590405a5dd783e4920ad2a8effbcf3475f03c2b9972e801440927c35cc41307baaa5d97c961bdfc0938caa5f64dbdc6260148dcc31bf508035df52afd3379b327cbcc13937f46206b6d97f33434d1d695c581437bd898c2d99e4ef835594b23afd03897302ab9541c8a463bfcec83f189d6c16155f212&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161124Z&x-goog-expires=28800&x-goog-signedheaders=host
+  required: true
+  size_bytes: 500000
+- path: src/08_overlap_bench/outputs/ckpt-mnist-10000.pt
+  url: https://labkit-build-colab-jobs.storage.googleapis.com/outputs/ckpt-mnist-10000.pt?x-goog-signature=b46f391ccf455e090a49a7b56eee2d1c0700c97266d84f2e0327f4758aa8ed5f4e7667291b425c304749a33ebece9a8a220a61190ad6656510957cae72033c2a9d0c7602c41f0626ec40cbde54b7f712fb5aac4431ae3d502df44a1d182c397c43b6b8cd15ca2b145657a549f032fcc0c354bb3f7b406e1f26dc7cdcab2c438ca43be2c3303b31fa2261a73e0fb9a9e8fa652007b29c47d05f0e19f32e75f09279ef2c8c86b8725b8191dec0f49b59b8aced315cab8359340ad6857e8db132de0f4ed99d94219c796c9f13243b29f87984511f4d06b0f4eb345a704012d9d603c3de728d30911e748eef31116f8a46badba43f320af863ee1ebe4100ce92fc01&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161128Z&x-goog-expires=28800&x-goog-signedheaders=host
+  required: false
+  size_bytes: 10000000
+control:
+  result:
+    put_url: https://labkit-build-colab-jobs.storage.googleapis.com/control/pursuit-b-mnist-10000/result.json?x-goog-signature=15e08be3a0168489a1b30f74a68a1ca54178d7c2ddbca1d8c2a33a3e49164f559e9542922e4107c493bc6a33094f63ad47a181685ea4bc6982c0eb60aafaab51cdfe4350de65d65f8915533312be22c786517f9d1838dce0855c77fce46225e5c3ad9a0bca99ae62ddd2078b1ee10927fdb500029e00c17bda15e71540c6bfef519ffa394a41ee7b285e253a7de06502e75210e2995d9b7c8f71e957a0bcbc22b2766a848f3bacfcfe96ee6220a4c1fadd272c46d4f835c0c63c20f86cb11b56d0b1b06c0e14f10ce96f5e28737848eb31b6156f34458e7fdb3c7a96a72272c717e9d38bf5fbd89aba7254b24e9ba0b94de7b580547a3ea6a36d73c1a9d51708&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161210Z&x-goog-expires=28800&x-goog-signedheaders=host
+    get_url: https://labkit-build-colab-jobs.storage.googleapis.com/control/pursuit-b-mnist-10000/result.json?x-goog-signature=ad82d60deef40a50f406c183d0f3c99563b51d35f0b7d76582e2e01127716a0130fa186ee729a69e265204ac217850f50f89a6e445a4c2e86476064af7a6e577c45c535722d693d01b59b37ad60ba33c0a1eb119ff4401ce2aa4291bd22a3f0dfcec9c202e58e63511e5f166de753fc8d03bf979a2ea0402295a047f4c576f70a0a2d976b6e59abf1dad45bad3f5cbd7c62b60d0d69b1bc60b7ee8bdb39dcb114d4c99641ae00475fcb390db31816a8da4f113e937c2ec41ed7e1b4129f02b0a0449f888980ac2b02e1565ef5490a1309ba29965b0dbfbb45e21456033d051daadcd16f7a1211613a34f969f1134b8b6832e944d2772a6da73548361ae6c7ba8&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=colab-job-signer%40labkit-build.iam.gserviceaccount.com%2F20260915%2Fus%2Fstorage%2Fgoog4_request&x-goog-date=20260915T161214Z&x-goog-expires=28800&x-goog-signedheaders=host
+budgets:
+  wall_clock: 5400
+on_offload_fail: leave_up
