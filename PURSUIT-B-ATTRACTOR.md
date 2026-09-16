@@ -211,3 +211,39 @@ the *tightest* gap of all three at 40k (`0.6459`) yet the *lowest* FG-ARI
 (`0.5765`) -- confounded by its intrinsically harder image content (a real
 grayscale, antialiased handwritten digit, not a binary shape --
 `PURSUIT-B-BEYOND-2SHAPES.md`'s sample-image finding).
+
+## What the learned weights themselves look like
+
+`figures/pursuit-b-mnist-3shapes-k2-structure.png`. Same metrics
+`PURSUIT-B-MECHANISM.md` used for 2shapes (`k2_frobenius_relative_change`,
+`delta_omega_norm` -- both already computed by `run_pursuit_b.py` into
+every run's own `diagnostics`; asymmetry `||K2-K2^T||/||K2||` computed
+directly from the checkpoints), across all three datasets:
+
+| dataset | steps | K2 relative change | delta_omega L2 norm | asymmetry |
+|---|---:|---:|---:|---:|
+| 2shapes | 10,000 | 2.8823 | 1.5679 | 0.9670 |
+| 2shapes | 20,000 | 4.4046 | 1.6885 | (checkpoint not retained) |
+| MNIST_shapes | 10,000 / 20,000 / 40,000 | 4.4968 / 7.4566 / 11.2813 | 4.0255 / 5.8033 / 6.7986 | 1.1375 / 1.1892 / 1.2273 |
+| 3shapes | 10,000 / 20,000 / 40,000 | 2.7662 / 4.4145 / 6.9952 | 9.9406 / 16.4284 / 23.8304 | 1.1195 / 1.1811 / 1.2216 |
+
+Three things stand out:
+
+1. **MNIST_shapes' K2 moves far more than either other dataset's.**
+   2shapes and 3shapes track each other almost exactly through 10k->20k
+   (2.88->4.40 vs 2.77->4.41), then MNIST_shapes pulls well ahead (reaching
+   11.28 by 40k) -- consistent with it needing a larger structural change
+   to handle intrinsically harder (grayscale, antialiased) input.
+2. **3shapes' `delta_omega` is 3-14x larger than the other two's, and
+   growing fastest in absolute terms.** This is a real, novel, and
+   deliberately *unresolved* observation: `PURSUIT-B-MECHANISM.md`
+   established via an explicit zero-`delta_omega` ablation that
+   `delta_omega` is causally irrelevant on 2shapes (zeroing it reproduces
+   every one of 500 partitions exactly). Nobody has run that ablation on
+   3shapes. Whether 3shapes' much larger `delta_omega` reflects genuine
+   causal reliance, or is just a larger incidental value that would zero
+   out just as harmlessly, is untested -- posed as `Q_10` rather than
+   asserted either way.
+3. **Asymmetry tracks nearly identically between MNIST_shapes and
+   3shapes** (1.12-1.14 -> 1.22-1.23 for both), both already exceeding
+   2shapes' 10k value (0.9670) at the same step count.
