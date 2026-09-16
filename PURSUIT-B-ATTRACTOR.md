@@ -259,23 +259,36 @@ row-reshape panels used `viridis` (a monotonic colormap) for genuinely
 signed data, while the full-matrix panels correctly used a diverging
 colormap (`RdBu_r`) centered at zero. On a monotonic colormap, spatially
 smooth but sign-mixed structure can look like noise even when it isn't.
-Caught by reproducing the identical row-reshape code on 2shapes' own 10k
-checkpoint (which I have locally) and comparing to the established
-`k2-evolution.png` story: with the colormap fixed, 2shapes' centre-oscillator
-row shows a clear, dominant coupling peak at the trained location, matching
-the known-good figure. Doing the *same* fixed-colormap comparison for
-MNIST_shapes shows **no dominant peak** -- comparable-or-larger-magnitude
-coupling values are scattered elsewhere in the 32x32 grid, not concentrated
-near the trained oscillator's own neighborhood. This is now a verified
-structural difference, not a plotting artifact: MNIST_shapes' training
-does not preserve the "broadens but stays centered" character 2shapes'
-K2 has; it moves to something closer to globally dense coupling, consistent
-with its much larger Frobenius relative change (11.28 vs 2shapes' 2.88-4.40).
 
-The eigenvalue spectrum (K2 alone, no `i*omega` contribution) shows the
-trained top ~100 eigenvalues sitting roughly 5x above their initial values
-throughout, not just at the very top -- consistent with a broadly
-amplified operator rather than a few isolated modes being boosted.
+Rather than trust my own new convention, I actually opened the existing
+`figures/pursuit-b-k2-evolution.png` and `pursuit-b-k2-row-evolution.png`
+for the first time (an earlier draft compared against a second-hand
+description of them instead) and matched their exact methodology:
+`|K2[528, :]|` magnitude (not raw signed value), `hot` colormap, row 528 --
+the same interior oscillator both use. Reproducing that exact convention on
+2shapes' own 10k checkpoint confirms the established story quantitatively:
+the row's magnitude maximum (0.429) occurs *exactly at* the trained
+(centre) pixel itself -- self-coupling is the single largest entry in its
+own row. Running the identical code on MNIST_shapes' 40k checkpoint: the
+centre pixel's own magnitude is only 0.149, while the row's true maximum
+(0.952) sits at a *different* oscillator entirely (pixel 77, no evident
+spatial relationship to pixel 528). `figures/pursuit-b-mnist-k2-row-magnitude-verified.png`,
+all three panels on one shared color scale.
+
+This is a real, precisely quantified structural difference verified against
+the established methodology, not an artifact of a different plotting
+convention: 2shapes' training preserves self-coupling as dominant even as
+the row broadens around it; MNIST_shapes' training does not -- the trained
+oscillator's own coupling is not even locally competitive with several
+other, spatially unrelated oscillators' coupling into it. Consistent with
+MNIST_shapes' much larger overall Frobenius relative change (11.28 vs
+2shapes' 2.88-4.40).
+
+The eigenvalue spectrum (K2 alone, no `i*omega` contribution,
+`figures/pursuit-b-mnist-k2-analysis.png`) shows the trained top ~100
+eigenvalues sitting roughly 5x above their initial values throughout, not
+just at the very top -- consistent with a broadly amplified operator
+rather than a few isolated modes being boosted.
 
 ### Does a dataset's learned K2 transfer to another dataset?
 
