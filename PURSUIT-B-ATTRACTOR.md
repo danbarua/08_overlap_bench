@@ -247,3 +247,44 @@ Three things stand out:
 3. **Asymmetry tracks nearly identically between MNIST_shapes and
    3shapes** (1.12-1.14 -> 1.22-1.23 for both), both already exceeding
    2shapes' 10k value (0.9670) at the same step count.
+
+### What K2 actually looks like as a matrix
+
+`figures/pursuit-b-mnist-k2-analysis.png`: the raw K2 matrix (init, trained,
+difference), a spatial row-reshape, and the eigenvalue spectrum, for
+MNIST_shapes' 40,000-step checkpoint.
+
+First version of this figure was wrong in a specific, checkable way: the
+row-reshape panels used `viridis` (a monotonic colormap) for genuinely
+signed data, while the full-matrix panels correctly used a diverging
+colormap (`RdBu_r`) centered at zero. On a monotonic colormap, spatially
+smooth but sign-mixed structure can look like noise even when it isn't.
+Caught by reproducing the identical row-reshape code on 2shapes' own 10k
+checkpoint (which I have locally) and comparing to the established
+`k2-evolution.png` story: with the colormap fixed, 2shapes' centre-oscillator
+row shows a clear, dominant coupling peak at the trained location, matching
+the known-good figure. Doing the *same* fixed-colormap comparison for
+MNIST_shapes shows **no dominant peak** -- comparable-or-larger-magnitude
+coupling values are scattered elsewhere in the 32x32 grid, not concentrated
+near the trained oscillator's own neighborhood. This is now a verified
+structural difference, not a plotting artifact: MNIST_shapes' training
+does not preserve the "broadens but stays centered" character 2shapes'
+K2 has; it moves to something closer to globally dense coupling, consistent
+with its much larger Frobenius relative change (11.28 vs 2shapes' 2.88-4.40).
+
+The eigenvalue spectrum (K2 alone, no `i*omega` contribution) shows the
+trained top ~100 eigenvalues sitting roughly 5x above their initial values
+throughout, not just at the very top -- consistent with a broadly
+amplified operator rather than a few isolated modes being boosted.
+
+### Does a dataset's learned K2 transfer to another dataset?
+
+Untested as of this note. `Layer2._evaluate` takes `dataset` and `model`
+independently (image size is 32x32=1024 oscillators for all three
+datasets, so the dimensions are compatible), which makes a transplant
+experiment -- load MNIST_shapes' trained K2/delta_omega, evaluate against
+2shapes/3shapes' own val images and readout -- mechanically straightforward.
+Not run yet: a naive local (CPU) attempt cost about 3 minutes of wasted
+compute (36s/seed on CPU, 10 seeds x 3 dataset pairs would have been
+~18 minutes) before being abandoned in favour of running it as a proper
+GPU job, matching every other real evaluation in this project.
